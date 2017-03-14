@@ -1,0 +1,231 @@
+﻿V 1.0a 
+23.10.2015
+- Add information about serialnumber after report creation to the ScanEditOrder label
+- Add button to admin context menu for open this changelog
+- Add operator privileges option to StationConfig.xml
+- Add possibility to select Surname when Logging in
+- Add list of last 10 serial numbers
+
+V 1.0b
+29.10.2015
+- Add MAP, MDU, MPU and PFC family
+- Add all active finish goods from agile
+
+V 1.0c
+3.11.2015
+- Add StationName in MainForm
+
+V 1.0d
+4.11.2015
+- Fix the bug when BarcodeLength tag in Product/Family missing in ProductsConfiguration.xml
+
+V 1.01
+6.11.2015
+- Changed installation path
+- Separated User configuration from Station configuration to support UserGroups
+
+V 1.01a
+9.11.2015
+- Fix issue, when fail cause is written to the scan/text field, but it is not saved to report when GenerateReport button is pressed
+
+V 1.01b
+23.11.2015
+- MAP80-4004 added to product label definition list
+
+V 1.01c
+26.11.2015
+- MAP110-4004 added to product label definition list
+
+V 1.01d
+2.12.2015
+- C, K, P family products added to product label definition list
+
+V 1.01e
+9.12.2015
+- MAP110-S163 added to product label definition list
+- Add possibility to set number of serial numbers in history view thru Settings/Nastavenia
+
+V 1.02
+11.12.2015
+- Add Batch Mode for passed units with same ProductNo, JobID and TestType
+
+V 1.02a
+- fixed error when PASS or FAIL is inserted to Order Text Box
+
+V 1.02aa
+- LK family products added to product label definition list
+
+V 1.02ab
+- PS families products merged and added to product label definition list
+
+V 1.02b
+- Possibility to change StationName and StationGUID based on type of test by changing of StationConfig file.
+
+V 1.03
+- Add barcodes for TestType selection and PASS/FAIL result grade selection
+
+V 1.03a
+- SPDFCBK-15G and SPDFCBK-16G products added to product label definition list
+
+V 1.04
+- Add the message box when reports are successfuly created in batchmode form.
+- Some Errors are loged to the log file on the server.
+- Add possibility of resizing a Results/ScanCodes view.
+
+V 1.04a
+21.1.2016
+- Add possibility of select a serial number from history combobox.
+- Fix error - station name selection according to StationConfig when space is in test type.
+
+V 1.04b
+22.1.2016
+- Fix error - serial number getting for 2D barcodes with ';' chars.
+- Fix error - logging to the ErrorLogFile on the server (append instead of replace mode).
+
+V 1.04c
+25.1.2016
+- Add barcode for send a FAIL report.
+
+V 1.04d
+27.1.2016
+- SPDCSCO-22GB1 product added to product label definition list.
+
+V 1.05
+27.1.2016
+- Implementation of automatic updates of application without operator input.
+
+V 1.05a
+28.1.2016
+- Implementation of SerialNumber duplicity check for Batch Mode.
+
+V 1.06
+29.1.2016
+- Implementation of checking if the unit was passed test in the past.
+
+V 1.06a
+1.2.2016
+- LOK family`s barcode informations added to product label definition list.
+- PFE family`s barcode informations added to product label definition list.
+- Add posibility to disable SerialNumber duplicity check thru StationConfig option.
+
+V 1.06b
+2.2.2016
+- AS and BS family`s barcode informations added to product label definition list.
+- In case of "FAIL" report property "To Repair" with value "Yes" is added to the report.
+
+V 1.06c
+4.2.2016
+- GP and LS family`s barcode informations added to product label definition list.
+
+V 1.07
+4.2.2016
+- Fix the problem with startup of the application when servers are offline.
+
+V 1.07a
+5.2.2016
+- PSK2420-9EG and SPDCSCO-31G   R product added to product label definition list.
+
+V 1.07b
+8.2.2016
+- LK5662-9ERD8TG product added to product label definition list.
+- fix the problem when GenerateReport barcode is scanned before the name or comment of failure is "entered"
+
+V 1.07c
+9.2.2016
+- some products settings added to product label definition list.
+
+V 1.07c
+11.2.2016
+- GQ family's barcode settings added to product label definition list.
+
+V 1.08
+22.2.2016
+- Added basic functionality of Instruction list.
+- Added possibility of TestType filtering through StationConfig ini file.
+- Some CPA250 products added to the product label definition list.
+
+V 1.09
+22.2.2016
+- Added checking of JOBID and SN format before generating of the report
+
+V 1.09a
+14.3.2016
+- Correction of SPDCSCO-38GA1 Product ID to "SPDCSCO-38G   A1" in Product definition file.
+
+V 1.09b
+15.3.2016
+- Added Barcode infos for SPDFFIV-02G product.
+- BS1601-9RG product added to product definition file.
+
+V 1.09c
+17.3.2016
+- DP4320-9RDG and DQ2001-9RG products added to product definition file.
+
+V 1.09d
+18.3.2016
+- LPM616-0GGGGG-D0104 product added to product definition file.
+- MAP130-4010 product added to product definition file.
+- Version of program is collected from ChangeLog.txt file.
+
+V 1.09e
+22.3.2016
+- DS1001-9ERTG product added to product definition file.
+- DS1301-9ERTG product added to product definition file.
+
+V 1.09f
+23.3.2016
+- CK1601-9ERG product added to product definition file.
+
+V 1.09g
+30.3.2016
+- LK1001-9RG product added to product definition file.
+- FM1601-9RG product added to product definition file.
+- Added SN barcode infos of SPDEMCM family in product definition file.
+- LM1501-9RG product added to product definition file.
+- Added SN barcode infos of 3D59 family in product definition file.
+
+V 1.1a
+12.4.2016
+- Added possibility of checklist for all test types
+
+V 1.1b
+12.4.2016
+- Added possibility of checklist for all test types
+- BP2020-9RG product added to product definition file
+
+V 1.1.1
+27.4.2016
+- Added checking of scanned products in batch mode for ProdID and JobID
+- Added some hints (popup tooltips on mouse hover) in main form
+
+V 1.1.2
+18.5.2016
+- Added some products to product configuration file
+
+V 1.1.2a
+18.5.2016
+- 3I66991F100G product added to product definition file
+
+V 1.1.2b
+18.5.2016
+- MAP80-4000G product added to product definition file
+
+V 1.1.2c
+18.5.2016
+- Juniper and Ericsson products family added to product definition file
+
+V 1.2
+15.6.2016
+- first steps to implement MES system
+
+V 1.3
+17.10.2016
+- Fully implemented PASS/FAIL reports generation for Batch Mode
+
+V 1.3.1
+9.12.2016
+- Operator can change "mode" if he is approved
+
+V 1.3.2
+16.2.2017
+- Added triming of tb_order text before main code is started

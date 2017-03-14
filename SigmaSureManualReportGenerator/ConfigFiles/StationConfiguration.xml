@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+  <Mode>D</Mode>
+  <OperatorConfigurationFile>\\dcafs3\SHARE\Manufacturing_Engineering\Public\Kolman Vladimir\SigmaSure\UserConfigurations\default.xml</OperatorConfigurationFile>
+  <OperatorNameMode>Surname</OperatorNameMode>  
+  <Station>
+    <Default>
+      <GUID>5C8E6992-FFFA-4D44-8ECE-A9D2AC7FF2C5</GUID>
+      <Name>SCANSTATION_01</Name>
+      <Properties>
+        <Station_Name>SCANSTATION</Station_Name>
+      </Properties>
+    </Default>
+  </Station>
+  <ReportPath>
+    <Path>C:\ATEdata\XML\</Path>
+  </ReportPath>
+  <Properties>
+    <Location>16</Location>
+  </Properties>
+  <HistorySerialNumbersCount>10</HistorySerialNumbersCount>
+  <HistorySerialNumbersSorting>1</HistorySerialNumbersSorting>
+  <SerialRepeatCheckingEnabled>Y</SerialRepeatCheckingEnabled>
+  <BatchModeAvailableTests>
+    <BurnIn>1</BurnIn>
+  </BatchModeAvailableTests>
+  <BelMESState>N</BelMESState>
+</Configuration>
