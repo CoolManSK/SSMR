@@ -5120,6 +5120,9 @@
 		<Assembly>
 			<Name>BQ2320-9RB1</Name>
 		</Assembly>
+    <Assembly>
+      <Name>BQ2320-9RB1G</Name>
+    </Assembly>
 		<Assembly>
 			<Name>BQ2320-9R-EX</Name>
 		</Assembly>
@@ -12215,6 +12218,9 @@
 		</Assembly>
     <Assembly>
       <Name>PSB125-9IR</Name>
+    </Assembly>
+    <Assembly>
+      <Name>PSB125-9IRG</Name>
     </Assembly>
 		<Assembly>
 			<Name>PSB125-9LIR</Name>
