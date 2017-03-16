@@ -4445,6 +4445,9 @@
 		<Assembly>
 			<Name>BM2540-9P</Name>
 		</Assembly>
+    <Assembly>
+			<Name>BM2540-9PG</Name>
+		</Assembly>
 		<Assembly>
 			<Name>BM2548-7D9</Name>
 		</Assembly>
