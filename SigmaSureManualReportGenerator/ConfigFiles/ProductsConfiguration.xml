@@ -1883,7 +1883,21 @@
     </Assembly>
     <Assembly>
       <Name>CPD250-4530S254G</Name>
-      <BarcodeLength>53</BarcodeLength>
+      <BarcodeLength>13</BarcodeLength>
+      <BarcodeSettings>
+        <JobID>
+          <StartIndex>0</StartIndex>
+          <Length>8</Length>
+        </JobID>
+        <SerialNumber>
+          <StartIndex>8</StartIndex>
+          <Length>5</Length>
+        </SerialNumber>
+        <ProductNo>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </ProductNo>
+      </BarcodeSettings>
       <Properties>
         <Memory>N/A</Memory>
       </Properties>
