@@ -11652,6 +11652,21 @@
 		</Assembly>
 		<Assembly>
 			<Name>MF007-100G</Name>
+      <BarcodeLength>18</BarcodeLength>
+      <BarcodeSettings>
+        <JobID>
+          <StartIndex>2</StartIndex>
+          <Length>8</Length>
+        </JobID>
+        <SerialNumber>
+          <StartIndex>13</StartIndex>
+          <Length>5</Length>
+        </SerialNumber>
+        <ProductNo>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </ProductNo>
+      </BarcodeSettings>
 		</Assembly>
 		<Assembly>
 			<Name>MK001-500</Name>
