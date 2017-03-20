@@ -1070,6 +1070,9 @@
   </Families>
   <Assemblies>      
     <Assembly>      
+      <Name>BPD1002</Name>
+    </Assembly>
+    <Assembly>      
       <Name>BPD1003</Name>
     </Assembly>
     <Assembly>      
