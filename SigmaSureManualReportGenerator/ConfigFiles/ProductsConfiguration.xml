@@ -1111,6 +1111,13 @@
       </Properties>  
     </Assembly>
     <Assembly>      
+      <Name>HR2320-9RB1GA103</Name>
+      <BarcodeLength>53</BarcodeLength>
+      <Properties>
+        <Memory>N/A</Memory>      
+      </Properties>  
+    </Assembly>
+    <Assembly>      
       <Name>HR2880-9RG</Name>
       <BarcodeLength>47</BarcodeLength>
       <Properties>
