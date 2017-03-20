@@ -13478,6 +13478,9 @@
 		<Assembly>
 			<Name>PSR53-9</Name>
 		</Assembly>
+    <Assembly>
+			<Name>PSR53-9G</Name>
+		</Assembly>
 		<Assembly>
 			<Name>PSR53-9I</Name>
 		</Assembly>
