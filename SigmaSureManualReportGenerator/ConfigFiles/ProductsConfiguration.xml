@@ -4190,6 +4190,9 @@
 		<Assembly>
 			<Name>BK2540-9RD6</Name>
 		</Assembly>
+    <Assembly>
+			<Name>BK2540-9RTG</Name>
+		</Assembly>
 		<Assembly>
 			<Name>BK2544-7RT</Name>
 		</Assembly>
