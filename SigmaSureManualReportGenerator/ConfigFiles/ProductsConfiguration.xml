@@ -6638,6 +6638,9 @@
 		<Assembly>
 			<Name>DM1501-9RD8</Name>
 		</Assembly>
+    <Assembly>
+			<Name>DM1501-9RD8G</Name>
+		</Assembly>
 		<Assembly>
 			<Name>DM1502-7R</Name>
 		</Assembly>
