@@ -4130,6 +4130,9 @@
 		<Assembly>
 			<Name>BK1601-9RT</Name>
 		</Assembly>
+    <Assembly>
+			<Name>BK1601-9RTG</Name>
+		</Assembly>
 		<Assembly>
 			<Name>BK1613-9R</Name>
 		</Assembly>
