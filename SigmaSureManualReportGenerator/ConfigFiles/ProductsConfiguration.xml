@@ -2601,6 +2601,13 @@
       </Properties>
     </Assembly>
     <Assembly>
+      <Name>MAP55-1024G</Name>
+      <BarcodeLength>47</BarcodeLength>
+      <Properties>
+        <Memory>N/A</Memory>
+      </Properties>
+    </Assembly>
+    <Assembly>
       <Name>(MAP55-4000)</Name>
       <BarcodeLength>49</BarcodeLength>
       <Properties>
