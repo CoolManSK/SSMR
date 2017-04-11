@@ -2433,6 +2433,13 @@
       </Properties>
     </Assembly>
     <Assembly>
+      <Name>MAP110-S163G</Name>
+      <BarcodeLength>49</BarcodeLength>
+      <Properties>
+        <Memory>N/A</Memory>
+      </Properties>
+    </Assembly>
+    <Assembly>
       <Name>MAP110-4002</Name>
       <BarcodeLength>48</BarcodeLength>
       <Properties>

@@ -56,6 +56,7 @@ namespace SigmaSureManualReportGenerator
                 this.Activated = false;
             }
         }
+
         public Boolean BelMESAuthorization(String SerialNumber, String TestType, String ProductName, String XmlContent)
         {
             if (TestType == "Adjustement") TestType = "Adjustment";

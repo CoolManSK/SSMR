@@ -86,6 +86,7 @@
             this.cb_FaultCodes_Code = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
+            this.timer_ToForeground = new System.Windows.Forms.Timer(this.components);
             this.gb_Product.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_TestType)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_SerialNumber)).BeginInit();
@@ -723,6 +724,12 @@
             this.label5.TabIndex = 0;
             this.label5.Text = "Kod chyby";
             // 
+            // timer_ToForeground
+            // 
+            this.timer_ToForeground.Enabled = true;
+            this.timer_ToForeground.Interval = 30000;
+            this.timer_ToForeground.Tick += new System.EventHandler(this.timer_ToForeground_Tick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -822,6 +829,7 @@
         private System.Windows.Forms.DataGridViewButtonColumn c_FailRes;
         private System.Windows.Forms.DataGridViewTextBoxColumn c_Comment;
         private System.Windows.Forms.ToolTip toolTip2;
+        private System.Windows.Forms.Timer timer_ToForeground;
     }
 }
 

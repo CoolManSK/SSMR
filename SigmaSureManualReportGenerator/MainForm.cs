@@ -2527,17 +2527,20 @@ namespace SigmaSureManualReportGenerator
             this.ApplySettings();
         }
 
+        private BatchSNEnterForm myForm;
         private void btn_BatchMode_Click(object sender, EventArgs e)
         {
-            BatchSNEnterForm myForm = new BatchSNEnterForm(this.cb_ProductNo.Text, this.lbl_JobIDValue.Text, this.cb_TestType.Text, this.ProductsConfig, this.StationConfig, this.lbl_OperatorSurname.Text, this.lbl_OperatorNr.Text);
+            this.myForm = new BatchSNEnterForm(this.cb_ProductNo.Text, this.lbl_JobIDValue.Text, this.cb_TestType.Text, this.ProductsConfig, this.StationConfig, this.lbl_OperatorSurname.Text, this.lbl_OperatorNr.Text);
             if (this.BelMESobj.Activated)
             {
-                myForm = new BatchSNEnterForm(this.cb_ProductNo.Text, this.lbl_JobIDValue.Text, this.cb_TestType.Text, this.ProductsConfig, this.StationConfig, this.lbl_OperatorSurname.Text, this.lbl_OperatorNr.Text, this.BelMESobj);
+                this.myForm = new BatchSNEnterForm(this.cb_ProductNo.Text, this.lbl_JobIDValue.Text, this.cb_TestType.Text, this.ProductsConfig, this.StationConfig, this.lbl_OperatorSurname.Text, this.lbl_OperatorNr.Text, this.BelMESobj);
             }
-            myForm.WindowState = FormWindowState.Maximized;
+            this.myForm.WindowState = FormWindowState.Maximized;
             this.WindowState = FormWindowState.Minimized;
-            myForm.ShowDialog();            
-            this.WindowState = FormWindowState.Maximized;            
+            this.myForm.ShowDialog();
+            this.myForm.Dispose();                       
+            this.WindowState = FormWindowState.Maximized;
+            this.tb_OrderValue.Focus();
         }
 
         private void lbl_ScanEditOrder_TextChanged(object sender, EventArgs e)
@@ -2727,5 +2730,20 @@ namespace SigmaSureManualReportGenerator
                 this.toolTip2.SetToolTip(this.tb_OrderValue, "Caps Lock is ON.");
             }
         }
-    }        
+
+        private void timer_ToForeground_Tick(object sender, EventArgs e)
+        {
+            if (this.BelMESobj.Emp.strEmployeeNumber == null) return;
+            if ((this.BelMESobj.Emp.strEmployeeNumber.Trim() == "607") || (this.BelMESobj.Emp.strEmployeeNumber.Trim() == "1805"))
+            {
+                this.Activate();
+                this.Focus();
+                if (this.myForm != null)
+                {
+                    this.myForm.Activate();
+                    this.myForm.Focus();
+                }                
+            }
+        }
+    }      
 }
