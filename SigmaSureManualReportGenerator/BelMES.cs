@@ -18,7 +18,7 @@ namespace SigmaSureManualReportGenerator
         private String LogFilePath = @"\\dcafs3\share\Manufacturing_Engineering\Public\Kolman Vladimir\BelMESCommon\SSMRG_BELLogs\";
         private String LogFileName = "";
         public Boolean Activated = false;
-        public String Mode = "D";
+        public String Mode = "P";
 
         public BelMES(String StationName)
         {

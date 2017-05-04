@@ -1791,6 +1791,7 @@ namespace SigmaSureManualReportGenerator
                             {
                                 this.pB_Assembly.Image = this.OKpict;
                             }
+                            this.lbl_JobIDValue.Text = JobID;
                         }
                         this.tb_OrderValue.Enabled = true;
                         this.tb_OrderValue.SelectAll();
@@ -1798,33 +1799,32 @@ namespace SigmaSureManualReportGenerator
                     else
                     {
                         this.pB_Assembly.Image = this.OKpict;
-                        this.lbl_JobIDValue.Text = JobID;
-                        this.pB_JobID.Image = this.OKpict;
-                        if (this.cb_TestType.SelectedIndex > -1)
+                    }
+                    if (this.cb_TestType.SelectedIndex > -1)
+                    {
+                        this.lbl_SerialNumber.Text = SerialNumber;
+                        this.pb_SerialNumber.Image = this.OKpict;
+                    }                        
+                    if (this.cb_TestType.Text == "")
+                    {
+                        this.actualOrder = 8;
+                        this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte typ testu:";
+                        //this.eventDisabler = true;
+                    }
+                    else
+                    {
+                        this.actualOrder = 6;
+                        if (this.gb_Results.Text != "Instrukcie")
                         {
-                            this.lbl_SerialNumber.Text = SerialNumber;
-                            this.pb_SerialNumber.Image = this.OKpict;
-                        }                        
-                        if (this.cb_TestType.Text == "")
-                        {
-                            this.actualOrder = 8;
-                            this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte typ testu:";
-                            //this.eventDisabler = true;
+                            this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte vysledok testu (PASS alebo FAIL):";
                         }
                         else
                         {
-                            this.actualOrder = 6;
-                            if (this.gb_Results.Text != "Instrukcie")
-                            {
-                                this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte vysledok testu (PASS alebo FAIL):";
-                            }
-                            else
-                            {
-                                this.lbl_ScanEditOrder.Text = "Vyklikajte prosim vysledky jednotlivych krokov a nasledne stlacte Vytvor report tlacidlo.";
-                                this.gb_Results.Enabled = true;
-                            }
+                            this.lbl_ScanEditOrder.Text = "Vyklikajte prosim vysledky jednotlivych krokov a nasledne stlacte Vytvor report tlacidlo.";
+                            this.gb_Results.Enabled = true;
                         }
                     }
+                    
                     this.ResetOrderTextBox();
                     return;
                 }

@@ -3821,6 +3821,9 @@
 		<Assembly>
 			<Name>AM2332-9</Name>
 		</Assembly>
+    <Assembly>
+      <Name>AM2332-9G</Name>
+    </Assembly>
 		<Assembly>
 			<Name>AM2540-7</Name>
 		</Assembly>
@@ -8355,6 +8358,9 @@
 		<Assembly>
 			<Name>GP2540-9R</Name>
 		</Assembly>
+    <Assembly>
+      <Name>GP2540-9RG</Name>
+    </Assembly>
 		<Assembly>
 			<Name>GP2660-7R</Name>
 		</Assembly>
@@ -8551,6 +8557,9 @@
 			<Name>HP4660-9RG</Name>
 		</Assembly>
     <Assembly>
+      <Name>HP4660-9RU42G</Name>
+    </Assembly>
+    <Assembly>
 			<Name>HP4660-9RVG</Name>
 		</Assembly>
     <Assembly>
@@ -8559,6 +8568,9 @@
 		<Assembly>
 			<Name>HP8060-9RG</Name>
 		</Assembly>
+    <Assembly>
+      <Name>HP8060-9RGA102</Name>
+    </Assembly>
 		<Assembly>
 			<Name>HR2320-9RB1G</Name>
 		</Assembly>
@@ -14156,6 +14168,9 @@
       <Name>BPEU2469</Name>      
     </Assembly>
     <Assembly>
+      <Name>BPEU2470</Name>
+    </Assembly>
+    <Assembly>
 			<Name>BPEU2504</Name>
 		</Assembly>
     <Assembly>
@@ -14987,6 +15002,28 @@
         <Final_Inspection>UAF01068</Final_Inspection>
       </CheckListTests>
 		</Assembly>
+    <Assembly>
+      <Name>350DNC40-12-8S415</Name>
+      <BarcodeLength>33</BarcodeLength>
+      <BarcodeSettings>
+        <JobID>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </JobID>
+        <SerialNumber>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </SerialNumber>
+        <ProductNo>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </ProductNo>
+      </BarcodeSettings>
+      <CheckListTests>
+        <OBA>UAF01068</OBA>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+    </Assembly>
     <Assembly>
 			<Name>350DNC40-12-8G</Name>
       <BarcodeLength>33</BarcodeLength>
