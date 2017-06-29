@@ -18,14 +18,19 @@ namespace SigmaSureManualReportGenerator
         private String LogFilePath = @"\\dcafs3\share\Manufacturing_Engineering\Public\Kolman Vladimir\BelMESCommon\SSMRG_BELLogs\";
         private String LogFileName = "";
         public Boolean Activated = false;
+        public Boolean WarningMessages = false;
         public String Mode = "P";
+
+        private String OperatorNumber;
+        private String StationName;
 
         public BelMES(String StationName)
         {
+            
             if (StationName == "") return;
             try
             {
-                //String userName = "trska";
+                //String userName = "inspection07";
                 //this.Env = this.Env.SetEnvironment(userName);
                 this.Env = this.Env.SetEnvironment();
                 if (this.Env != null)
@@ -36,19 +41,20 @@ namespace SigmaSureManualReportGenerator
                         this.LogFileName = String.Concat(this.Env.strComputer, "_", String.Format("{0:yyyyMMdd}", DateTime.Now), ".txt");
                     if (this.Env.blnAuthorizationPaused != false) this.Env.blnAuthorizationPaused = false;
                     this.Activated = true;
-                    this.Env.Employee = this.Emp;
-                    this.WriteLogData("");
+                    this.Env.Employee = new clEmployee();
                 }
                 else
                 {
                     this.LogFileName = String.Concat(StationName, "_", String.Format("{0:yyyyMMdd}", DateTime.Now), ".txt");
-                }
-            
+                    
+                }            
+
                 if (!File.Exists(String.Concat(this.LogFilePath, this.LogFileName)))
                 {
                     File.Create(String.Concat(this.LogFilePath, this.LogFileName));                
                 }
-                
+
+                this.WriteLogData("");
             }
             catch
             {
@@ -67,18 +73,18 @@ namespace SigmaSureManualReportGenerator
         {
             if (TestType == "Adjustement") TestType = "Adjustment";
 
-            if (this.Env.Employee.strEmployeeNumber == null)
+            if ((this.Env.Employee.strEmployeeNumber == null) || (this.Env.Employee.strEmployeeNumber == "nullEmpNumber"))
             {
-                this.Env.Employee = this.Emp;
+                this.EmployeeVerification(this.Emp.strEmployeeNumber);
             }
 
             if ((this.Authorization.strWO_SerialNumber != null) && ForceTerminated)
             {
-                this.Authorization = this.Authorization.TryAuthorization(this.Authorization.strWO_SerialNumber, this.Authorization.strTestKind, "Terminated", this.Env, true, false,this.Mode, XmlContent);
+                this.Authorization = this.Authorization.TryAuthorization(this.Authorization.strWO_SerialNumber, this.Authorization.strTestKind, "Terminated", this.Env, true, false, this.Mode, XmlContent, "");
             }
             if ((SerialNumber.Length == 13) && (TestType != ""))
             {
-                this.Authorization = this.Authorization.TryAuthorization(SerialNumber, TestType, "", this.Env, true, true, this.Mode);
+                this.Authorization = this.Authorization.TryAuthorization(SerialNumber, TestType, "", this.Env, false, true, this.Mode, "", "");
                 this.Authorization.strTestKind = TestType;
             }
             this.WriteLogData(SerialNumber);
@@ -91,7 +97,11 @@ namespace SigmaSureManualReportGenerator
             else
             {
                 b_Verified = false;
-            }
+                if (this.WarningMessages)
+                {
+                    MessageBox.Show(this.Authorization.strResult, "CHYBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }            
             return b_Verified;
         }
 
@@ -99,9 +109,9 @@ namespace SigmaSureManualReportGenerator
         {
             Boolean retVal = false;
 
-            if (this.Env.Employee.strEmployeeNumber == null)
+            if ((this.Env.Employee.strEmployeeNumber == null) || (this.Env.Employee.strEmployeeNumber == "nullEmpNumber"))
             {
-                this.Env.Employee = this.Emp;
+                this.EmployeeVerification(this.Emp.strEmployeeNumber);
             }
 
             try
@@ -110,16 +120,16 @@ namespace SigmaSureManualReportGenerator
                 {
                     if (this.Authorization.strWO_SerialNumber != "")
                     {
-                        this.Authorization = this.Authorization.TryAuthorization(this.Authorization.strWO_SerialNumber, this.Authorization.strTestKind, Result, this.Env, true, true, this.Mode, XmlReportString);
+                        this.Authorization = this.Authorization.TryAuthorization(this.Authorization.strWO_SerialNumber, this.Authorization.strTestKind, Result, this.Env, false, true, this.Mode, XmlReportString, "");
                     }
                     else
                     {
-                        this.Authorization = this.Authorization.TryAuthorization(SerialNumber, this.Authorization.strTestKind, Result, this.Env, true, true, this.Mode, XmlReportString);
+                        this.Authorization = this.Authorization.TryAuthorization(SerialNumber, this.Authorization.strTestKind, Result, this.Env, false, true, this.Mode, XmlReportString, "");
                     }
                 }
                 else
                 {
-                    this.Authorization = this.Authorization.TryAuthorization(SerialNumber, this.Authorization.strTestKind, Result, this.Env, true, true, this.Mode, XmlReportString);
+                    this.Authorization = this.Authorization.TryAuthorization(SerialNumber, this.Authorization.strTestKind, Result, this.Env, false, true, this.Mode, XmlReportString, "");
                 }
                 /*
                 if ((this.Authorization.strWO_SerialNumber != null))
@@ -145,15 +155,16 @@ namespace SigmaSureManualReportGenerator
         {
             Boolean retVal = false;
 
-            if (this.Env.Employee.strEmployeeNumber == null)
+
+            if ((this.Env.Employee.strEmployeeNumber == null) || (this.Env.Employee.strEmployeeNumber == "nullEmpNumber"))
             {
-                this.Env.Employee = this.Emp;
+                this.EmployeeVerification(this.Emp.strEmployeeNumber);                
             }
 
             if (TestKind == "Adjustement") TestKind = "Adjustment";
             try
             {
-                this.Authorization = this.Authorization.TryAuthorization(SerialNumber, TestKind, Result, this.Env, true, true, this.Mode, XmlReportString);
+                this.Authorization = this.Authorization.TryAuthorization(SerialNumber, TestKind, Result, this.Env, false, true, this.Mode, XmlReportString, "");
                 /*
                 if ((this.Authorization.strWO_SerialNumber != null))
                 {
@@ -176,13 +187,18 @@ namespace SigmaSureManualReportGenerator
 
         public Boolean EmployeeVerification(String EmployeeNumber)
         {
+            this.OperatorNumber = EmployeeNumber;
             try
             {
                 this.Emp = this.Emp.EmployeeVerify(EmployeeNumber, this.Env.DB_Resource, this.Env.ESD_DB_Resource);
                 if (this.Emp == null)
                 {
                     this.Activated = false;
-                    //MessageBox.Show("Employee Number does not exist");  
+                    if (this.WarningMessages)
+                    {
+                        MessageBox.Show(String.Concat(this.Emp.strEmployeeCodeInfo,". Zavolajte prosim testovacieho technika."), "CHYBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
                     this.WriteLogData(EmployeeNumber);
                     return false;
                 }
@@ -196,12 +212,14 @@ namespace SigmaSureManualReportGenerator
                     else
                     {
                         this.Activated = false;
-                        //MessageBox.Show(this.Emp.strEmployeeCodeInfo);  
+                        if (this.WarningMessages)
+                        {
+                            MessageBox.Show(String.Concat(this.Emp.strEmployeeCodeInfo, ". Zavolajte prosim testovacieho technika."), "CHYBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }                        
                         this.WriteLogData(EmployeeNumber);
                         return false;
                     }
                 }
-
                 return true;
             }
             catch
@@ -210,7 +228,7 @@ namespace SigmaSureManualReportGenerator
                 this.Activated = false;
                 return false;
             }
-        }
+        }                
 
         private void WriteLogData(String ExtendedInfo)
         {
@@ -233,6 +251,7 @@ namespace SigmaSureManualReportGenerator
                     this.Env.blnAuthorizationPaused, ";", this.Activated, ";", ExtendedInfo);
                 sr.WriteLine(newLine);
                 sr.Close();
+                sr.Dispose();
             }
             catch (Exception ex)
             {

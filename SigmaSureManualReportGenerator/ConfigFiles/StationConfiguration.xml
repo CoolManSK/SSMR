@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Configuration>
   <Mode>D</Mode>
-  <OperatorConfigurationFile>\\dcafs3\SHARE\Manufacturing_Engineering\Public\Kolman Vladimir\SigmaSure\UserConfigurations\default.xml</OperatorConfigurationFile>
+  <OperatorConfigurationFile>\\dcafs3\SHARE\Manufacturing_Engineering\Public\Kolman Vladimir\SigmaSure\UserConfigurations\default.xml</OperatorConfigurationFile>  
   <OperatorNameMode>Surname</OperatorNameMode>  
   <Station>
     <Default>
@@ -25,4 +25,7 @@
     <BurnIn>1</BurnIn>
   </BatchModeAvailableTests>
   <BelMESState>N</BelMESState>
+  <AllowStationModeChange>N</AllowStationModeChange>
+  <BelMESMessageWarnings>N</BelMESMessageWarnings>
+  <ExtraLoginEnabled>N</ExtraLoginEnabled>
 </Configuration>

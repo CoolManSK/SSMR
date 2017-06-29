@@ -218,6 +218,24 @@
       </BarcodeSettings>
     </Family>
     <Family>
+      <Name>PV</Name>
+      <BarcodeLength>18</BarcodeLength>
+      <BarcodeSettings>
+        <JobID>
+          <StartIndex>2</StartIndex>
+          <Length>8</Length>
+        </JobID>
+        <SerialNumber>
+          <StartIndex>13</StartIndex>
+          <Length>5</Length>
+        </SerialNumber>
+        <ProductNo>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </ProductNo>
+      </BarcodeSettings>
+    </Family>
+    <Family>
       <Name>LX</Name>
       <BarcodeLength>18</BarcodeLength>
       <BarcodeSettings>
@@ -2033,6 +2051,9 @@
       <Name>LWN2663-6EG</Name>
     </Assembly>
     <Assembly>
+      <Name>LWN2663-9EG</Name>
+    </Assembly>
+    <Assembly>
       <Name>LWN2660-6ER</Name>
     </Assembly>
     <Assembly>
@@ -3666,6 +3687,9 @@
 	    <Name>AK1601-9RD3</Name>
     </Assembly>
     <Assembly>
+	    <Name>AK1601-9RG</Name>
+    </Assembly>
+    <Assembly>
 	    <Name>AK1601-9RT</Name>
     </Assembly>
     <Assembly>
@@ -4826,6 +4850,9 @@
 		<Assembly>
 			<Name>BP1501-9RD</Name>
 		</Assembly>
+    <Assembly>
+			<Name>BP1501-9RDG</Name>
+		</Assembly>
 		<Assembly>
 			<Name>BP1502-5RD</Name>
 		</Assembly>
@@ -5737,6 +5764,9 @@
 		</Assembly>
 		<Assembly>
 			<Name>CM1506-9R</Name>
+		</Assembly>
+    <Assembly>
+			<Name>CM1506-9RG</Name>
 		</Assembly>
 		<Assembly>
 			<Name>CM1601-7ER</Name>
@@ -8560,6 +8590,9 @@
       <Name>HP4660-9RU42G</Name>
     </Assembly>
     <Assembly>
+      <Name>HP4660-9RU14G</Name>
+    </Assembly>
+    <Assembly>
 			<Name>HP4660-9RVG</Name>
 		</Assembly>
     <Assembly>
@@ -10642,6 +10675,12 @@
 			<Name>LPM000-HPF5</Name>
 		</Assembly>
     <Assembly>
+			<Name>LPM109-OUTA1-10</Name>
+		</Assembly>
+    <Assembly>
+			<Name>LPM109-OUTA1-20</Name>
+		</Assembly>
+    <Assembly>
 			<Name>LPM118-OUTA2-20</Name>
 		</Assembly>
     <Assembly>
@@ -10736,6 +10775,9 @@
 		</Assembly>
 		<Assembly>
 			<Name>LPM409-JJJJ-D081</Name>
+		</Assembly>
+    <Assembly>
+			<Name>LPM409-KKKE-D0120</Name>
 		</Assembly>
 		<Assembly>
 			<Name>LPM615-00ABB0-D017</Name>
@@ -11129,6 +11171,9 @@
 		</Assembly>
 		<Assembly>
 			<Name>LS1501-9ER</Name>
+		</Assembly>
+    <Assembly>
+			<Name>LS1501-9ERG</Name>
 		</Assembly>
 		<Assembly>
 			<Name>LS1501-9PB1</Name>
@@ -11645,6 +11690,21 @@
 		</Assembly>
 		<Assembly>
 			<Name>MD083-500</Name>
+      <BarcodeLength>18</BarcodeLength>
+        <BarcodeSettings>
+          <JobID>
+            <StartIndex>2</StartIndex>
+            <Length>8</Length>
+          </JobID>
+          <SerialNumber>
+            <StartIndex>13</StartIndex>
+            <Length>5</Length>
+          </SerialNumber>
+          <ProductNo>
+            <StartIndex>-1</StartIndex>
+            <Length>0</Length>
+          </ProductNo>
+        </BarcodeSettings>
 		</Assembly>
 		<Assembly>
 			<Name>MD087-800</Name>
@@ -16642,6 +16702,9 @@
 		</Assembly>
 		<Assembly>
 			<Name>70IMX35D05D15-8Z</Name>
+		</Assembly>
+    <Assembly>
+			<Name>70IMX35D05D15-8ZG</Name>
 		</Assembly>
 		<Assembly>
 			<Name>70IMX35D12D12-8</Name>

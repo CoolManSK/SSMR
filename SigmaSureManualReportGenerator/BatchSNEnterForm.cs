@@ -602,7 +602,7 @@ namespace SigmaSureManualReportGenerator
 
         private void tb_ScanField_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if ((this.tb_ScanField.Text != "") && (e.KeyChar == (char)Keys.Enter))
+            if ((this.tb_ScanField.Text.Trim() != "") && (e.KeyChar == (char)Keys.Enter))
             {
                 this.FailedStepComponentsVisibility(false);
                 String str_ProdID = ProductBarcode.GetProductNoFromBarcode(this.tb_ScanField.Text);
@@ -670,8 +670,7 @@ namespace SigmaSureManualReportGenerator
 
                     if (this.BelMesObj.Activated)
                     {
-                        Boolean b_BelMesAutorized = this.BelMesObj.BelMESAuthorization(String.Concat(this.JobID, str_FormatedSN), this.TestType, this.ProductNo, "", false);
-                        if (b_BelMesAutorized)
+                        if (this.BelMesObj.BelMESAuthorization(String.Concat(this.JobID, str_FormatedSN), this.TestType, this.ProductNo, "", false))                        
                         {
                             Array.Resize(ref this.AuthorizedSNs, this.AuthorizedSNs.Length + 1);
                             this.AuthorizedSNs.SetValue(str_FormatedSN, this.AuthorizedSNs.Length - 1);
@@ -889,6 +888,8 @@ namespace SigmaSureManualReportGenerator
             if (e.Button == MouseButtons.Left)
             {
                 if (e.RowIndex < 0) return;
+                String actSerialNumber = String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[0].Value.ToString().Trim());
+                // highlight serial number
                 if (e.ColumnIndex == 0)
                 {                    
                     if (this.dgv_SerialNumbers.Rows[e.RowIndex].DefaultCellStyle.BackColor == Color.Green)
@@ -927,29 +928,25 @@ namespace SigmaSureManualReportGenerator
 
                     }
                 }
+                // pass button
                 else if (e.ColumnIndex == 1)
                 {
                     this.DeleteSerialNumberFailedSteps(String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[0].Value.ToString()));
                     this.dgv_SerialNumbers.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Green;
                     this.dgv_SerialNumbers.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = Color.Green;
                     this.FailedStepComponentsVisibility(false);
-                }
-                else if (e.ColumnIndex == 3)
-                {
-                    String actSerialNumber = String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[0].Value.ToString().Trim());
-                    PropertyInfo[] bufferPIs = { };
-                    foreach (PropertyInfo actPI in this.myPIs)
+
+                    if (this.BelMesObj.Activated)
                     {
-                        if (actPI.SerialNumber != actSerialNumber)
+                        Int32 actSNIndex = Array.IndexOf(this.AuthorizedSNs, actSerialNumber);
+                        if (actSNIndex == -1)
                         {
-                            Array.Resize(ref bufferPIs, bufferPIs.Length + 1);
-                            bufferPIs.SetValue(actPI, bufferPIs.Length - 1);
+                            Array.Resize(ref this.AuthorizedSNs, this.AuthorizedSNs.Length + 1);
+                            this.AuthorizedSNs.SetValue(actSerialNumber, this.AuthorizedSNs.Length - 1);
                         }
                     }
-                    this.myPIs = bufferPIs;
-                    this.DeleteSerialNumberFailedSteps(String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[0].Value.ToString().Trim()));
-                    this.dgv_SerialNumbers.Rows.RemoveAt(e.RowIndex);
                 }
+                // fail button
                 else if (e.ColumnIndex == 2)
                 {
                     this.gb_FailedSteps.Controls.Clear();
@@ -983,6 +980,41 @@ namespace SigmaSureManualReportGenerator
                     this.dgv_SerialNumbers.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = Color.Red;
                     this.tb_FailedStepNameEnter.Focus();
                 }
+                // delete button
+                else if (e.ColumnIndex == 3)
+                {
+                    
+                    PropertyInfo[] bufferPIs = { };
+                    foreach (PropertyInfo actPI in this.myPIs)
+                    {
+                        if (actPI.SerialNumber != actSerialNumber)
+                        {
+                            Array.Resize(ref bufferPIs, bufferPIs.Length + 1);
+                            bufferPIs.SetValue(actPI, bufferPIs.Length - 1);
+                        }
+                    }
+                    if (this.BelMesObj.Activated)
+                    {
+                        Int32 actSNIndex = Array.IndexOf(this.AuthorizedSNs, actSerialNumber);
+                        if (actSNIndex != -1)
+                        {                            
+                            String[] TempArray = { };
+                            for (Int32 i = 0; i < this.AuthorizedSNs.Length; i++)
+                            {
+                                if (i != actSNIndex)
+                                {
+                                    Array.Resize(ref TempArray, TempArray.Length + 1);
+                                    TempArray.SetValue(this.AuthorizedSNs.GetValue(i), TempArray.Length - 1);
+                                }
+                            }
+                            this.AuthorizedSNs = TempArray;                            
+                        }
+                    }
+                    this.myPIs = bufferPIs;
+                    this.DeleteSerialNumberFailedSteps(String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[0].Value.ToString().Trim()));
+                    this.dgv_SerialNumbers.Rows.RemoveAt(e.RowIndex);
+                }
+                
                 
             }            
             else if (e.Button == MouseButtons.Right)

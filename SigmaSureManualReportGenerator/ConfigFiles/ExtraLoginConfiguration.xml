@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<Configuration>
+  <U1805>
+    <ValidationString>QZaSaTRyhDhtEa7R</ValidationString>
+    <Surname>Kolman</Surname>
+    
+    <!-- 0 - Operator -->
+    <!-- 1 - Admin -->
+    <!-- 2 - UserAdmin -->    
+    <AdminRights>1</AdminRights>
+  </U1805>
+  <U1805>
+    <ValidationString>QZaSaTRyhDhtEa7R</ValidationString>
+    <Surname>Kolman</Surname>
+    
+    <!-- 0 - Operator -->
+    <!-- 1 - Admin -->
+    <!-- 2 - UserAdmin -->    
+    <AdminRights>1</AdminRights>
+  </U1805>
+</Configuration>
