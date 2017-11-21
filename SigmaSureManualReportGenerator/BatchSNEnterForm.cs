@@ -12,7 +12,7 @@ namespace SigmaSureManualReportGenerator
 {
     public partial class BatchSNEnterForm : Form
     {
-        public BatchSNEnterForm(String ProductNo, String JobID, String TestType, XmlDocument ProductsConfigXML, XmlDocument StationConfigXML, String OperatorName, String OperatorNr)
+        public BatchSNEnterForm(String ProductNo, String JobID, String TestType, ProductsConfigurationFile ProductsConfigXML, XmlDocument StationConfigXML, String OperatorName, String OperatorNr)
         {
             InitializeComponent();
             this.ProductNo = ProductNo;
@@ -26,7 +26,7 @@ namespace SigmaSureManualReportGenerator
             this.BelMesObj = new BelMES("");
         }
 
-        public BatchSNEnterForm(String ProductNo, String JobID, String TestType, XmlDocument ProductsConfigXML, XmlDocument StationConfigXML, String OperatorName, String OperatorNr, BelMES BelMesObj)
+        public BatchSNEnterForm(String ProductNo, String JobID, String TestType, ProductsConfigurationFile ProductsConfigXML, XmlDocument StationConfigXML, String OperatorName, String OperatorNr, BelMES BelMesObj)
         {
             InitializeComponent();
             this.ProductNo = ProductNo;
@@ -45,7 +45,7 @@ namespace SigmaSureManualReportGenerator
         private String TestType;
         private String OperatorName;
         private String OperatorNr;
-        private XmlDocument ProductsConfig;
+        private ProductsConfigurationFile ProductsConfig;
         private XmlDocument StationConfig;
         private Boolean CheckingOfSerialNumberTested;
         private StationInfos mySI;
@@ -342,6 +342,7 @@ namespace SigmaSureManualReportGenerator
                 StreamWriter sw = new StreamWriter(fs);
                 sw.WriteLine(String.Concat(ActualTime, ";", StationID, ";", Operator, ";", ActualOrderString, ";", ErrorMessage));
                 sw.Close();
+                fs.Close();
             }
             catch (Exception ex)
             {
@@ -412,7 +413,7 @@ namespace SigmaSureManualReportGenerator
             {
                 myReport.mode = URMode;
             }
-            XmlNode assembliesNode = ProductsConfig.LastChild.SelectSingleNode("./Assemblies");
+            XmlNode assembliesNode = ProductsConfig.XmlFile.LastChild.SelectSingleNode("./Assemblies");
             foreach (XmlNode actAssNode in assembliesNode.ChildNodes)
             {
                 if (actAssNode.SelectSingleNode("./Name").InnerText == myReport.Cathegory.Product.PartNo)
@@ -428,7 +429,7 @@ namespace SigmaSureManualReportGenerator
                 }
             }
 
-            XmlNode familyProperties = ProductsConfig.LastChild.SelectSingleNode("./Families");
+            XmlNode familyProperties = ProductsConfig.XmlFile.LastChild.SelectSingleNode("./Families");
             foreach (XmlNode actFamilyNode in familyProperties.ChildNodes)
             {
                 if (actFamilyNode.SelectSingleNode("./Name").InnerText == myReport.Cathegory.Product.PartNo)
@@ -653,7 +654,7 @@ namespace SigmaSureManualReportGenerator
                         }
                     }
 
-                    if (SpecialRequirements.IsActive(this.ProductsConfig, this.lbl_ProductNo.Text, "CustomSerialNumber"))
+                    if (SpecialRequirements.IsActive(this.ProductsConfig.XmlFile, this.lbl_ProductNo.Text, "CustomSerialNumber"))
                     {
                         InputBox_Form myForm = new InputBox_Form("Custom Serial Number", "Oskenujte Custom Serial Number");
                         myForm.ShowDialog();
@@ -675,6 +676,13 @@ namespace SigmaSureManualReportGenerator
                             Array.Resize(ref this.AuthorizedSNs, this.AuthorizedSNs.Length + 1);
                             this.AuthorizedSNs.SetValue(str_FormatedSN, this.AuthorizedSNs.Length - 1);
                         }
+                        // will be removed in the future
+                        else
+                        {
+                            Array.Resize(ref this.AuthorizedSNs, this.AuthorizedSNs.Length + 1);
+                            this.AuthorizedSNs.SetValue(str_FormatedSN, this.AuthorizedSNs.Length - 1);
+                        }
+                        //-----
                     }  
 
                     this.dgv_SerialNumbers.Rows.Add(str_FormatedSN, "PASS", "FAIL", "DELETE");
@@ -693,7 +701,21 @@ namespace SigmaSureManualReportGenerator
 
         private void button2_Click(object sender, EventArgs e)
         {
-            this.Dispose();
+            if (this.dgv_SerialNumbers.Rows.Count > 0)
+            {
+                if (MessageBox.Show("Naozaj chcete ukoncit pracu v Batch mode? Reporty z oskenovanych vyrobkov sa neposlu.", "POZOR", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    foreach (String actSN in this.AuthorizedSNs)
+                    {
+                        this.BelMesObj.SetActualResult("Terminated", "", actSN);
+                    }
+                    this.Dispose();
+                }
+            }
+            else
+            {
+                this.Dispose();
+            }
         }
 
         private void btn_CreateReports_Click(object sender, EventArgs e)

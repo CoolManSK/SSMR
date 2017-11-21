@@ -10,6 +10,7 @@ namespace SigmaSureManualReportGenerator
         public String Number;
         public String Password;
         public String Privileges;
+        private XmlDocument ELxmlConfig;
         private XmlDocument XMLConfig;
         private XmlNode OperatorsNode;
         private XmlNode OperatorNode;
@@ -20,11 +21,15 @@ namespace SigmaSureManualReportGenerator
             this.Number = "";
             this.Password = "";
             this.Privileges = "";
+            this.ELxmlConfig = new XmlDocument();
+            this.ELxmlConfig.Load(@"ConfigFiles\ExtraLoginConfiguration.xml");
             this.XMLConfig = ConfigFile;
-            this.OperatorsNode = this.XMLConfig.SelectSingleNode("/Operators");            
+            this.OperatorsNode = this.XMLConfig.SelectSingleNode("./Operators");            
         }
         public OperatorData(String Surname, String Number, String Password, String Privileges, XmlDocument ConfigFile)
         {
+            this.ELxmlConfig = new XmlDocument();
+            this.ELxmlConfig.Load(@"ConfigFiles\ExtraLoginConfiguration.xml");
             this.XMLConfig = ConfigFile;
             this.OperatorsNode = this.XMLConfig.SelectSingleNode("./Operators");
             this.Surname = Surname;
@@ -37,7 +42,9 @@ namespace SigmaSureManualReportGenerator
         {
             this.Surname = Surname;
 
-            this.XMLConfig = ConfigDocument;
+            this.ELxmlConfig = new XmlDocument();
+            this.ELxmlConfig.Load(@"ConfigFiles\ExtraLoginConfiguration.xml");
+            this.XMLConfig = ConfigDocument;           
 
             this.OperatorsNode = this.XMLConfig.SelectSingleNode(String.Concat("./Operators"));
 
@@ -67,6 +74,8 @@ namespace SigmaSureManualReportGenerator
         {
             this.Number = Number;
 
+            this.ELxmlConfig = new XmlDocument();
+            this.ELxmlConfig.Load(@"ConfigFiles\ExtraLoginConfiguration.xml");
             this.XMLConfig = ConfigDocument;
 
             this.OperatorsNode = this.XMLConfig.SelectSingleNode(String.Concat("./Operators"));
@@ -92,6 +101,12 @@ namespace SigmaSureManualReportGenerator
                     }
                 }
             }
+        }
+
+        public OperatorData(String ExtraLoginPassword)
+        {
+            this.ELxmlConfig = new XmlDocument();
+            this.ELxmlConfig.Load(@"ConfigFiles\ExtraLoginConfiguration.xml");            
         }
 
         public void ChangePassword(String NewPassword)
@@ -218,6 +233,8 @@ namespace SigmaSureManualReportGenerator
                         this.Number = Number;
                         XmlNode node_surname = actNode.SelectSingleNode(String.Concat("./Surname"));
                         this.Surname = node_surname.InnerText;
+                        XmlNode privileges_node = actNode.SelectSingleNode(String.Concat("./Privileges"));
+                        this.Privileges = privileges_node.InnerText;
                         return true;
                     }
                     else
@@ -228,6 +245,34 @@ namespace SigmaSureManualReportGenerator
             }
             return IsValid;
         }
+
+        public Boolean PasswordValidation(String Password)
+        {
+            Boolean retVal = false;
+
+            try
+            {
+                XmlNode ConfigurationNode = this.ELxmlConfig.SelectSingleNode("./Configuration");
+                foreach (XmlNode actOperatorNode in ConfigurationNode.ChildNodes)
+                {
+                    if (actOperatorNode.SelectSingleNode("./ValidationString").InnerText.Trim() == Password)
+                    {
+                        this.Number = actOperatorNode.Name.Substring(1);
+                        this.Surname = actOperatorNode.SelectSingleNode("./Surname").InnerText.Trim();
+                        this.Privileges = actOperatorNode.SelectSingleNode("./AdminRights").InnerText.Trim();
+                        retVal = true;
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return retVal;
+        }
+
         public Boolean DeleteOperator()
         {
             foreach (XmlNode actOperatorNode in this.OperatorsNode)
@@ -246,7 +291,8 @@ namespace SigmaSureManualReportGenerator
             this.Surname = Surname;
             this.DeleteOperator();
             return true;
-        }
+        }        
+
         private String GetFilePathFromURI(String URIPath)
         {
             if (URIPath.IndexOf(@"file:///") == 0)

@@ -36,6 +36,8 @@
             this.cb_HistorySNSorting = new System.Windows.Forms.ComboBox();
             this.cb_StationMode = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.cb_CommandsColor = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nUD_LastSNinHystory)).BeginInit();
             this.SuspendLayout();
             // 
@@ -69,7 +71,7 @@
             // btn_SAVE
             // 
             this.btn_SAVE.Enabled = false;
-            this.btn_SAVE.Location = new System.Drawing.Point(16, 109);
+            this.btn_SAVE.Location = new System.Drawing.Point(16, 187);
             this.btn_SAVE.Name = "btn_SAVE";
             this.btn_SAVE.Size = new System.Drawing.Size(143, 35);
             this.btn_SAVE.TabIndex = 2;
@@ -79,7 +81,7 @@
             // 
             // btn_Cancel
             // 
-            this.btn_Cancel.Location = new System.Drawing.Point(279, 109);
+            this.btn_Cancel.Location = new System.Drawing.Point(279, 187);
             this.btn_Cancel.Name = "btn_Cancel";
             this.btn_Cancel.Size = new System.Drawing.Size(143, 35);
             this.btn_Cancel.TabIndex = 3;
@@ -131,12 +133,33 @@
             this.label3.TabIndex = 6;
             this.label3.Text = "Station Mode:";
             // 
+            // cb_CommandsColor
+            // 
+            this.cb_CommandsColor.FormattingEnabled = true;
+            this.cb_CommandsColor.Location = new System.Drawing.Point(209, 107);
+            this.cb_CommandsColor.Name = "cb_CommandsColor";
+            this.cb_CommandsColor.Size = new System.Drawing.Size(213, 28);
+            this.cb_CommandsColor.TabIndex = 9;
+            this.cb_CommandsColor.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cb_CommandsColor_DrawItem);
+            this.cb_CommandsColor.SelectedIndexChanged += new System.EventHandler(this.cb_CommandsColor_SelectedIndexChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 110);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(191, 20);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Farba prikazoveho riadku:";
+            // 
             // AlwaysAvailableSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(440, 154);
+            this.ClientSize = new System.Drawing.Size(440, 236);
             this.ControlBox = false;
+            this.Controls.Add(this.cb_CommandsColor);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.cb_StationMode);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.cb_HistorySNSorting);
@@ -167,5 +190,7 @@
         private System.Windows.Forms.ComboBox cb_HistorySNSorting;
         private System.Windows.Forms.ComboBox cb_StationMode;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox cb_CommandsColor;
+        private System.Windows.Forms.Label label4;
     }
 }

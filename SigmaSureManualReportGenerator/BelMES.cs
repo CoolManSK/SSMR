@@ -19,6 +19,7 @@ namespace SigmaSureManualReportGenerator
         private String LogFileName = "";
         public Boolean Activated = false;
         public Boolean WarningMessages = false;
+        public Boolean ProductVerifiedForMessages = false;
         public String Mode = "P";
 
         private String OperatorNumber;
@@ -51,7 +52,7 @@ namespace SigmaSureManualReportGenerator
 
                 if (!File.Exists(String.Concat(this.LogFilePath, this.LogFileName)))
                 {
-                    File.Create(String.Concat(this.LogFilePath, this.LogFileName));                
+                    File.Create(String.Concat(this.LogFilePath, this.LogFileName)).Close();                    
                 }
 
                 this.WriteLogData("");
@@ -97,7 +98,7 @@ namespace SigmaSureManualReportGenerator
             else
             {
                 b_Verified = false;
-                if (this.WarningMessages)
+                if (this.WarningMessages || this.ProductVerifiedForMessages)
                 {
                     MessageBox.Show(this.Authorization.strResult, "CHYBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -162,9 +163,16 @@ namespace SigmaSureManualReportGenerator
             }
 
             if (TestKind == "Adjustement") TestKind = "Adjustment";
+
             try
             {
                 this.Authorization = this.Authorization.TryAuthorization(SerialNumber, TestKind, Result, this.Env, false, true, this.Mode, XmlReportString, "");
+
+                if ((!this.Authorization.blnAuthorized) && (TestKind == "OBA"))
+                {
+                    MessageBox.Show(String.Concat("Nepodaril sa vytvorit zaznam z OBA testu pre SN ", SerialNumber, " do Belmesu. Kontaktujte prosím testovacieho technika."), "CHYBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
                 /*
                 if ((this.Authorization.strWO_SerialNumber != null))
                 {

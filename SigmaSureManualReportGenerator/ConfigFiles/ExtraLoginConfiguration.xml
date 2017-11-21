@@ -3,19 +3,46 @@
   <U1805>
     <ValidationString>QZaSaTRyhDhtEa7R</ValidationString>
     <Surname>Kolman</Surname>
-    
-    <!-- 0 - Operator -->
-    <!-- 1 - Admin -->
-    <!-- 2 - UserAdmin -->    
-    <AdminRights>1</AdminRights>
+    <AdminRights>admin</AdminRights>
   </U1805>
-  <U1805>
-    <ValidationString>QZaSaTRyhDhtEa7R</ValidationString>
-    <Surname>Kolman</Surname>
-    
-    <!-- 0 - Operator -->
-    <!-- 1 - Admin -->
-    <!-- 2 - UserAdmin -->    
-    <AdminRights>1</AdminRights>
-  </U1805>
+  <U1418>
+    <ValidationString>LwmafSvctRzeE3mj</ValidationString>
+    <Surname>Vavrikova</Surname>
+    <AdminRights>operator</AdminRights>
+  </U1418>
+  <U1172>
+    <ValidationString>EjgFEWCNJz58LSe4</ValidationString>
+    <Surname>Kubisova</Surname>
+    <AdminRights>operator</AdminRights>
+  </U1172>
+  <U1873>
+    <ValidationString>Afg2VmhcptJfSTzp</ValidationString>
+    <Surname>Palieska</Surname>
+    <AdminRights>operator</AdminRights>
+  </U1873>
+  <U30240>
+    <ValidationString>PQxrAHYRry3Ab62B</ValidationString>
+    <Surname>Gabor</Surname>
+    <AdminRights>operator</AdminRights>
+  </U30240>
+  <U1780>
+    <ValidationString>tghkdjMZG2gy3XUH</ValidationString>
+    <Surname>Markova</Surname>
+    <AdminRights>operator</AdminRights>
+  </U1780>
+  <U1441>
+    <ValidationString>2BBH7CkDgwEx9D52</ValidationString>
+    <Surname>Gazova</Surname>
+    <AdminRights>operator</AdminRights>
+  </U1441>
+  <U1698>
+    <ValidationString>9HbSmHtvrQFBjaNC</ValidationString>
+    <Surname>Dulakova</Surname>
+    <AdminRights>operator</AdminRights>
+  </U1698>
+  <U1465>
+    <ValidationString>bEHagBuxpu22V9VL</ValidationString>
+    <Surname>Kazik</Surname>
+    <AdminRights>operator</AdminRights>
+  </U1465>
 </Configuration>

@@ -24,6 +24,7 @@ namespace SigmaSureManualReportGenerator
         private Int16 actualOrder;
         private Int32 lastProductIndex = -1;
         private String actualGrade = "PASS";
+        private Boolean ExtraLoginEnabled = false;
 
         private Bitmap OKpict = new Bitmap("OK.jpg");
         private Bitmap NOTOKpict = new Bitmap("NOTOK.jpg");
@@ -37,7 +38,7 @@ namespace SigmaSureManualReportGenerator
         private String ProductsConfigFileName = "ProductsConfiguration.xml";
         private XmlDocument StationConfig = new XmlDocument();
         private XmlDocument UserConfig = new XmlDocument();
-        private XmlDocument ProductsConfig = new XmlDocument();
+        private ProductsConfigurationFile ProductsConfig;
         private Boolean CheckingOfSerialNumberTested = true;
         private Boolean IgnoreSNLength = false;
         private TxtDatabase TD = new TxtDatabase();
@@ -45,18 +46,22 @@ namespace SigmaSureManualReportGenerator
         private Boolean BelMESenabled = true;
         private Boolean BelMESMessageWarnings = true;
         private BelMES BelMESobj = new BelMES("");
-
-        private struct ChildTestInfo
+           
+        /*     
+        public struct ChildTestInfo
         {
             public string Name;
             public string Instruction;
             public string PicturePath;
         }
-        private struct FaultCode
+        
+        public struct FaultCode
         {
             public String Code;
             public String Description;
         }
+        */
+        
         private struct StationInfos
         {
             public String Name;
@@ -162,102 +167,8 @@ namespace SigmaSureManualReportGenerator
             this.cms_AdminContext.Enabled = false;
 
             if (this.lbl_OperatorNr.Text != "")
-            {               
-                foreach (XmlNode actNode in this.UserConfig.SelectSingleNode("./Operators").ChildNodes)
-                {
-                    if (actNode.SelectSingleNode("./Number").InnerText == this.lbl_OperatorNr.Text)
-                    {
-                        if (actNode.SelectSingleNode("./Privileges") == null)
-                        {
-                            this.ErrorMessageBoxShow(String.Concat("V konfiguracnom subore chybaju udaje o Vasich privilegiach. Zavolajte prosim testovacieho inziniera."), true);
-                            if (this.lbl_OperatorNr.Text == "1805") this.cms_AdminContext.Enabled = true;
-                            this.gb_Product.Enabled = false;
-                            this.gb_Barcodes.Enabled = false;
-                            return;
-                        }
-                        if (actNode.SelectSingleNode("./Privileges").InnerText == "admin")
-                        {
-                            this.cms_AdminContext.Enabled = true;
-                            this.cms_AdminContext.Items[0].Enabled = true;
-                            this.cms_AdminContext.Items[1].Enabled = true;
-                            this.cms_AdminContext.Items[2].Enabled = true;
-                            this.cms_AdminContext.Items[3].Enabled = true;
-                            this.cms_AdminContext.Items[4].Enabled = true;
-                            MessageBox.Show(String.Concat("Number of ProductNo in database: ", this.cb_ProductNo.Items.Count.ToString()));
-                        }
-                        else if (actNode.SelectSingleNode("./Privileges").InnerText == "useradmin")
-                        {
-                            this.cms_AdminContext.Enabled = true;
-                            this.cms_AdminContext.Items[0].Enabled = false;
-                            this.cms_AdminContext.Items[1].Enabled = false;
-                            this.cms_AdminContext.Items[2].Enabled = true;
-                            this.cms_AdminContext.Items[3].Enabled = true;
-                            this.cms_AdminContext.Items[4].Enabled = true;                            
-                        }
-                        else
-                        {
-                            this.cms_AdminContext.Enabled = false;
-                            this.cms_AdminContext.Items[0].Enabled = true;
-                            this.cms_AdminContext.Items[1].Enabled = true;
-                            this.cms_AdminContext.Items[2].Enabled = true;
-                            this.cms_AdminContext.Items[3].Enabled = true;
-                            this.cms_AdminContext.Items[4].Enabled = true;
-                        }
-                        break;
-                    }
-                }
-            }
-            this.tb_OrderValue.Focus();
-        }
-        private void ExtraLogin()
-        {
-            ExtraLoginForm myELform = null;
-            if (this.BelMESenabled) myELform = new ExtraLoginForm(this.BelMESobj);
-            else myELform = new ExtraLoginForm();
-            myELform.ShowDialog();
-
-            if (this.BelMESenabled)
-            {
-                this.BelMESobj = myELform.BelMESobj;
-                XmlNode URModeNode = this.StationConfig.LastChild.SelectSingleNode("./Mode");
-                if (URModeNode == null)
-                {
-                    this.ErrorMessageBoxShow("V Station configu chyba informacia o mode testu.", true);
-                }
-                if (URModeNode.InnerText != "") this.BelMESobj.Mode = URModeNode.InnerText;
-                if (!this.BelMESobj.Activated)
-                {
-                    this.BelMESenabled = false;
-                }
-            }
-            this.ResetForm(false);
-
-            if (myELform.PasswordValidation)
-            {
-                this.lbl_OperatorNr.Text = myELform.LoggedOperatorNumber;
-                this.lbl_OperatorSurname.Text = myELform.LoggedOperatorSurname;
-                this.gb_Product.Enabled = true;
-                this.gb_Barcodes.Enabled = true;
-            }
-            else
-            {
-                this.lbl_OperatorNr.Text = "";
-                this.lbl_OperatorSurname.Text = "";
-                this.gb_Product.Enabled = false;
-                this.gb_Barcodes.Enabled = false;
-            }
-            if (this.lbl_OperatorNr.Text != "")
-            {
-                if (myELform.AdminRights == 0)
-                {
-                    this.cms_AdminContext.Enabled = false;
-                    this.cms_AdminContext.Items[0].Enabled = true;
-                    this.cms_AdminContext.Items[1].Enabled = true;
-                    this.cms_AdminContext.Items[2].Enabled = true;
-                    this.cms_AdminContext.Items[3].Enabled = true;
-                    this.cms_AdminContext.Items[4].Enabled = true;
-                }
-                else if (myELform.AdminRights == 1)
+            {    
+                if (myOLform.Privileges == "admin")
                 {
                     this.cms_AdminContext.Enabled = true;
                     this.cms_AdminContext.Items[0].Enabled = true;
@@ -267,15 +178,24 @@ namespace SigmaSureManualReportGenerator
                     this.cms_AdminContext.Items[4].Enabled = true;
                     MessageBox.Show(String.Concat("Number of ProductNo in database: ", this.cb_ProductNo.Items.Count.ToString()));
                 }
-                else if (myELform.AdminRights == 2)
+                else if (myOLform.Privileges == "useradmin")
                 {
                     this.cms_AdminContext.Enabled = true;
                     this.cms_AdminContext.Items[0].Enabled = false;
                     this.cms_AdminContext.Items[1].Enabled = false;
-                    this.cms_AdminContext.Items[2].Enabled = false;
-                    this.cms_AdminContext.Items[3].Enabled = false;
-                    this.cms_AdminContext.Items[4].Enabled = false;
+                    this.cms_AdminContext.Items[2].Enabled = true;
+                    this.cms_AdminContext.Items[3].Enabled = true;
+                    this.cms_AdminContext.Items[4].Enabled = true;
                 }
+                else
+                {
+                    this.cms_AdminContext.Enabled = false;
+                    this.cms_AdminContext.Items[0].Enabled = true;
+                    this.cms_AdminContext.Items[1].Enabled = true;
+                    this.cms_AdminContext.Items[2].Enabled = true;
+                    this.cms_AdminContext.Items[3].Enabled = true;
+                    this.cms_AdminContext.Items[4].Enabled = true;
+                }                
             }
             this.tb_OrderValue.Focus();
         }
@@ -297,7 +217,7 @@ namespace SigmaSureManualReportGenerator
                     this.ErrorMessageBoxShow(String.Concat("Zle zadane Serial Number: \"", this.lbl_SerialNumber.Text, "\".\tSerial Number musi mat 5 znakov. Dvojklikom na hodnotu Serial Number ju resetnite a postupujte podla instrukcii zobrazenych cervenym pismom. V pripade, ze sa chyba opakuje zavolajte testovacieho technika. Dakujem.\tProductID: ", this.cb_ProductNo.Text), true);
                     return false;
                 }
-            }            
+            }
 
             UnitReport myReport = new UnitReport(starttime, endtime, "D", "", false);
 
@@ -381,6 +301,21 @@ namespace SigmaSureManualReportGenerator
             {
                 myReport.mode = URMode;
             }
+
+            XmlNode actProductNode = this.ProductsConfig.GetProductNode(myReport.Cathegory.Product.PartNo);
+            if (actProductNode != null)
+            {
+                XmlNode propertiesNode = actProductNode.SelectSingleNode("./Properties");
+                if (propertiesNode != null)
+                {
+                    foreach (XmlNode actPropNode in propertiesNode)
+                    {
+                        myReport.AddProperty(actPropNode.Name, actPropNode.InnerText);
+                    }
+                }
+            }
+
+            /*
             XmlNode assembliesNode = ProductsConfig.LastChild.SelectSingleNode("./Assemblies");
             foreach (XmlNode actAssNode in assembliesNode.ChildNodes)
             {
@@ -396,7 +331,23 @@ namespace SigmaSureManualReportGenerator
                     }
                 }
             }
+            */
 
+            XmlNode actFamilyNode = this.ProductsConfig.GetFamilyNode(myReport.Cathegory.Product.PartNo);
+            if (actFamilyNode != null)
+            {
+                XmlNode propertiesNode = actFamilyNode.SelectSingleNode("./Properties");
+                if (propertiesNode != null)
+                {
+                    foreach (XmlNode actPropNode in propertiesNode)
+                    {
+                        myReport.AddProperty(actPropNode.Name, actPropNode.InnerText);
+                    }
+                }
+            }
+
+            
+            /*
             XmlNode familyProperties = ProductsConfig.LastChild.SelectSingleNode("./Families");
             foreach (XmlNode actFamilyNode in familyProperties.ChildNodes)
             {
@@ -412,6 +363,7 @@ namespace SigmaSureManualReportGenerator
                     }
                 }
             }
+            */
 
             /*
             if (SpecialRequirements.IsActive(this.ProductsConfig, this.lbl_SerialNumber.Text, "CustomSerialNumber"))
@@ -548,6 +500,7 @@ namespace SigmaSureManualReportGenerator
             this.tb_OrderValue.Text = "";
             this.tb_OrderValue.Focus();
         }
+        /*
         private XmlNode GetProductNode(String ProductNo)
         {
             XmlNode AssembliesNode = this.ProductsConfig.SelectSingleNode("./Configuration/Assemblies");
@@ -577,6 +530,23 @@ namespace SigmaSureManualReportGenerator
             }
             return null;
         }
+        
+        public Boolean BelMesActivated(String ProductNo)
+        {
+            Boolean retval = false;
+
+            XmlNode myProdNode = this.ProductsConfig.GetFamilyNode(ProductNo);
+            if (this.ProductsConfig.GetProductNode(ProductNo) != null)
+            {
+                if (myProdNode.SelectSingleNode("./BelMESActivated") != null)
+                {
+                    String str_buffer = myProdNode.SelectSingleNode("./BelMESActivated").InnerText;
+                    if (str_buffer == "Y") retval = true;
+                }
+            }
+            return retval;
+        }
+        */
         private void CheckFormDataForReportAndBatchSNEnter()
         {
             if ((this.cb_ProductNo.SelectedIndex != -1)
@@ -769,6 +739,27 @@ namespace SigmaSureManualReportGenerator
                 this.StationConfig.Save(this.StationConfig.BaseURI.Substring(this.StationConfig.BaseURI.IndexOf("C:/")));
             }
 
+            XmlNode CommandColorNode = this.StationConfig.SelectSingleNode("./Configuration/Colors/CommandColor");
+            if (CommandColorNode == null)
+            {
+                XmlNode confignode = this.StationConfig.SelectSingleNode("./Configuration");
+
+                XmlNode colorsnode = this.StationConfig.SelectSingleNode("./Configuration/Colors");
+                if (colorsnode == null)
+                {
+                    XmlNode elToAdd1 = this.StationConfig.CreateNode("element", "Colors", "");                    
+                    confignode.AppendChild(elToAdd1);
+                    this.StationConfig.Save(this.StationConfig.BaseURI.Substring(this.StationConfig.BaseURI.IndexOf("C:/")));                    
+                }
+
+                colorsnode = this.StationConfig.SelectSingleNode("./Configuration/Colors");
+
+                XmlNode elToAdd = this.StationConfig.CreateNode("element", "CommandColor", "");
+                elToAdd.InnerText = "Red";
+                colorsnode.AppendChild(elToAdd);
+                this.StationConfig.Save(this.StationConfig.BaseURI.Substring(this.StationConfig.BaseURI.IndexOf("C:/")));
+            }
+
 
             /*
             XmlNode DefaultStationNode = this.StationConfig.SelectSingleNode("./Configuration/Station/Default");
@@ -910,6 +901,9 @@ namespace SigmaSureManualReportGenerator
             this.cb_LastSerialNumbers.DropDownHeight = this.cb_LastSerialNumbers.ItemHeight * ((n_HistorySNCount>20)?(20):(n_HistorySNCount));
 
             this.HSNSorting = Convert.ToInt32(this.StationConfig.SelectSingleNode("./Configuration/HistorySerialNumbersSorting").InnerText);
+
+            this.lbl_ScanEditOrder.ForeColor = Color.FromName(this.StationConfig.SelectSingleNode("./Configuration/Colors/CommandColor").InnerText.Trim());
+
             this.eventDisabler = false;
         }
         private void SaveErrorToLogFile(String ErrorMessage)
@@ -973,6 +967,7 @@ namespace SigmaSureManualReportGenerator
                     StreamWriter sw = new StreamWriter(fs);
                     sw.WriteLine(String.Concat(ActualTime, ";", StationID, ";", Operator, ";", ActualOrderString, ";", ErrorMessage));
                     sw.Close();
+                    fs.Close();
                 }
             }
             catch (Exception ex)
@@ -1169,7 +1164,10 @@ namespace SigmaSureManualReportGenerator
                 }
             }
             return retVal;
-        }        
+        }
+
+
+        /*
         private Array GetChildTestsInfos(string ProdID, string TestType)
         {
             ChildTestInfo[] retArray = { };
@@ -1256,6 +1254,8 @@ namespace SigmaSureManualReportGenerator
             }
             return retArray;
         }
+        */
+        /*
         private Array GetFaultCodes(String ProdID, String TestType)
         {
             FaultCode[] retArray = { };
@@ -1303,12 +1303,13 @@ namespace SigmaSureManualReportGenerator
             }
             return retArray;
         }
+        */
         private bool CheckForDgvInstructionVisibility()
         {
             if (this.cb_ProductNo.SelectedIndex == -1) return false;
             if (this.lbl_JobIDValue.Text == "") return false;
             if (this.cb_TestType.SelectedIndex == -1) return false;
-            Array ChildTestsInfo = this.GetChildTestsInfos(this.cb_ProductNo.Text, this.cb_TestType.Text);
+            Array ChildTestsInfo = this.ProductsConfig.GetChildTestsInfos(this.cb_ProductNo.Text, this.cb_TestType.Text);
             if (ChildTestsInfo.Length == 0) return false;
             return true;
         }
@@ -1345,7 +1346,7 @@ namespace SigmaSureManualReportGenerator
                 {
                     if ((this.cb_ProductNo.Text != "") && (this.lbl_JobIDValue.Text != "") && (this.cb_TestType.Text != "") && (this.lbl_SerialNumber.Text != ""))
                     {
-                        Array myFaultCodes = this.GetFaultCodes(this.cb_ProductNo.Text, this.cb_TestType.Text);
+                        Array myFaultCodes = this.ProductsConfig.GetFaultCodes(this.cb_ProductNo.Text, this.cb_TestType.Text);
                         if (myFaultCodes.Length > 0)
                         {
                             this.pb_BarcodesToScan.Visible = false;
@@ -1354,7 +1355,7 @@ namespace SigmaSureManualReportGenerator
                             this.cb_FaultCodes_Description.Items.Clear();
                             for (Int32 i = 0; i < myFaultCodes.Length; i++)
                             {
-                                FaultCode actFC = (FaultCode)myFaultCodes.GetValue(i);
+                                ProductsConfigurationFile.FaultCode actFC = (ProductsConfigurationFile.FaultCode)myFaultCodes.GetValue(i);
                                 this.cb_FaultCodes_Code.Items.Add(actFC.Code);
                                 this.cb_FaultCodes_Description.Items.Add(actFC.Description);
                             }
@@ -1386,32 +1387,34 @@ namespace SigmaSureManualReportGenerator
                 }
             }
         }               
+        
         private Boolean CheckUnknownProduct(String Product)
         {
             Boolean retValue = false;
             String Message = String.Concat("Produkt \"", Product, "\" sa nenasiel. Chcete ho pridat do zoznamu?");
             if (MessageBox.Show(Message, "CHYBA", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2, MessageBoxOptions.DefaultDesktopOnly) == DialogResult.Yes)
             {
-                XmlNode mainProductNode = this.ProductsConfig.SelectSingleNode("./Configuration/Assemblies");
-                XmlNode assNode = this.ProductsConfig.CreateElement("Assembly");
-                XmlNode assNameNode = this.ProductsConfig.CreateElement("Name");
+                XmlNode mainProductNode = this.ProductsConfig.XmlFile.SelectSingleNode("./Configuration/Assemblies");
+                XmlNode assNode = this.ProductsConfig.XmlFile.CreateElement("Assembly");
+                XmlNode assNameNode = this.ProductsConfig.XmlFile.CreateElement("Name");
                 assNameNode.InnerText = Product;
 
                 assNode.AppendChild(assNameNode);
 
                 mainProductNode.AppendChild(assNode);
 
-                this.ProductsConfig.Save(this.ProductsConfig.BaseURI.Substring(this.ProductsConfig.BaseURI.IndexOf("C:/")));
+                this.ProductsConfig.XmlFile.Save(this.ProductsConfig.XmlFile.BaseURI.Substring(this.ProductsConfig.XmlFile.BaseURI.IndexOf("C:/")));
                 this.tb_OrderValue.Focus();
                 retValue = true;
             }
             this.ErrorMessageBoxShow(Message, false);
             return retValue;
         }
+        
         private void SetIgnoreSNCheckFlag()
         {
             String ProductNo = this.cb_ProductNo.Text;
-            XmlNode actProdNode = this.GetProductNode(ProductNo);
+            XmlNode actProdNode = this.ProductsConfig.GetProductNode(ProductNo);
             if (actProdNode == null)
             {
                 this.IgnoreSNLength = false;
@@ -1514,9 +1517,14 @@ namespace SigmaSureManualReportGenerator
             this.UserConfig.Load(String.Concat(this.ConfigPath, this.UserConfigFileName));
 
             File.Copy(String.Concat(@"ConfigFiles\", this.ProductsConfigFileName), String.Concat(this.ConfigPath, this.ProductsConfigFileName), true);
-            this.ProductsConfig.Load(String.Concat(this.ConfigPath, this.ProductsConfigFileName));
 
-            String[] ar_assemblies = { };
+            this.ProductsConfig = new ProductsConfigurationFile(this.ConfigPath);
+
+            //this.ProductsConfig.Load(String.Concat(this.ConfigPath, this.ProductsConfigFileName));
+
+            Array ar_assemblies = this.ProductsConfig.GetAssembliesList();
+
+            /*
             XmlNode node_Assembly = this.ProductsConfig.SelectSingleNode("./Configuration/Assemblies");
             foreach (XmlNode actNode in node_Assembly.ChildNodes)
             {
@@ -1524,6 +1532,7 @@ namespace SigmaSureManualReportGenerator
                 Array.Resize(ref ar_assemblies, ar_assemblies.Length + 1);
                 ar_assemblies.SetValue(node_AssemblyName.InnerText, ar_assemblies.Length - 1);
             }
+            */
 
             Array.Sort(ar_assemblies);
             foreach (String actAssembly in ar_assemblies)
@@ -1561,11 +1570,7 @@ namespace SigmaSureManualReportGenerator
                 XmlNode mainSCnode = this.StationConfig.SelectSingleNode("./Configuration");
                 if (mainSCnode.SelectSingleNode("./ExtraLoginEnabled").InnerText.Trim() == "Y")
                 {
-                    this.ExtraLogin();
-                }
-                else
-                {
-                    this.Login();
+                    this.ExtraLoginEnabled = true;
                 }
             }
             catch (Exception ex)
@@ -1573,6 +1578,8 @@ namespace SigmaSureManualReportGenerator
                 MessageBox.Show(String.Concat(ex.Message, "/n Zavolajte prosim testovacieho technika. Problem s extraLogin."));
                 return;
             }
+
+            this.Login();
 
             this.Focus();
             this.actualOrder = 1;
@@ -1600,6 +1607,14 @@ namespace SigmaSureManualReportGenerator
                 this.eventDisabler = false;
                 this.CheckFormDataForReportAndBatchSNEnter();
                 this.SetIgnoreSNCheckFlag();
+                if (this.ProductsConfig.BelMesActivated(this.cb_ProductNo.Items[this.cb_ProductNo.SelectedIndex].ToString()))
+                {
+                    this.BelMESobj.ProductVerifiedForMessages = true;
+                }
+                else
+                {
+                    this.BelMESobj.ProductVerifiedForMessages = false;
+                }
                 return;
             }
             if (this.eventDisabler)
@@ -1616,6 +1631,7 @@ namespace SigmaSureManualReportGenerator
             else
             {
                 this.pB_Assembly.Image = this.NOTOKpict;
+                this.BelMESobj.ProductVerifiedForMessages = false;
             }
             /*
             this.resetingCB_TestType = true;
@@ -1666,6 +1682,7 @@ namespace SigmaSureManualReportGenerator
                     this.pB_Assembly.Image = this.NOTOKpict;
 
                     this.Login();
+
                     this.ResetOrderTextBox();
                     this.actualOrder = 1; 
                     return;
@@ -1905,7 +1922,7 @@ namespace SigmaSureManualReportGenerator
                         {
                             this.cb_ProductNo.Items.Clear();
                             String[] ar_assemblies = { };
-                            XmlNode node_Assembly = this.ProductsConfig.SelectSingleNode("./Configuration/Assemblies");
+                            XmlNode node_Assembly = this.ProductsConfig.XmlFile.SelectSingleNode("./Configuration/Assemblies");
                             foreach (XmlNode actNode in node_Assembly.ChildNodes)
                             {
                                 XmlNode node_AssemblyName = actNode.SelectSingleNode("./Name");
@@ -2006,7 +2023,7 @@ namespace SigmaSureManualReportGenerator
                             {
                                 this.cb_ProductNo.Items.Clear();
                                 String[] ar_assemblies = { };
-                                XmlNode node_Assembly = this.ProductsConfig.SelectSingleNode("./Configuration/Assemblies");
+                                XmlNode node_Assembly = this.ProductsConfig.XmlFile.SelectSingleNode("./Configuration/Assemblies");
                                 foreach (XmlNode actNode in node_Assembly.ChildNodes)
                                 {
                                     XmlNode node_AssemblyName = actNode.SelectSingleNode("./Name");
@@ -2155,7 +2172,7 @@ namespace SigmaSureManualReportGenerator
                         {
                             this.tb_OrderValue.Text = String.Concat("0", this.tb_OrderValue.Text);
                         }
-                        XmlNode actProdNode = this.GetProductNode(this.cb_ProductNo.Text);
+                        XmlNode actProdNode = this.ProductsConfig.GetProductNode(this.cb_ProductNo.Text);
                         if (actProdNode != null)
                         {
                             if (actProdNode.SelectSingleNode("./BarcodeLength") != null)
@@ -2174,7 +2191,7 @@ namespace SigmaSureManualReportGenerator
                             }
                             else
                             {
-                                XmlNode actProdFamilyNode = this.GetFamilyNode(this.cb_ProductNo.Text);
+                                XmlNode actProdFamilyNode = this.ProductsConfig.GetFamilyNode(this.cb_ProductNo.Text);
                                 if (actProdFamilyNode != null)
                                 {
                                     XmlNode actProdFamilyNodeBarcodeLength = actProdFamilyNode.SelectSingleNode("./BarcodeLength");
@@ -2300,7 +2317,7 @@ namespace SigmaSureManualReportGenerator
                                 this.actualGrade = "FAIL";
                                 this.gb_Results.Enabled = true;
 
-                                Array myFaultCodes = this.GetFaultCodes(this.cb_ProductNo.Text, this.cb_TestType.Text);
+                                Array myFaultCodes = this.ProductsConfig.GetFaultCodes(this.cb_ProductNo.Text, this.cb_TestType.Text);
                                 if (myFaultCodes.Length == 0)
                                 {
                                     this.actualOrder = 5;
@@ -2426,7 +2443,7 @@ namespace SigmaSureManualReportGenerator
 
             if (this.cb_ProductNo.SelectedIndex != -1)
             {
-                Array ar_ChildTestsInfo = this.GetChildTestsInfos(this.cb_ProductNo.Text, this.cb_TestType.Text);
+                Array ar_ChildTestsInfo = this.ProductsConfig.GetChildTestsInfos(this.cb_ProductNo.Text, this.cb_TestType.Text);
                 if (ar_ChildTestsInfo.Length != 0)
                 {
                     this.gb_Results.Text = "Instrukcie";
@@ -2435,7 +2452,7 @@ namespace SigmaSureManualReportGenerator
                     this.dgv_Instructions.Rows.Clear();
                     for (Int32 i = 0; i < ar_ChildTestsInfo.Length; i++)
                     {
-                        ChildTestInfo actCTI = (ChildTestInfo)ar_ChildTestsInfo.GetValue(i);
+                        ProductsConfigurationFile.ChildTestInfo actCTI = (ProductsConfigurationFile.ChildTestInfo)ar_ChildTestsInfo.GetValue(i);
                         this.dgv_Instructions.Rows.Add(actCTI.Name, actCTI.Instruction, "", "PASS", "FAIL", "");
                         //this.dgv_Instructions.Rows[i].Cells[1].ToolTipText = actCTI.Description;
                     }
@@ -2752,7 +2769,7 @@ namespace SigmaSureManualReportGenerator
             }
             this.Cursor = Cursors.WaitCursor;
             String str_PicturesPath = @"\\dcafs3\Testing_SRO\TESTING\SigmaSure\SSManualReportGenerator\PictureFolder\";
-            Array ar_actChildTI = this.GetChildTestsInfos(this.cb_ProductNo.Text, this.cb_TestType.Text); 
+            Array ar_actChildTI = this.ProductsConfig.GetChildTestsInfos(this.cb_ProductNo.Text, this.cb_TestType.Text); 
             
             if (ar_actChildTI.Length == 0)
             {
@@ -2761,7 +2778,7 @@ namespace SigmaSureManualReportGenerator
             }
 
             String str_StepName = this.dgv_Instructions.Rows[e.RowIndex].Cells[0].Value.ToString();
-            foreach (ChildTestInfo actCTI in ar_actChildTI)
+            foreach (ProductsConfigurationFile.ChildTestInfo actCTI in ar_actChildTI)
             {
                 if (actCTI.Name == str_StepName)
                 {

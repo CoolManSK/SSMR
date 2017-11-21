@@ -200,6 +200,25 @@
       </BarcodeSettings>
     </Family>
     <Family>
+      <Name>MAP</Name>
+      <BarcodeLength>2</BarcodeLength>
+      <BarcodeSettings>
+        <JobID>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </JobID>
+        <SerialNumber>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </SerialNumber>
+        <ProductNo>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </ProductNo>
+      </BarcodeSettings>
+      <BelMESActivated>1</BelMESActivated>
+    </Family>
+    <Family>
       <Name>PS</Name>
       <BarcodeLength>18</BarcodeLength>
       <BarcodeSettings>
@@ -1136,6 +1155,13 @@
       </Properties>  
     </Assembly>
     <Assembly>      
+      <Name>HRP2324-9RB1G</Name>
+      <BarcodeLength>48</BarcodeLength>
+      <Properties>
+        <Memory>N/A</Memory>      
+      </Properties>  
+    </Assembly>
+    <Assembly>      
       <Name>HR2880-9RG</Name>
       <BarcodeLength>47</BarcodeLength>
       <Properties>
@@ -1352,6 +1378,13 @@
     <Assembly>      
       <Name>CPA250-4530S381G</Name>
       <BarcodeLength>53</BarcodeLength>
+      <Properties>
+        <Memory>N/A</Memory>      
+      </Properties>  
+    </Assembly>
+    <Assembly>      
+      <Name>CPA250-4530S381CG</Name>
+      <BarcodeLength>54</BarcodeLength>
       <Properties>
         <Memory>N/A</Memory>      
       </Properties>  
@@ -2555,6 +2588,13 @@
       </Properties>
     </Assembly>
     <Assembly>
+      <Name>MAP110-4000G</Name>
+      <BarcodeLength>49</BarcodeLength>
+      <Properties>
+        <Memory>N/A</Memory>
+      </Properties>
+    </Assembly>
+    <Assembly>
       <Name>MAP55-4001C</Name>
       <BarcodeLength>48</BarcodeLength>
       <Properties>
@@ -3185,6 +3225,13 @@
       </Properties>
     </Assembly>
     <Assembly>
+      <Name>PFC250-1015G</Name>
+      <BarcodeLength>49</BarcodeLength>
+      <Properties>
+        <Memory>N/A</Memory>
+      </Properties>
+    </Assembly>
+    <Assembly>
       <Name>PFC250-1024</Name>
       <BarcodeLength>48</BarcodeLength>
       <Properties>
@@ -3376,6 +3423,13 @@
     <Assembly>
       <Name>PFC375-4000F</Name>
       <BarcodeLength>49</BarcodeLength>
+      <Properties>
+        <Memory>N/A</Memory>
+      </Properties>
+    </Assembly>
+    <Assembly>
+      <Name>PFC375-4000FG</Name>
+      <BarcodeLength>50</BarcodeLength>
       <Properties>
         <Memory>N/A</Memory>
       </Properties>
@@ -5459,6 +5513,9 @@
 		<Assembly>
 			<Name>BS2660-9R</Name>
 		</Assembly>
+    <Assembly>
+			<Name>BS2660-9RB1G</Name>
+		</Assembly>
 		<Assembly>
 			<Name>BS2771-7RB1</Name>
 		</Assembly>
@@ -6962,6 +7019,9 @@
 		<Assembly>
 			<Name>DP2540-9R</Name>
 		</Assembly>
+    <Assembly>
+			<Name>DP2540-9RDG</Name>
+		</Assembly>
 		<Assembly>
 			<Name>DP2540-9RB1G</Name>
 		</Assembly>
@@ -7801,6 +7861,9 @@
 		</Assembly>
 		<Assembly>
 			<Name>EQ2543-7R</Name>
+		</Assembly>
+    <Assembly>
+			<Name>EQ2543-9RG</Name>
 		</Assembly>
 		<Assembly>
 			<Name>EQ2544-0R</Name>
@@ -8841,6 +8904,9 @@
 		<Assembly>
 			<Name>LK1006-9ERD9T</Name>
 		</Assembly>
+    <Assembly>
+			<Name>LK1006-9ERD9TG</Name>
+		</Assembly>
 		<Assembly>
 			<Name>LK1007-7ERD4TB1</Name>
 		</Assembly>
@@ -9047,6 +9113,9 @@
 		</Assembly>
 		<Assembly>
 			<Name>LK1626-9ERD8T</Name>
+		</Assembly>
+    <Assembly>
+			<Name>LK1626-9ERD8TG</Name>
 		</Assembly>
 		<Assembly>
 			<Name>LK1702-7ER</Name>
@@ -10221,6 +10290,9 @@
 		<Assembly>
 			<Name>LM2547-9ED8A</Name>
 		</Assembly>
+    <Assembly>
+			<Name>LM2547-9ED8AG</Name>
+		</Assembly>
 		<Assembly>
 			<Name>LM2554-0</Name>
 		</Assembly>
@@ -11013,6 +11085,9 @@
     <Assembly>
       <Name>LPM616-JJJJJJ-D0116</Name>
     </Assembly>    
+    <Assembly>
+      <Name>LPM616-JJJJJJ-D0124</Name>
+    </Assembly>
     <Assembly>
 			<Name>LRS05-28-901G</Name>
 		</Assembly>
@@ -14033,7 +14108,13 @@
 		</Assembly>    
     <Assembly>
 			<Name>SPDCSCO-38GA1</Name>
-		</Assembly>  
+		</Assembly>
+    <Assembly>
+      <Name>SPDCSCO-61</Name>
+    </Assembly>
+    <Assembly>
+      <Name>SPDCSCO-61G</Name>
+    </Assembly>
     <Assembly>
 			<Name>SPDEMCM-07</Name>
 		</Assembly>
@@ -14241,6 +14322,9 @@
 		</Assembly>
     <Assembly>
 			<Name>BPEU2507</Name>
+		</Assembly>
+     <Assembly>
+			<Name>BPEU2508</Name>
 		</Assembly>
     <Assembly>
 			<Name>BPEU2509</Name>
@@ -15958,6 +16042,24 @@
       </BarcodeSettings>
     </Assembly>    
     <Assembly>
+			<Name>3F75011F200G</Name>
+      <BarcodeLength>8</BarcodeLength>
+      <BarcodeSettings>
+        <JobID>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </JobID>
+        <SerialNumber>
+          <StartIndex>4</StartIndex>
+          <Length>4</Length>
+        </SerialNumber>
+        <ProductNo>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </ProductNo>
+      </BarcodeSettings>
+		</Assembly>
+    <Assembly>
 			<Name>3F77991F100G</Name>
       <BarcodeLength>19</BarcodeLength>
       <BarcodeSettings>
@@ -17100,6 +17202,9 @@
     </Assembly>
     <Assembly>
       <Name>PAL300-56</Name>
+    </Assembly>
+     <Assembly>
+      <Name>110RCM150-24D</Name>
     </Assembly>
     <Assembly>
       <Name>110RCM150-24DMQF</Name>

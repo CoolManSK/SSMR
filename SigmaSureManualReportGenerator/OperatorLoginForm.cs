@@ -13,9 +13,12 @@ namespace SigmaSureManualReportGenerator
     public partial class OperatorLoginForm : Form
     {
         public XmlDocument myXMLdoc;
+        public XmlDocument ExtraLoginXMLdoc;
+
         public Boolean PasswordValidation = false;
         public String LoggedOperatorNumber = "";
         public String LoggedOperatorSurname = "";
+        public String Privileges = "";
         public String ConfigFile = "";
 
 
@@ -35,6 +38,15 @@ namespace SigmaSureManualReportGenerator
         {
             InitializeComponent();
             this.myXMLdoc = ConfigFile;
+            this.BelMESenabled = true;
+            this.BelMESobj = BelMESobj;
+        }
+
+        public OperatorLoginForm(XmlDocument ConfigFile, XmlDocument ExtraLoginConfigFile, BelMES BelMESobj)
+        {
+            InitializeComponent();
+            this.myXMLdoc = ConfigFile;
+            this.ExtraLoginXMLdoc = ExtraLoginConfigFile;
             this.BelMESenabled = true;
             this.BelMESobj = BelMESobj;
         }
@@ -87,7 +99,33 @@ namespace SigmaSureManualReportGenerator
 
         private void btn_OperatorLoginOK_Click(object sender, EventArgs e)
         {
+
             OperatorData ope_data = new OperatorData(this.myXMLdoc);
+            if (this.tb_OperatorScanField.Text.Trim().Length == 16)
+            {
+                
+                String str_typedValidationString = this.tb_OperatorScanField.Text.Trim();
+                ope_data = new OperatorData(str_typedValidationString);
+                if (ope_data.PasswordValidation(str_typedValidationString))
+                {
+                    this.PasswordValidation = true;
+                    this.LoggedOperatorNumber = ope_data.Number;
+                    this.LoggedOperatorSurname = ope_data.Surname;
+                    this.Privileges = ope_data.Privileges;
+                    if (!this.BelMESobj.EmployeeVerification(this.LoggedOperatorNumber))
+                    {
+                        this.tb_OperatorScanField.Focus();
+                        this.tb_OperatorScanField.SelectAll();                        
+                    }
+                    else
+                    {
+                        this.Close();
+                    }
+                }
+
+                return;               
+            }
+            
             String str_OperatorNumberBelMes = this.cb_OperatorLoginNr.Text;
             /*while (str_OperatorNumberBelMes.Length > 5)
             {
@@ -100,17 +138,22 @@ namespace SigmaSureManualReportGenerator
                 {                    
                     if (!this.BelMESobj.EmployeeVerification(str_OperatorNumberBelMes))
                     {
-                        //return;
+                        this.tb_OperatorScanField.Focus();
+                        this.tb_OperatorScanField.SelectAll();
+                        return;
                     }
                 }
 
                 this.LoggedOperatorNumber = ope_data.Number;
                 this.LoggedOperatorSurname = ope_data.Surname;
+                this.Privileges = ope_data.Privileges;
                 this.Close();
             }  
             else
             {
-                this.tb_OperatorLoginPassword.SelectAll();
+                this.tb_OperatorScanField.Focus();
+                this.tb_OperatorScanField.SelectAll();
+                return;
             }          
         }
 
@@ -135,6 +178,14 @@ namespace SigmaSureManualReportGenerator
             this.cb_OperatorLoginNr.Text = myOD.Number;
 
             this.tb_OperatorLoginPassword.Focus();
+        }
+
+        private void tb_OperatorScanField_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                this.btn_OperatorLoginOK_Click(new object(), new EventArgs());
+            }
         }
     }
 }
