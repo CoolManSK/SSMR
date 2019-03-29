@@ -7,6 +7,7 @@ using System.Diagnostics;
 using SigmaSure;
 using System.Deployment.Application;
 using System.Threading;
+using IWshRuntimeLibrary;
 
 
 namespace SigmaSureManualReportGenerator
@@ -19,12 +20,16 @@ namespace SigmaSureManualReportGenerator
         }
         private String ActualProgramVersion = "1.1";
 
+        [System.Runtime.InteropServices.DllImport("Shell32.dll")]
+        private static extern int SHChangeNotify(int eventId, int flags, IntPtr item1, IntPtr item2);
+
         private Boolean eventDisabler = false;
         private Boolean resetingCB_TestType = false;
         private Int16 actualOrder;
         private Int32 lastProductIndex = -1;
         private String actualGrade = "PASS";
         private Boolean ExtraLoginEnabled = false;
+        private Boolean PartNoNeeded = true;
 
         private Bitmap OKpict = new Bitmap("OK.jpg");
         private Bitmap NOTOKpict = new Bitmap("NOTOK.jpg");
@@ -45,7 +50,7 @@ namespace SigmaSureManualReportGenerator
 
         private Boolean BelMESenabled = true;
         private Boolean BelMESMessageWarnings = true;
-        private BelMES BelMESobj = new BelMES("");
+        private BelMES BelMESobj = new BelMES("", "");
            
         /*     
         public struct ChildTestInfo
@@ -212,13 +217,13 @@ namespace SigmaSureManualReportGenerator
 
             if (this.IgnoreSNLength == false)
             {
-                if (this.lbl_SerialNumber.Text.Length != 5)
+                if (!((this.lbl_SerialNumber.Text.Length == 5) || (this.lbl_SerialNumber.Text.Length == 13)))
                 {
-                    this.ErrorMessageBoxShow(String.Concat("Zle zadane Serial Number: \"", this.lbl_SerialNumber.Text, "\".\tSerial Number musi mat 5 znakov. Dvojklikom na hodnotu Serial Number ju resetnite a postupujte podla instrukcii zobrazenych cervenym pismom. V pripade, ze sa chyba opakuje zavolajte testovacieho technika. Dakujem.\tProductID: ", this.cb_ProductNo.Text), true);
+                    this.ErrorMessageBoxShow(String.Concat("Zle zadane Serial Number: \"", this.lbl_SerialNumber.Text, "\".\tSerial Number musi mat 5 alebo 13 znakov. Dvojklikom na hodnotu Serial Number ju resetnite a postupujte podla instrukcii zobrazenych cervenym pismom. V pripade, ze sa chyba opakuje zavolajte testovacieho technika. Dakujem.\tProductID: ", this.cb_ProductNo.Text), true);
                     return false;
                 }
             }
-
+            
             UnitReport myReport = new UnitReport(starttime, endtime, "D", "", false);
 
             XmlNode OperatorNameMode = this.StationConfig.SelectSingleNode("./Configuration/OperatorNameMode");
@@ -242,6 +247,25 @@ namespace SigmaSureManualReportGenerator
                 this.ErrorMessageBoxShow("Neznama hodnota OperationNameMode v Station config subore. Prosim, zavolajte testovacieho inziniera.", true);
                 this.tb_OrderValue.Enabled = true;
                 return false;
+            }
+
+            if (this.lbl_SerialNumber.Text.Length == 13)
+            {
+                String buffer = this.lbl_SerialNumber.Text;
+                try
+                {
+                    int n_buf = Convert.ToInt16(buffer);
+                }
+                catch
+                {
+                    this.ErrorMessageBoxShow("Seriove cislo nezodpoveda poziadavkam. Jednotku oskenujte este raz. Ak sa problem opakuje, zavolajte prosim testovacieho inziniera.", true);
+                    return false;
+                }
+                finally
+                {
+                    this.lbl_JobIDValue.Text = buffer.Substring(0, 8);
+                    this.lbl_SerialNumber.Text = buffer.Substring(8);
+                }
             }
 
             myReport.Cathegory = new _Cathegory("Default");
@@ -283,7 +307,7 @@ namespace SigmaSureManualReportGenerator
                 }
             }
 
-            myReport.TestRun.grade = this.actualGrade;
+            myReport.TestRun.grade = this.actualGrade;            
 
             myReport.AddProperty("Work Order", this.lbl_JobIDValue.Text);
             XmlNode URModeNode = this.StationConfig.LastChild.SelectSingleNode("./Mode");
@@ -416,7 +440,9 @@ namespace SigmaSureManualReportGenerator
 
             if (this.BelMESenabled)
             {
-                if (!this.BelMESobj.SetActualResult(myReport.Cathegory.Product.SerialNo, this.cb_TestType.Text.Trim(), String.Concat(myReport.TestRun.grade.ToUpper().Trim(), "ED"), XmlReportContent));
+                if (myReport.TestRun.grade.ToUpper().Trim() == "PASS") myReport.TestRun.grade = "Pass";
+                if (myReport.TestRun.grade.ToUpper().Trim() == "FAIL") myReport.TestRun.grade = "Fail";
+                if (!this.BelMESobj.SetActualResult(myReport.Cathegory.Product.SerialNo, this.cb_TestType.Text.Trim(), String.Concat(myReport.TestRun.grade.Trim(), "ed"), XmlReportContent))
                 {
 
                 }
@@ -603,10 +629,11 @@ namespace SigmaSureManualReportGenerator
             while (i < 9999999) i++;
             this.tb_OrderValue.SelectAll();
             this.tb_OrderValue.Focus();
+            this.Focus();
         }
         private void ResetForm(Boolean ResetOperator)
         {
-            this.cb_ProductNo.SelectedIndex = -1;
+            if (PartNoNeeded) this.cb_ProductNo.SelectedIndex = -1;
             this.pB_Assembly.Image = this.NOTOKpict;
             this.lbl_JobIDValue.Text = "";
             this.pB_JobID.Image = this.NOTOKpict;
@@ -760,6 +787,38 @@ namespace SigmaSureManualReportGenerator
                 this.StationConfig.Save(this.StationConfig.BaseURI.Substring(this.StationConfig.BaseURI.IndexOf("C:/")));
             }
 
+            XmlNode PartNoNeededNode = this.StationConfig.SelectSingleNode("./Configuration/PartNoNeeded");
+            if (PartNoNeededNode == null)
+            {
+                XmlNode confignode = this.StationConfig.SelectSingleNode("./Configuration");
+
+                XmlNode elToAdd = this.StationConfig.CreateNode("element", "PartNoNeeded", "");
+                elToAdd.InnerText = "Y";
+                confignode.AppendChild(elToAdd);
+                this.StationConfig.Save(this.StationConfig.BaseURI.Substring(this.StationConfig.BaseURI.IndexOf("C:/")));
+            }
+
+            XmlNode SimpleModeNode = this.StationConfig.SelectSingleNode("./Configuration/SimpleMode");
+            if (SimpleModeNode == null)
+            {
+                XmlNode confignode = this.StationConfig.SelectSingleNode("./Configuration");
+
+                XmlNode elToAdd = this.StationConfig.CreateNode("element", "SimpleMode", "");
+                
+                confignode.AppendChild(elToAdd);
+                this.StationConfig.Save(this.StationConfig.BaseURI.Substring(this.StationConfig.BaseURI.IndexOf("C:/")));
+            }
+
+            XmlNode SerialNumbersInProcessNode = this.StationConfig.SelectSingleNode("./Configuration/SimpleMode/SerialNumberInProcess");
+            if (SerialNumbersInProcessNode == null)
+            {
+                XmlNode confignode = this.StationConfig.SelectSingleNode("./Configuration/SimpleMode");
+
+                XmlNode elToAdd = this.StationConfig.CreateNode("element", "SerialNumbersInProcess", "");
+
+                confignode.AppendChild(elToAdd);
+                this.StationConfig.Save(this.StationConfig.BaseURI.Substring(this.StationConfig.BaseURI.IndexOf("C:/")));
+            }
 
             /*
             XmlNode DefaultStationNode = this.StationConfig.SelectSingleNode("./Configuration/Station/Default");
@@ -816,11 +875,14 @@ namespace SigmaSureManualReportGenerator
                 else
                 {
                     this.BelMESMessageWarnings = false;
+                }                
+
+                if (this.Text.IndexOf(" BelMES ") == -1)
+                {
+                    FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(@"BelMESCommon.dll");
+                    this.Text = String.Concat(this.Text, ", BelMES v.", myFileVersionInfo.FileVersion);
                 }
-                FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(@"BelMESCommon.dll");
-               
-                this.Text = String.Concat(this.Text, ", BelMES v.", myFileVersionInfo.FileVersion);
-                this.BelMESobj = new BelMES(this.lbl_StationName.Text.Trim());
+                this.BelMESobj = new BelMES(this.lbl_StationName.Text.Trim(), this.ConfigPath);
                 this.BelMESobj.WarningMessages = this.BelMESMessageWarnings;
                 XmlNode URModeNode = this.StationConfig.LastChild.SelectSingleNode("./Mode");
                 if (URModeNode == null)
@@ -831,7 +893,7 @@ namespace SigmaSureManualReportGenerator
                 if (!this.BelMESobj.Activated) this.BelMESenabled = false;
                 else
                 {
-                    if (!File.Exists(@"C:\BelMESCommon\BelMES.ini"))
+                    if (!System.IO.File.Exists(@"C:\BelMESCommon\BelMES.ini"))
                     {
                         if (!Directory.Exists(@"C:\BelMESCommon"))
                         {
@@ -847,7 +909,7 @@ namespace SigmaSureManualReportGenerator
                         }
                         try
                         {
-                            File.Copy(@"\\dcafs3\Testing_SRO\TESTING\TestStand\BelMESCommon\BelMES.ini", @"C:\BelMESCommon\BelMES.ini", true);
+                            System.IO.File.Copy(@"\\dcafs3\Testing_SRO\TESTING\TestStand\BelMESCommon\BelMES.ini", @"C:\BelMESCommon\BelMES.ini", true);
                         }
                         catch
                         {
@@ -856,11 +918,11 @@ namespace SigmaSureManualReportGenerator
                         }
                     }
 
-                    if (!File.Exists(@"C:\BelMESCommon\BelMESESD.ini"))
+                    if (!System.IO.File.Exists(@"C:\BelMESCommon\BelMESESD.ini"))
                     {
                         try
                         {
-                            File.Copy(@"\\dcafs3\Testing_SRO\TESTING\TestStand\BelMESCommon\BelMESESD.ini", @"C:\BelMESCommon\BelMESESD.ini", true);
+                            System.IO.File.Copy(@"\\dcafs3\Testing_SRO\TESTING\TestStand\BelMESCommon\BelMESESD.ini", @"C:\BelMESCommon\BelMESESD.ini", true);
                         }
                         catch
                         {
@@ -893,7 +955,7 @@ namespace SigmaSureManualReportGenerator
                 //this.StationConfig.SelectSingleNode("./Configuration/BelMESState").InnerText = "Y";
                 //this.StationConfig.Save(this.StationConfig.BaseURI.Substring(this.StationConfig.BaseURI.IndexOf("C:/")));
             }
-
+            this.CheckShortcutOnDesktop();
             Int32 n_HistorySNCount = Convert.ToInt32(this.StationConfig.SelectSingleNode("./Configuration/HistorySerialNumbersCount").InnerText);
             this.eventDisabler = true;
 
@@ -904,6 +966,12 @@ namespace SigmaSureManualReportGenerator
 
             this.lbl_ScanEditOrder.ForeColor = Color.FromName(this.StationConfig.SelectSingleNode("./Configuration/Colors/CommandColor").InnerText.Trim());
 
+            if (this.StationConfig.SelectSingleNode("./Configuration/PartNoNeeded").InnerText == "N")
+            {
+                this.cb_ProductNo.Enabled = false;
+                this.PartNoNeeded = false;
+            }
+
             this.eventDisabler = false;
         }
         private void SaveErrorToLogFile(String ErrorMessage)
@@ -913,11 +981,11 @@ namespace SigmaSureManualReportGenerator
             Boolean b_writeEnabled = true;
             if (PathExists(@"\\dcafs3\SHARE\Manufacturing_Engineering\Public\Kolman Vladimir\ErrorLogDir\"))
             {
-                if (!File.Exists(String.Concat(@"\\dcafs3\SHARE\Manufacturing_Engineering\Public\Kolman Vladimir\ErrorLogDir\", str_ErrorLogFileName)))
+                if (!System.IO.File.Exists(String.Concat(@"\\dcafs3\SHARE\Manufacturing_Engineering\Public\Kolman Vladimir\ErrorLogDir\", str_ErrorLogFileName)))
                 {
                     try
                     {
-                        fs = File.Create(String.Concat(@"\\dcafs3\SHARE\Manufacturing_Engineering\Public\Kolman Vladimir\ErrorLogDir\", str_ErrorLogFileName));
+                        fs = System.IO.File.Create(String.Concat(@"\\dcafs3\SHARE\Manufacturing_Engineering\Public\Kolman Vladimir\ErrorLogDir\", str_ErrorLogFileName));
                     }
                     catch
                     {
@@ -927,7 +995,7 @@ namespace SigmaSureManualReportGenerator
                 else
                 {
                     fs = new FileStream(String.Concat(@"\\dcafs3\SHARE\Manufacturing_Engineering\Public\Kolman Vladimir\ErrorLogDir\", str_ErrorLogFileName), FileMode.Append);
-                    //fs = File.OpenWrite(String.Concat(@"\\dcafs3\SHARE\Manufacturing_Engineering\Public\Kolman Vladimir\ErrorLogDir\", str_ErrorLogFileName));
+                    //fs = System.IO.File.OpenWrite(String.Concat(@"\\dcafs3\SHARE\Manufacturing_Engineering\Public\Kolman Vladimir\ErrorLogDir\", str_ErrorLogFileName));
                 }
             }
             else
@@ -937,11 +1005,11 @@ namespace SigmaSureManualReportGenerator
                 {
                     str_localErrorDir = String.Concat(str_localErrorDir, "\\");
                 }                
-                if (!File.Exists(String.Concat(str_localErrorDir, @"ErrorLogDir\", str_ErrorLogFileName)))
+                if (!System.IO.File.Exists(String.Concat(str_localErrorDir, @"ErrorLogDir\", str_ErrorLogFileName)))
                 {
                     try
                     {
-                        fs = File.Create(String.Concat(str_localErrorDir, @"ErrorLogDir\", str_ErrorLogFileName));
+                        fs = System.IO.File.Create(String.Concat(str_localErrorDir, @"ErrorLogDir\", str_ErrorLogFileName));
                     }
                     catch
                     {
@@ -951,7 +1019,7 @@ namespace SigmaSureManualReportGenerator
                 else
                 {
                     fs = new FileStream(String.Concat(str_localErrorDir, @"ErrorLogDir\", str_ErrorLogFileName), FileMode.Append);
-                    //fs = File.OpenWrite(String.Concat(@"\\dcafs3\SHARE\Manufacturing_Engineering\Public\Kolman Vladimir\ErrorLogDir\", str_ErrorLogFileName));
+                    //fs = System.IO.File.OpenWrite(String.Concat(@"\\dcafs3\SHARE\Manufacturing_Engineering\Public\Kolman Vladimir\ErrorLogDir\", str_ErrorLogFileName));
                 }
             }
 
@@ -990,17 +1058,17 @@ namespace SigmaSureManualReportGenerator
                 }
                 catch (DeploymentDownloadException dde)
                 {
-                    MessageBox.Show("The new version of the application cannot be downloaded at this time. \n\nPlease check your network connection, or try again later. Error: " + dde.Message);
+                    MessageBox.Show("Novsia verzia aplikácie nemôže byť teraz stiahnutá. \n\nProsím skontrolujte sieťové pripojenie, prípadne vypršanie platnosti hesla do windows. \nV prípade opakovania sa chyby zavolajte prosím technika. \n\nError: " + dde.Message);
                     return;
                 }
                 catch (InvalidDeploymentException ide)
                 {
-                    MessageBox.Show("Cannot check for a new version of the application. The ClickOnce deployment is corrupt. Please redeploy the application and try again. Error: " + ide.Message);
+                    MessageBox.Show("Cannot check for a new version of the application. The ClickOnce deployment is corrupt. Please redeploy the application and try again. \n\nProsim zavolajte technika. \n\nError: " + ide.Message);
                     return;
                 }
                 catch (InvalidOperationException ioe)
                 {
-                    MessageBox.Show("This application cannot be updated. It is likely not a ClickOnce application. Error: " + ioe.Message);
+                    MessageBox.Show("This application cannot be updated. It is likely not a ClickOnce application. \n\nProsim zavolajte technika. \n\nError: " + ioe.Message);
                     return;
                 }
 
@@ -1014,7 +1082,7 @@ namespace SigmaSureManualReportGenerator
                     }
                     catch (DeploymentDownloadException dde)
                     {
-                        MessageBox.Show("Nemoze sa nainstalovat najnovsia verzia programu. \n\nProsim zavolajte testovacieho inziniera.\n\n" + dde);
+                        MessageBox.Show("Novsia verzia aplikácie nemôže byť teraz stiahnutá. \n\nProsím skontrolujte sieťové pripojenie, prípadne vypršanie platnosti hesla do windows. \nV prípade opakovania sa chyby zavolajte prosím technika. \n\nError: " + dde.Message);
                         return;
                     }
 
@@ -1036,11 +1104,15 @@ namespace SigmaSureManualReportGenerator
             }
             try
             {
-                if (File.GetLastWriteTime(@"\\dcafs3\Testing_SRO\TESTING\TestStand\BelMESCommon\belmes.ini") != File.GetLastWriteTime(@"c:\belmescommon\belmes.ini"))
-                    File.Copy(@"\\dcafs3\Testing_SRO\TESTING\TestStand\BelMESCommon\belmes.ini", @"c:\belmescommon\belmes.ini", true);
+                String str_actUser = Environment.UserName;
+                if (str_actUser != "kolman")
+                {
+                    if (System.IO.File.GetLastWriteTime(@"\\dcafs3\Testing_SRO\TESTING\TestStand\BelMESCommon\belmes.ini") != System.IO.File.GetLastWriteTime(@"c:\belmescommon\belmes.ini"))
+                        System.IO.File.Copy(@"\\dcafs3\Testing_SRO\TESTING\TestStand\BelMESCommon\belmes.ini", @"c:\belmescommon\belmes.ini", true);
 
-                if (File.GetLastWriteTime(@"\\dcafs3\Testing_SRO\TESTING\TestStand\BelMESCommon\belmesesd.ini") != File.GetLastWriteTime(@"c:\belmescommon\belmesesd.ini"))
-                    File.Copy(@"\\dcafs3\Testing_SRO\TESTING\TestStand\BelMESCommon\belmesesd.ini", @"c:\belmescommon\belmesesd.ini", true);
+                    if (System.IO.File.GetLastWriteTime(@"\\dcafs3\Testing_SRO\TESTING\TestStand\BelMESCommon\belmesesd.ini") != System.IO.File.GetLastWriteTime(@"c:\belmescommon\belmesesd.ini"))
+                        System.IO.File.Copy(@"\\dcafs3\Testing_SRO\TESTING\TestStand\BelMESCommon\belmesesd.ini", @"c:\belmescommon\belmesesd.ini", true);
+                }
             }
             catch
             {
@@ -1067,6 +1139,73 @@ namespace SigmaSureManualReportGenerator
             if (!completed) { exists = false; t.Abort(); }
             return exists;
         }
+        private void CheckShortcutOnDesktop()
+        {
+
+
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            Array myFiles = Directory.GetFiles(path);
+
+            bool shortcutpresent = false;
+            foreach (String actFile in myFiles)
+            {
+                if (actFile.IndexOf("SigmaSure Manual Report Generator") > -1)
+                {
+                    try
+                    {
+                        System.IO.File.Delete(actFile);
+                        SHChangeNotify(0x8000000, 0x1000, IntPtr.Zero, IntPtr.Zero);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        this.SaveErrorToLogFile(ex.Message);
+                    }
+                }
+            }
+
+            foreach (String actFile in myFiles)
+            {
+                if (actFile.IndexOf("BelMes Manual Report Generator") > -1)
+                {
+                    shortcutpresent = true;
+                    break;
+                }
+            }
+
+            if (!shortcutpresent)
+            {
+                path = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
+                path = String.Concat(path, @"\Programs\Vladimir Kolman");
+
+                String DesktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                Array myShortcuts = Directory.GetFiles(path);
+                foreach (string actSC in myShortcuts)
+                {
+                    if (actSC.IndexOf("SigmaSure Manual Report Generator") > -1)
+                    {
+                        try
+                        {
+                            System.IO.File.Copy(actSC, String.Concat(DesktopPath, @"\BelMes Manual Report Generator.appref-ms"));
+                        }
+                        catch (Exception ex)
+                        {
+                            this.SaveErrorToLogFile(ex.Message);
+                        }
+
+                    }
+                }
+                /*
+                object shDesktop = (object)"Desktop";
+                WshShell shell = new WshShell();
+                string shortcutAddress = (string)shell.SpecialFolders.Item(ref shDesktop) + @"\BelMes Manual Report Generator.lnk";
+                IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
+                shortcut.Description = "BelMes Manual Report Generator";
+                shortcut.TargetPath = Application.ExecutablePath;
+                shortcut.Save();
+                */
+            }
+        }
         private String[] GetAllTestNames()
         {
             XmlNode actStationMainConfingNode = this.StationConfig.SelectSingleNode("./Configuration/Station");
@@ -1077,6 +1216,7 @@ namespace SigmaSureManualReportGenerator
                 {
                     String[] ar_TestTypes = {"Safety Test"
                             , "PreTest"
+                            , "Board Test"
                             , "Functiontest"
                             , "Final Inspection"
                             , "Adjustement"
@@ -1306,7 +1446,10 @@ namespace SigmaSureManualReportGenerator
         */
         private bool CheckForDgvInstructionVisibility()
         {
-            if (this.cb_ProductNo.SelectedIndex == -1) return false;
+            if (PartNoNeeded)
+            {
+                if (this.cb_ProductNo.SelectedIndex == -1) return false;
+            }
             if (this.lbl_JobIDValue.Text == "") return false;
             if (this.cb_TestType.SelectedIndex == -1) return false;
             Array ChildTestsInfo = this.ProductsConfig.GetChildTestsInfos(this.cb_ProductNo.Text, this.cb_TestType.Text);
@@ -1456,13 +1599,13 @@ namespace SigmaSureManualReportGenerator
             {
                 Directory.CreateDirectory(String.Concat(this.ConfigPath, @"Actual\"));
             }
-            File.Copy(String.Concat(@"ConfigFiles\", this.StationConfigFileName), String.Concat(this.ConfigPath, @"Actual\", this.StationConfigFileName), true);
+            System.IO.File.Copy(String.Concat(@"ConfigFiles\", this.StationConfigFileName), String.Concat(this.ConfigPath, @"Actual\", this.StationConfigFileName), true);
             if (!Directory.Exists(this.ConfigPath))
             {
                 Directory.CreateDirectory(this.ConfigPath);
             }
 
-            if (!File.Exists(String.Concat(this.ConfigPath, StationConfigFileName)))
+            if (!System.IO.File.Exists(String.Concat(this.ConfigPath, StationConfigFileName)))
             {
                 this.ErrorMessageBoxShow(String.Concat("Neexistuje Station config subor v adresari ", this.ConfigPath, ". Zavolajte prosim testovacieho inziniera"), true);
                 this.Dispose();
@@ -1487,20 +1630,20 @@ namespace SigmaSureManualReportGenerator
             String str_UserConfigServerFile = this.StationConfig.SelectSingleNode("./Configuration/OperatorConfigurationFile").InnerText;
             if (this.PathExists(Path.GetDirectoryName(str_UserConfigServerFile)))
             {
-                if (File.Exists(str_UserConfigServerFile))
+                if (System.IO.File.Exists(str_UserConfigServerFile))
                 {
-                    if (File.Exists(String.Concat(this.ConfigPath, @"Actual\", this.UserConfigFileName)))
+                    if (System.IO.File.Exists(String.Concat(this.ConfigPath, @"Actual\", this.UserConfigFileName)))
                     {
                         FileInfo serverFile = new FileInfo(str_UserConfigServerFile);
                         FileInfo localFile = new FileInfo(String.Concat(this.ConfigPath, @"Actual\", this.UserConfigFileName));
                         if (localFile.LastWriteTimeUtc < serverFile.LastWriteTimeUtc)
                         {
-                            File.Copy(str_UserConfigServerFile, String.Concat(this.ConfigPath, this.UserConfigFileName), true);
+                            System.IO.File.Copy(str_UserConfigServerFile, String.Concat(this.ConfigPath, this.UserConfigFileName), true);
                         }
                     }
                     else
                     {
-                        File.Copy(str_UserConfigServerFile, String.Concat(this.ConfigPath, this.UserConfigFileName), true);
+                        System.IO.File.Copy(str_UserConfigServerFile, String.Concat(this.ConfigPath, this.UserConfigFileName), true);
                     }
                 }
                 else
@@ -1516,7 +1659,7 @@ namespace SigmaSureManualReportGenerator
 
             this.UserConfig.Load(String.Concat(this.ConfigPath, this.UserConfigFileName));
 
-            File.Copy(String.Concat(@"ConfigFiles\", this.ProductsConfigFileName), String.Concat(this.ConfigPath, this.ProductsConfigFileName), true);
+            System.IO.File.Copy(String.Concat(@"ConfigFiles\", this.ProductsConfigFileName), String.Concat(this.ConfigPath, this.ProductsConfigFileName), true);
 
             this.ProductsConfig = new ProductsConfigurationFile(this.ConfigPath);
 
@@ -1581,14 +1724,23 @@ namespace SigmaSureManualReportGenerator
 
             this.Login();
 
-            this.Focus();
-            this.actualOrder = 1;
+            if (!this.cb_ProductNo.Enabled)
+            {
+                this.lbl_ScanEditOrder.Text = "Zadajte Job ID alebo zoskenujte barcode na vyrobku:";
+                this.actualOrder = 2;
+            }
+            else
+            {
+                this.actualOrder = 1;
+            }
+            this.Focus();            
             this.tb_OrderValue.Focus();
             this.tb_OrderValue.SelectAll();
         }        
 
         private void cb_ProductNo_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (!PartNoNeeded) return;
             if ((this.cb_ProductNo.SelectedIndex != -1) && (this.cb_ProductNo.SelectedIndex != this.lastProductIndex))
             {
                 this.lastProductIndex = this.cb_ProductNo.SelectedIndex;
@@ -1646,8 +1798,7 @@ namespace SigmaSureManualReportGenerator
             this.lbl_ScanEditOrder.Text = "Zadajte Job ID alebo zoskenujte barcode na vyrobku:";
             this.ResetOrderTextBox();
             this.CheckFormDataForReportAndBatchSNEnter();
-            this.cb_LastSerialNumbers.Items.Clear();
-
+            this.cb_LastSerialNumbers.Items.Clear();            
         }        
 
         private void lbl_OperatorNr_DoubleClick(object sender, EventArgs e)
@@ -1671,14 +1822,14 @@ namespace SigmaSureManualReportGenerator
                 }
                 if (this.tb_OrderValue.Text.ToUpper() == "LOGOUTUSER")
                 {
-                    this.cb_TestType.SelectedIndex = -1;
+                    if (PartNoNeeded) this.cb_TestType.SelectedIndex = -1;
                     this.eventDisabler = true;
                     this.lbl_SerialNumber.Text = "";
                     this.pb_SerialNumber.Image = this.NOTOKpict;
                     this.pb_TestType.Image = this.NOTOKpict;
                     this.lbl_JobIDValue.Text = "";
                     this.pB_JobID.Image = this.NOTOKpict;
-                    this.cb_ProductNo.SelectedIndex = -1;
+                    if (PartNoNeeded) this.cb_ProductNo.SelectedIndex = -1;
                     this.pB_Assembly.Image = this.NOTOKpict;
 
                     this.Login();
@@ -1755,7 +1906,7 @@ namespace SigmaSureManualReportGenerator
                     this.GenerateReport();
                     return;
                 }
-                if (this.tb_OrderValue.Text.IndexOf(';') > -1)
+                if ((this.tb_OrderValue.Text.IndexOf(';') > -1) || (this.tb_OrderValue.Text.IndexOf(':') > -1))
                 {
                     if ((this.gb_Results.Enabled) && (this.lbl_SerialNumber.Text.Trim() != ""))
                     {
@@ -1779,6 +1930,7 @@ namespace SigmaSureManualReportGenerator
                     String actOrderValue = "";
                     String JobID = "";
                     String SerialNumber = "";
+                    String CustomSerialNumber = "";
                     String Product = "";
                     String Version = "";
                     String Location = "";
@@ -1786,41 +1938,117 @@ namespace SigmaSureManualReportGenerator
                     String WorkOrder = "";
                     if (this.tb_OrderValue.Text[0] == '#')
                     {
-                        try
+                        if (this.tb_OrderValue.Text.Length == 15)
                         {
-                            actOrderValue = this.tb_OrderValue.Text.Substring(1);
-                            JobID = actOrderValue.Substring(0, 8);
-                            actOrderValue = actOrderValue.Substring(8);
-                            SerialNumber = actOrderValue.Substring(0, 5);
-                            if (actOrderValue.IndexOf(';') > -1)
+                            JobID = this.tb_OrderValue.Text.Substring(1, 8);
+                            SerialNumber = this.tb_OrderValue.Text.Substring(9, 5);
+                            if (!PartNoNeeded)
                             {
-                                actOrderValue = actOrderValue.Substring(actOrderValue.IndexOf(';') + 1);
-                                Product = actOrderValue.Substring(0, actOrderValue.IndexOf(';'));
+                                this.lbl_JobIDValue.Text = JobID;
+                                if (this.cb_TestType.Text == "")
+                                {
+                                    this.actualOrder = 8;
+                                    this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte typ testu:";
+                                }
+                                else
+                                {
+                                    this.lbl_SerialNumber.Text = SerialNumber;
+                                    if (this.BelMESenabled)
+                                    {
+                                        this.BelMESobj.BelMESAuthorization(String.Concat(this.lbl_JobIDValue.Text.Trim(), this.lbl_SerialNumber.Text.Trim()), this.cb_TestType.Text.Trim(), "", "");
+
+                                        if (!BelMESobj.Authorization.blnAuthorized)
+                                        {
+                                            if (this.BelMESMessageWarnings)
+                                            {
+                                                MessageBox.Show(this.BelMESobj.Authorization.strResult);
+                                            }
+                                        }
+                                    }
+                                    this.actualOrder = 6;
+                                    if (this.gb_Results.Text != "Instrukcie")
+                                    {
+                                        this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte vysledok testu (PASS alebo FAIL):";
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (this.cb_ProductNo.Text != "")
+                                {
+                                    this.lbl_JobIDValue.Text = JobID;
+                                    if (this.cb_TestType.Text == "")
+                                    {
+                                        this.actualOrder = 8;
+                                        this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte typ testu:";
+                                    }
+                                    else
+                                    {
+                                        this.lbl_SerialNumber.Text = SerialNumber;
+                                        if (this.BelMESenabled)
+                                        {
+                                            this.BelMESobj.BelMESAuthorization(String.Concat(this.lbl_JobIDValue.Text.Trim(), this.lbl_SerialNumber.Text.Trim()), this.cb_TestType.Text.Trim(), "", "");
+                                            
+                                            if (!BelMESobj.Authorization.blnAuthorized)
+                                            {
+                                                if (this.BelMESMessageWarnings)
+                                                {
+                                                    MessageBox.Show(this.BelMESobj.Authorization.strResult);
+                                                }
+                                            }
+                                        }
+                                        this.actualOrder = 6;
+                                        if (this.gb_Results.Text != "Instrukcie")
+                                        {
+                                            this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte vysledok testu (PASS alebo FAIL):";
+                                        }
+                                        else
+                                        {
+                                            this.lbl_ScanEditOrder.Text = "Vyklikajte prosim vysledky jednotlivych krokov a nasledne stlacte Vytvor report tlacidlo.";
+                                            this.gb_Results.Enabled = true;
+                                        }
+                                    }                                   
+                                }
+                            }
+                            this.ResetOrderTextBox();
+                            return;
+                        }
+                        else
+                        {
+
+                            try
+                            {
+                                actOrderValue = this.tb_OrderValue.Text.Substring(1);
+                                JobID = actOrderValue.Substring(0, 8);
+                                actOrderValue = actOrderValue.Substring(8);
+                                SerialNumber = actOrderValue.Substring(0, 5);
                                 if (actOrderValue.IndexOf(';') > -1)
                                 {
                                     actOrderValue = actOrderValue.Substring(actOrderValue.IndexOf(';') + 1);
-                                    Version = actOrderValue.Substring(0, actOrderValue.IndexOf(';'));
+                                    Product = actOrderValue.Substring(0, actOrderValue.IndexOf(';'));
                                     if (actOrderValue.IndexOf(';') > -1)
                                     {
                                         actOrderValue = actOrderValue.Substring(actOrderValue.IndexOf(';') + 1);
-                                        Datecode = actOrderValue.Substring(0, actOrderValue.IndexOf(';'));
+                                        Version = actOrderValue.Substring(0, actOrderValue.IndexOf(';'));
                                         if (actOrderValue.IndexOf(';') > -1)
                                         {
                                             actOrderValue = actOrderValue.Substring(actOrderValue.IndexOf(';') + 1);
-                                            if (actOrderValue.IndexOf(';') > -1)
-                                            {
-                                                Location = actOrderValue.Substring(0, actOrderValue.IndexOf(';'));
-                                            }
-                                            else
-                                            {
-                                                Location = actOrderValue;
-                                            }
+                                            Datecode = actOrderValue.Substring(0, actOrderValue.IndexOf(';'));
                                             if (actOrderValue.IndexOf(';') > -1)
                                             {
                                                 actOrderValue = actOrderValue.Substring(actOrderValue.IndexOf(';') + 1);
                                                 if (actOrderValue.IndexOf(';') > -1)
                                                 {
+                                                    Location = actOrderValue.Substring(0, actOrderValue.IndexOf(';'));
+                                                }
+                                                else
+                                                {
+                                                    Location = actOrderValue;
+                                                }
+                                                if (actOrderValue.IndexOf(';') > -1)
+                                                {
                                                     actOrderValue = actOrderValue.Substring(actOrderValue.IndexOf(';') + 1);
+                                                    CustomSerialNumber = actOrderValue.Substring(0, actOrderValue.IndexOf(';'));
                                                     if (actOrderValue.IndexOf(';') > -1)
                                                     {
                                                         actOrderValue = actOrderValue.Substring(actOrderValue.IndexOf(';') + 1);
@@ -1829,11 +2057,15 @@ namespace SigmaSureManualReportGenerator
                                                             actOrderValue = actOrderValue.Substring(actOrderValue.IndexOf(';') + 1);
                                                             if (actOrderValue.IndexOf(';') > -1)
                                                             {
-                                                                WorkOrder = actOrderValue.Substring(0, actOrderValue.IndexOf(';'));
-                                                            }
-                                                            else
-                                                            {
-                                                                WorkOrder = actOrderValue;
+                                                                actOrderValue = actOrderValue.Substring(actOrderValue.IndexOf(';') + 1);
+                                                                if (actOrderValue.IndexOf(';') > -1)
+                                                                {
+                                                                    WorkOrder = actOrderValue.Substring(0, actOrderValue.IndexOf(';'));
+                                                                }
+                                                                else
+                                                                {
+                                                                    WorkOrder = actOrderValue;
+                                                                }
                                                             }
                                                         }
                                                     }
@@ -1842,27 +2074,20 @@ namespace SigmaSureManualReportGenerator
                                         }
                                     }
                                 }
+                                if (actOrderValue.IndexOf(';') > -1)
+                                {
+
+                                }
+                                else
+                                {
+                                    WorkOrder = actOrderValue;
+                                }
                             }
-
-
-
-
-
-
-
-                            if (actOrderValue.IndexOf(';') > -1)
+                            catch
                             {
-
+                                this.ErrorMessageBoxShow("Nespravne udaje v zoskenovanom barcode", true);
+                                return;
                             }
-                            else
-                            {
-                                WorkOrder = actOrderValue;
-                            }
-                        }
-                        catch
-                        {
-                            this.ErrorMessageBoxShow("Nespravne udaje v zoskenovanom barcode", true);
-                            return;
                         }
                     }
                     else
@@ -1904,122 +2129,25 @@ namespace SigmaSureManualReportGenerator
                         }
                     }
                     this.eventDisabler = true;
-                    if (this.cb_ProductNo.Text != Product)
+                    if (PartNoNeeded)
                     {
-                        this.resetingCB_TestType = true;
-                        this.cb_TestType.SelectedIndex = -1;
-                        this.pb_TestType.Image = this.NOTOKpict;
-                        this.resetingCB_TestType = false;
-                    }
-                    this.cb_ProductNo.SelectedIndex = -1;
-                    this.cb_ProductNo.SelectedItem = Product;
-                    this.eventDisabler = false;
-                    this.lbl_JobIDValue.Text = "";
-                    if (this.cb_ProductNo.SelectedIndex == -1)
-                    {
-                        this.pB_Assembly.Image = this.NOTOKpict;
-                        if (this.CheckUnknownProduct(Product))
+                        if (this.cb_ProductNo.Text != Product)
                         {
-                            this.cb_ProductNo.Items.Clear();
-                            String[] ar_assemblies = { };
-                            XmlNode node_Assembly = this.ProductsConfig.XmlFile.SelectSingleNode("./Configuration/Assemblies");
-                            foreach (XmlNode actNode in node_Assembly.ChildNodes)
-                            {
-                                XmlNode node_AssemblyName = actNode.SelectSingleNode("./Name");
-                                Array.Resize(ref ar_assemblies, ar_assemblies.Length + 1);
-                                ar_assemblies.SetValue(node_AssemblyName.InnerText, ar_assemblies.Length - 1);
-                            }
+                            this.resetingCB_TestType = true;
+                            this.cb_TestType.SelectedIndex = -1;
+                            this.pb_TestType.Image = this.NOTOKpict;
+                            this.resetingCB_TestType = false;
+                        }
 
-                            Array.Sort(ar_assemblies);
-                            foreach (String actAssembly in ar_assemblies)
-                            {
-                                this.cb_ProductNo.Items.Add(actAssembly);
-                            }
-                            this.cb_ProductNo.SelectedItem = Product;
-                            if (this.cb_ProductNo.SelectedIndex > -1)
-                            {
-                                this.pB_Assembly.Image = this.OKpict;
-                            }
-                        }
-                        this.tb_OrderValue.Enabled = true;
-                        this.tb_OrderValue.SelectAll();
-                    }
-                    else
-                    {
-                        this.pB_Assembly.Image = this.OKpict;
-                        this.lbl_JobIDValue.Text = JobID;
-                        this.pB_JobID.Image = this.OKpict;
-                        if (this.cb_TestType.SelectedIndex > -1)
-                        {
-                            this.lbl_SerialNumber.Text = SerialNumber;
-                            this.pb_SerialNumber.Image = this.OKpict;
-                        }
-                        if (this.cb_TestType.Text == "")
-                        {
-                            this.actualOrder = 8;
-                            this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte typ testu:";
-                            //this.eventDisabler = true;
-                        }
-                        else
-                        {
-                            this.actualOrder = 6;
-                            if (this.gb_Results.Text != "Instrukcie")
-                            {
-                                this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte vysledok testu (PASS alebo FAIL):";
-                            }
-                            else
-                            {
-                                this.lbl_ScanEditOrder.Text = "Vyklikajte prosim vysledky jednotlivych krokov a nasledne stlacte Vytvor report tlacidlo.";
-                                this.gb_Results.Enabled = true;
-                            }
-                        }
-                    }
-                    this.ResetOrderTextBox();
-                    return;
-                }
-                String str_ValidationValue = ProductBarcode.GetProductNoFromBarcode(this.tb_OrderValue.Text);
-                if ((str_ValidationValue != "") && (str_ValidationValue != "Error") && (str_ValidationValue != this.tb_OrderValue.Text))
-                {                    
-                    String str_TbValue = this.tb_OrderValue.Text;
-                    String actProduct = "";
-                    actProduct = ProductBarcode.GetProductNoFromBarcode(str_TbValue);
-                    if (actProduct == "Error")
-                    {
-                        this.tb_OrderValue.SelectAll();
-                        this.tb_OrderValue.Focus();
-                        return;
-                    }
-                    if (actProduct != str_TbValue)
-                    {
-                        this.cb_ProductNo.SelectedItem = actProduct;
-                        this.lbl_JobIDValue.Text = ProductBarcode.GetJobIdFromBarcode(actProduct, str_TbValue);
-                        this.pB_JobID.Image = this.OKpict;
-                        this.lbl_SerialNumber.Text = ProductBarcode.GetSerialNumberFromBarcode(actProduct, str_TbValue);
-                        this.pb_SerialNumber.Image = this.OKpict;
-                        if (this.cb_TestType.Text == "")
-                        {
-                            this.actualOrder = 8;
-                            this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte typ testu:";                            
-                        }
-                        else
-                        {
-                            this.actualOrder = 6;
-                            this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte vysledok testu (PASS alebo FAIL):";                            
-                        }
-                        this.ResetOrderTextBox();
-                        return;
-                    }
-                }
-                switch (this.actualOrder)
-                {
-                    case 1:
-                        this.cb_ProductNo.SelectedIndex = -1;                        
-                        String actProduct = this.tb_OrderValue.Text;
-                        this.cb_ProductNo.SelectedItem = actProduct;                        
+                        this.cb_ProductNo.SelectedIndex = -1;
+                        this.cb_ProductNo.SelectedItem = Product;
+                        this.eventDisabler = false;
                         this.lbl_JobIDValue.Text = "";
+
                         if (this.cb_ProductNo.SelectedIndex == -1)
                         {
-                            if (this.CheckUnknownProduct(actProduct))
+                            this.pB_Assembly.Image = this.NOTOKpict;
+                            if (this.CheckUnknownProduct(Product))
                             {
                                 this.cb_ProductNo.Items.Clear();
                                 String[] ar_assemblies = { };
@@ -2036,20 +2164,133 @@ namespace SigmaSureManualReportGenerator
                                 {
                                     this.cb_ProductNo.Items.Add(actAssembly);
                                 }
-                                this.cb_ProductNo.SelectedItem = actProduct;
+                                this.cb_ProductNo.SelectedItem = Product;
                                 if (this.cb_ProductNo.SelectedIndex > -1)
                                 {
                                     this.pB_Assembly.Image = this.OKpict;
                                 }
-                                this.tb_OrderValue.SelectAll();
+                                this.Focus();
                             }
+                            this.tb_OrderValue.Enabled = true;
+                            this.tb_OrderValue.SelectAll();
                         }
                         else
-                        {                            
-                            this.actualOrder = 2;
-                            this.lbl_ScanEditOrder.Text = "Zadajte Job ID alebo zoskenujte barcode na vyrobku:";
-                            this.ResetOrderTextBox();                       
+                        {
+                            this.pB_Assembly.Image = this.OKpict;
+                            this.lbl_JobIDValue.Text = JobID;
+                            this.pB_JobID.Image = this.OKpict;
+                            if (this.cb_TestType.SelectedIndex > -1)
+                            {
+                                this.lbl_SerialNumber.Text = SerialNumber;
+                                this.pb_SerialNumber.Image = this.OKpict;
+                            }
+                            if (this.cb_TestType.Text == "")
+                            {
+                                this.actualOrder = 8;
+                                this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte typ testu:";
+                                //this.eventDisabler = true;
+                            }
+                            else
+                            {
+                                this.actualOrder = 6;
+                                if (this.gb_Results.Text != "Instrukcie")
+                                {
+                                    this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte vysledok testu (PASS alebo FAIL):";
+                                }
+                                else
+                                {
+                                    this.lbl_ScanEditOrder.Text = "Vyklikajte prosim vysledky jednotlivych krokov a nasledne stlacte Vytvor report tlacidlo.";
+                                    this.gb_Results.Enabled = true;
+                                }
+                            }
                         }
+                        this.ResetOrderTextBox();
+                        return;
+                    }
+                }
+                String str_ValidationValue = ProductBarcode.GetProductNoFromBarcode(this.tb_OrderValue.Text);
+                if ((str_ValidationValue != "") && (str_ValidationValue != "Error") && (str_ValidationValue != this.tb_OrderValue.Text))
+                {                    
+                    String str_TbValue = this.tb_OrderValue.Text;
+                    String actProduct = "";
+                    actProduct = ProductBarcode.GetProductNoFromBarcode(str_TbValue);
+                    if (actProduct == "Error")
+                    {
+                        this.tb_OrderValue.SelectAll();
+                        this.tb_OrderValue.Focus();
+                        return;
+                    }
+                    if (actProduct != str_TbValue)
+                    {
+                        if (PartNoNeeded) this.cb_ProductNo.SelectedItem = actProduct;
+                        this.lbl_JobIDValue.Text = ProductBarcode.GetJobIdFromBarcode(actProduct, str_TbValue);
+                        this.pB_JobID.Image = this.OKpict;
+                        if (!this.IgnoreSNLength) this.lbl_SerialNumber.Text = ProductBarcode.GetSerialNumberFromBarcode(actProduct, str_TbValue);
+                        else this.lbl_SerialNumber.Text = str_TbValue;
+                        this.pb_SerialNumber.Image = this.OKpict;
+                        if (this.cb_TestType.Text == "")
+                        {
+                            this.actualOrder = 8;
+                            this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte typ testu:";                            
+                        }
+                        else
+                        {
+                            this.actualOrder = 6;
+                            this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte vysledok testu (PASS alebo FAIL):";                            
+                        }
+                        this.ResetOrderTextBox();
+                        return;
+                    }
+                }
+
+                //OrderLogic:
+
+                switch (this.actualOrder)
+                {
+                    case 1:
+                        if (PartNoNeeded) this.cb_ProductNo.SelectedIndex = -1;                        
+                        String actProduct = this.tb_OrderValue.Text;
+                        if (PartNoNeeded) this.cb_ProductNo.SelectedItem = actProduct;                        
+                        this.lbl_JobIDValue.Text = "";
+                        if (PartNoNeeded)
+                        {
+                            if (this.cb_ProductNo.SelectedIndex == -1)
+                            {
+                                if (this.CheckUnknownProduct(actProduct))
+                                {
+                                    this.cb_ProductNo.Items.Clear();
+                                    String[] ar_assemblies = { };
+                                    XmlNode node_Assembly = this.ProductsConfig.XmlFile.SelectSingleNode("./Configuration/Assemblies");
+                                    foreach (XmlNode actNode in node_Assembly.ChildNodes)
+                                    {
+                                        XmlNode node_AssemblyName = actNode.SelectSingleNode("./Name");
+                                        Array.Resize(ref ar_assemblies, ar_assemblies.Length + 1);
+                                        ar_assemblies.SetValue(node_AssemblyName.InnerText, ar_assemblies.Length - 1);
+                                    }
+
+                                    Array.Sort(ar_assemblies);
+                                    foreach (String actAssembly in ar_assemblies)
+                                    {
+                                        this.cb_ProductNo.Items.Add(actAssembly);
+                                    }
+                                    this.cb_ProductNo.SelectedItem = actProduct;
+                                    if (this.cb_ProductNo.SelectedIndex > -1)
+                                    {
+                                        this.pB_Assembly.Image = this.OKpict;
+                                    }
+                                    this.Focus();
+                                    this.tb_OrderValue.SelectAll();
+                                    this.tb_OrderValue.Focus();
+                                }
+                            }
+                            else
+                            {
+                                this.actualOrder = 2;
+                                this.lbl_ScanEditOrder.Text = "Zadajte Job ID alebo zoskenujte barcode na vyrobku:";
+                                this.ResetOrderTextBox();
+                            }
+                        }
+                        this.Focus();
                         break;
                     case 2:
                         this.lbl_JobIDValue.Text = ProductBarcode.GetJobIdFromBarcode(this.cb_ProductNo.Text, this.tb_OrderValue.Text.ToUpper());
@@ -2107,7 +2348,7 @@ namespace SigmaSureManualReportGenerator
                             return;
                         }
 
-                        if (this.lbl_JobIDValue.Text.Substring(0, 1) != "0")
+                        if (!((this.lbl_JobIDValue.Text.Substring(0, 1) == "0") || (this.lbl_JobIDValue.Text.Substring(0, 1) == "1")))
                         {
                             this.lbl_JobIDValue.Text = "";
                             this.tb_OrderValue.Focus();
@@ -2179,9 +2420,13 @@ namespace SigmaSureManualReportGenerator
                             {
                                 if (Convert.ToInt32(actProdNode.SelectSingleNode("./BarcodeLength").InnerText) == this.tb_OrderValue.Text.Length)
                                 {
-                                    String JobIDfromBarcode = ProductBarcode.GetJobIdFromBarcode(this.cb_ProductNo.Text, this.tb_OrderValue.Text);
-                                    if (JobIDfromBarcode != "") this.lbl_JobIDValue.Text = JobIDfromBarcode;
-                                    this.lbl_SerialNumber.Text = ProductBarcode.GetSerialNumberFromBarcode(this.cb_ProductNo.Text, this.tb_OrderValue.Text);
+                                    if (this.lbl_JobIDValue.Text == "")
+                                    {
+                                        String JobIDfromBarcode = ProductBarcode.GetJobIdFromBarcode(this.cb_ProductNo.Text, this.tb_OrderValue.Text);
+                                        if (JobIDfromBarcode != "") this.lbl_JobIDValue.Text = JobIDfromBarcode;                                        
+                                    }
+                                    if (!this.IgnoreSNLength) this.lbl_SerialNumber.Text = ProductBarcode.GetSerialNumberFromBarcode(this.cb_ProductNo.Text, this.tb_OrderValue.Text);
+                                    else this.lbl_SerialNumber.Text = this.tb_OrderValue.Text;
                                 }
                                 else
                                 {
@@ -2204,12 +2449,15 @@ namespace SigmaSureManualReportGenerator
                                             {
                                                 this.lbl_JobIDValue.Text = str_JobID;
                                             }
-
-                                            this.lbl_SerialNumber.Text = ProductBarcode.GetSerialNumberFromBarcode(this.cb_ProductNo.Text, this.tb_OrderValue.Text);
+                                            if (!this.IgnoreSNLength) this.lbl_SerialNumber.Text = ProductBarcode.GetSerialNumberFromBarcode(this.cb_ProductNo.Text, this.tb_OrderValue.Text);
+                                            else this.lbl_SerialNumber.Text = this.tb_OrderValue.Text;
+                                            //this.lbl_SerialNumber.Text = ProductBarcode.GetSerialNumberFromBarcode(this.cb_ProductNo.Text, this.tb_OrderValue.Text);
                                         }
                                         else
                                         {
-                                            this.lbl_SerialNumber.Text = this.tb_OrderValue.Text;
+                                            if (!this.IgnoreSNLength) this.lbl_SerialNumber.Text = ProductBarcode.GetSerialNumberFromBarcode(this.cb_ProductNo.Text, this.tb_OrderValue.Text);
+                                            else this.lbl_SerialNumber.Text = this.tb_OrderValue.Text;
+                                            //this.lbl_SerialNumber.Text = ProductBarcode.GetSerialNumberFromBarcode(this.cb_ProductNo.Text, this.tb_OrderValue.Text);
                                         }
                                         this.pb_SerialNumber.Image = this.OKpict;
                                     }
@@ -2317,7 +2565,7 @@ namespace SigmaSureManualReportGenerator
                                 this.actualGrade = "FAIL";
                                 this.gb_Results.Enabled = true;
 
-                                Array myFaultCodes = this.ProductsConfig.GetFaultCodes(this.cb_ProductNo.Text, this.cb_TestType.Text);
+                                Array myFaultCodes = this.ProductsConfig.GetFaultCodes(this.cb_ProductNo.Text, this.cb_TestType.Text, this.PartNoNeeded);
                                 if (myFaultCodes.Length == 0)
                                 {
                                     this.actualOrder = 5;
@@ -2356,11 +2604,14 @@ namespace SigmaSureManualReportGenerator
 
         private void lbl_JobIDValue_DoubleClick(object sender, EventArgs e)
         {
-            if (this.cb_ProductNo.SelectedIndex == -1)
+            if (this.PartNoNeeded)
             {
-                this.ResetOrderTextBox();
-                return;
-            }
+                if (this.cb_ProductNo.SelectedIndex == -1)
+                {
+                    this.ResetOrderTextBox();
+                    return;
+                }
+            }            
             this.cb_TestType.Text = "";
             this.pb_TestType.Image = this.NOTOKpict;
             this.lbl_JobIDValue.Text = "";
@@ -2438,85 +2689,94 @@ namespace SigmaSureManualReportGenerator
         private void cb_TestType_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (this.eventDisabler) return;
+            this.lbl_SerialNumber.Text = "";
             StationInfos actSI = this.GetStationInfosForTest(this.cb_TestType.Text);
             this.lbl_StationName.Text = actSI.Name;
-
-            if (this.cb_ProductNo.SelectedIndex != -1)
+            if (this.PartNoNeeded)
             {
-                Array ar_ChildTestsInfo = this.ProductsConfig.GetChildTestsInfos(this.cb_ProductNo.Text, this.cb_TestType.Text);
-                if (ar_ChildTestsInfo.Length != 0)
+                if (this.cb_ProductNo.SelectedIndex != -1)
                 {
-                    this.gb_Results.Text = "Instrukcie";
-                    this.gb_Results.Enabled = true;
-                    this.dgv_Instructions.Visible = true;
-                    this.dgv_Instructions.Rows.Clear();
-                    for (Int32 i = 0; i < ar_ChildTestsInfo.Length; i++)
+                    Array ar_ChildTestsInfo = this.ProductsConfig.GetChildTestsInfos(this.cb_ProductNo.Text, this.cb_TestType.Text);
+                    if (ar_ChildTestsInfo.Length != 0)
                     {
-                        ProductsConfigurationFile.ChildTestInfo actCTI = (ProductsConfigurationFile.ChildTestInfo)ar_ChildTestsInfo.GetValue(i);
-                        this.dgv_Instructions.Rows.Add(actCTI.Name, actCTI.Instruction, "", "PASS", "FAIL", "");
-                        //this.dgv_Instructions.Rows[i].Cells[1].ToolTipText = actCTI.Description;
-                    }
-                    this.dgv_Instructions.Columns[1].Width = this.gb_Results.Width - 12 - this.dgv_Instructions.Columns[0].Width - this.dgv_Instructions.Columns[2].Width - this.dgv_Instructions.Columns[3].Width - this.dgv_Instructions.Columns[4].Width - this.dgv_Instructions.Columns[5].Width;
-                }
-                else
-                {
-                    this.gb_Results.Text = "Vysledky";
-                    this.dgv_Instructions.Visible = false;
-                }
-                if (this.lbl_JobIDValue.Text != "")
-                {
-                    if (this.cb_TestType.SelectedIndex != -1)
-                    {
-                        this.pb_TestType.Image = this.OKpict;
-                        if (this.lbl_SerialNumber.Text != "")
+                        this.gb_Results.Text = "Instrukcie";
+                        this.gb_Results.Enabled = true;
+                        this.dgv_Instructions.Visible = true;
+                        this.dgv_Instructions.Rows.Clear();
+                        for (Int32 i = 0; i < ar_ChildTestsInfo.Length; i++)
                         {
-                            this.eventDisabler = false;
-                            this.actualOrder = 6;
-                            if (this.gb_Results.Text == "Vysledky")
-                            {
-                                this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte vysledok testu (PASS alebo FAIL):";
-                            }
-                            else
-                            {
-                                this.lbl_ScanEditOrder.Text = "Postupujte podla krokov v tabulke nizsie.";
-                            }
+                            ProductsConfigurationFile.ChildTestInfo actCTI = (ProductsConfigurationFile.ChildTestInfo)ar_ChildTestsInfo.GetValue(i);
+                            this.dgv_Instructions.Rows.Add(actCTI.Name, actCTI.Instruction, "", "PASS", "FAIL", "");
+                            //this.dgv_Instructions.Rows[i].Cells[1].ToolTipText = actCTI.Description;
                         }
-                        else
-                        {
-                            this.pb_SerialNumber.Image = this.NOTOKpict;
-                            this.actualOrder = 4;
-                            this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte seriove cislo produktu:";
-                        }
-
-                        this.ResetOrderTextBox();
+                        this.dgv_Instructions.Columns[1].Width = this.gb_Results.Width - 12 - this.dgv_Instructions.Columns[0].Width - this.dgv_Instructions.Columns[2].Width - this.dgv_Instructions.Columns[3].Width - this.dgv_Instructions.Columns[4].Width - this.dgv_Instructions.Columns[5].Width;
                     }
                     else
                     {
-                        if (!this.resetingCB_TestType)
-                        {
-                            this.ErrorMessageBoxShow("Zadany typ testu asi nie je spravny. V pripade, ze je spravny kontaktujte testovacieho inziniera.", true);
-                        }
-                        this.tb_OrderValue.Focus();
-                        this.tb_OrderValue.SelectAll();
-                    }
+                        this.gb_Results.Text = "Vysledky";
+                        this.dgv_Instructions.Visible = false;
+                    }              
+                    
                 }
                 else
                 {
+                    this.eventDisabler = true;
                     this.cb_TestType.SelectedIndex = -1;
+                    this.eventDisabler = false;
+                    if (!this.resetingCB_TestType) this.ErrorMessageBoxShow("Riadte sa prosim pokynmi, ktore su zvyraznene cervernou farbou. Dakujeme.", true);
+                    this.ResetOrderTextBox();
+                }                
+            }
+            else
+            {
+                this.gb_Results.Text = "Vysledky";
+                this.dgv_Instructions.Visible = false;
+            }
+            if (this.lbl_JobIDValue.Text != "")
+            {
+                if (this.cb_TestType.SelectedIndex != -1)
+                {
+                    this.pb_TestType.Image = this.OKpict;
+                    if (this.lbl_SerialNumber.Text != "")
+                    {
+                        this.eventDisabler = false;
+                        this.actualOrder = 6;
+                        if (this.gb_Results.Text == "Vysledky")
+                        {
+                            this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte vysledok testu (PASS alebo FAIL):";
+                        }
+                        else
+                        {
+                            this.lbl_ScanEditOrder.Text = "Postupujte podla krokov v tabulke nizsie.";
+                        }
+                    }
+                    else
+                    {
+                        this.pb_SerialNumber.Image = this.NOTOKpict;
+                        this.actualOrder = 4;
+                        this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte seriove cislo produktu:";
+                    }
+
+                    this.ResetOrderTextBox();
+                }
+                else
+                {
                     if (!this.resetingCB_TestType)
                     {
-                        this.ErrorMessageBoxShow("Riadte sa prosim pokynmi, ktore su zvyraznene cervernou farbou. Dakujeme.", true);
-                        this.tb_OrderValue.Enabled = true;
+                        this.ErrorMessageBoxShow("Zadany typ testu asi nie je spravny. V pripade, ze je spravny kontaktujte testovacieho inziniera.", true);
                     }
-                    this.ResetOrderTextBox();
+                    this.tb_OrderValue.Focus();
+                    this.tb_OrderValue.SelectAll();
                 }
             }
             else
             {
-                this.eventDisabler = true;
                 this.cb_TestType.SelectedIndex = -1;
-                this.eventDisabler = false;
-                if (!this.resetingCB_TestType) this.ErrorMessageBoxShow("Riadte sa prosim pokynmi, ktore su zvyraznene cervernou farbou. Dakujeme.", true);
+                if (!this.resetingCB_TestType)
+                {
+                    this.ErrorMessageBoxShow("Riadte sa prosim pokynmi, ktore su zvyraznene cervernou farbou. Dakujeme.", true);
+                    this.tb_OrderValue.Enabled = true;
+                }
                 this.ResetOrderTextBox();
             }
             this.CheckFormDataForReportAndBatchSNEnter();
@@ -2611,9 +2871,9 @@ namespace SigmaSureManualReportGenerator
             serverUserConfig.Load(this.StationConfig.SelectSingleNode("./Configuration/OperatorConfigurationFile").InnerText);
 
             PasswordChangeForm newForm = new PasswordChangeForm(this.lbl_OperatorSurname.Text, serverUserConfig);
-            newForm.ShowDialog();            
+            newForm.ShowDialog();
 
-            File.Copy(this.GetFilePathFromURI(serverUserConfig.BaseURI), this.GetFilePathFromURI(this.UserConfig.BaseURI), true);
+            System.IO.File.Copy(this.GetFilePathFromURI(serverUserConfig.BaseURI), this.GetFilePathFromURI(this.UserConfig.BaseURI), true);
             this.UserConfig.Load(this.GetFilePathFromURI(this.UserConfig.BaseURI));
 
             this.tb_OrderValue.Text = "LOGOUTUSER";
@@ -2633,7 +2893,7 @@ namespace SigmaSureManualReportGenerator
             UserMaintenanceForm newForm = new UserMaintenanceForm(serverUserConfig, this.lbl_OperatorSurname.Text);
             newForm.ShowDialog();
 
-            File.Copy(this.GetFilePathFromURI(serverUserConfig.BaseURI), this.GetFilePathFromURI(this.UserConfig.BaseURI), true);
+            System.IO.File.Copy(this.GetFilePathFromURI(serverUserConfig.BaseURI), this.GetFilePathFromURI(this.UserConfig.BaseURI), true);
             this.UserConfig.Load(this.GetFilePathFromURI(this.UserConfig.BaseURI));
 
             this.tb_OrderValue.Text = "LOGOUTUSER";
@@ -2651,7 +2911,7 @@ namespace SigmaSureManualReportGenerator
             OperatorSettingsForm newForm = new OperatorSettingsForm(this.lbl_OperatorSurname.Text, serverUserConfig);
             newForm.ShowDialog();
 
-            File.Copy(this.GetFilePathFromURI(serverUserConfig.BaseURI), this.GetFilePathFromURI(this.UserConfig.BaseURI), true);
+            System.IO.File.Copy(this.GetFilePathFromURI(serverUserConfig.BaseURI), this.GetFilePathFromURI(this.UserConfig.BaseURI), true);
             this.UserConfig.Load(this.GetFilePathFromURI(this.UserConfig.BaseURI));
 
             this.tb_OrderValue.Text = "LOGOUTUSER";
@@ -2732,6 +2992,7 @@ namespace SigmaSureManualReportGenerator
                     this.pb_SerialNumber.Image = this.OKpict;
                     this.tb_OrderValue.Text = "";
                     this.lbl_ScanEditOrder.Text = "Zoskenujte alebo zadajte vysledok testu (PASS alebo FAIL):";
+                    this.BelMESobj.BelMESAuthorization(String.Concat(this.lbl_JobIDValue.Text.Trim(), this.lbl_SerialNumber.Text.Trim()), this.cb_TestType.Text.Trim(), this.cb_ProductNo.Text.Trim(), "", true);
                     this.actualOrder = 6;
                     this.tb_OrderValue.Focus();
                 }
@@ -2790,7 +3051,7 @@ namespace SigmaSureManualReportGenerator
                     str_PicturesPath = String.Concat(str_PicturesPath, actCTI.PicturePath);
                     if (Directory.Exists(Path.GetDirectoryName(str_PicturesPath)))
                     {
-                        if (!File.Exists(str_PicturesPath))
+                        if (!System.IO.File.Exists(str_PicturesPath))
                         {
                             this.Cursor = Cursors.Default;
                             if (Path.GetFileName(str_PicturesPath) == "") return;
@@ -2897,6 +3158,11 @@ namespace SigmaSureManualReportGenerator
                     this.myForm.Focus();
                 }                
             }
+        }
+
+        private void btn_SimpleMode_Click(object sender, EventArgs e)
+        {
+
         }
     }      
 }

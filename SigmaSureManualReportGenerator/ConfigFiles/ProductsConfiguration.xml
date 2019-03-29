@@ -255,6 +255,42 @@
       </BarcodeSettings>
     </Family>
     <Family>
+      <Name>FXR</Name>
+      <BarcodeLength>18</BarcodeLength>
+      <BarcodeSettings>
+        <JobID>
+          <StartIndex>2</StartIndex>
+          <Length>8</Length>
+        </JobID>
+        <SerialNumber>
+          <StartIndex>13</StartIndex>
+          <Length>5</Length>
+        </SerialNumber>
+        <ProductNo>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </ProductNo>
+      </BarcodeSettings>
+    </Family>
+    <Family>
+      <Name>FNR</Name>
+      <BarcodeLength>18</BarcodeLength>
+      <BarcodeSettings>
+        <JobID>
+          <StartIndex>2</StartIndex>
+          <Length>8</Length>
+        </JobID>
+        <SerialNumber>
+          <StartIndex>13</StartIndex>
+          <Length>5</Length>
+        </SerialNumber>
+        <ProductNo>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </ProductNo>
+      </BarcodeSettings>
+    </Family>
+    <Family>
       <Name>LX</Name>
       <BarcodeLength>18</BarcodeLength>
       <BarcodeSettings>
@@ -1125,21 +1161,7 @@
       <Properties>
         <Memory>N/A</Memory>      
       </Properties>  
-    </Assembly>
-    <Assembly>      
-      <Name>HR2320-9RBG</Name>
-      <BarcodeLength>48</BarcodeLength>
-      <Properties>
-        <Memory>N/A</Memory>      
-      </Properties>  
-    </Assembly>
-    <Assembly>      
-      <Name>HRP2320-9RG</Name>
-      <BarcodeLength>48</BarcodeLength>
-      <Properties>
-        <Memory>N/A</Memory>      
-      </Properties>  
-    </Assembly>
+    </Assembly>    
     <Assembly>      
       <Name>HR2320-9RB1G</Name>
       <BarcodeLength>49</BarcodeLength>
@@ -1155,7 +1177,7 @@
       </Properties>  
     </Assembly>
     <Assembly>      
-      <Name>HRP2324-9RB1G</Name>
+      <Name>HR2320-9RBG</Name>
       <BarcodeLength>48</BarcodeLength>
       <Properties>
         <Memory>N/A</Memory>      
@@ -1164,6 +1186,27 @@
     <Assembly>      
       <Name>HR2880-9RG</Name>
       <BarcodeLength>47</BarcodeLength>
+      <Properties>
+        <Memory>N/A</Memory>      
+      </Properties>  
+    </Assembly>
+    <Assembly>      
+      <Name>HRP2320-9RG</Name>
+      <BarcodeLength>48</BarcodeLength>
+      <Properties>
+        <Memory>N/A</Memory>      
+      </Properties>  
+    </Assembly>
+    <Assembly>      
+      <Name>HRP2325-9RB1G</Name>
+      <BarcodeLength>48</BarcodeLength>
+      <Properties>
+        <Memory>N/A</Memory>      
+      </Properties>  
+    </Assembly>
+    <Assembly>      
+      <Name>HRP2324-9RB1G</Name>
+      <BarcodeLength>48</BarcodeLength>
       <Properties>
         <Memory>N/A</Memory>      
       </Properties>  
@@ -1229,11 +1272,15 @@
       <BarcodeLength>49</BarcodeLength>
       <Properties>
         <Memory>N/A</Memory>      
-      </Properties> 
+      </Properties>
+      <!--
       <CheckListTests>
+
         <OBA>XEF00148</OBA>
         <Final_Inspection>XEF00148</Final_Inspection>
+
       </CheckListTests>
+              -->
     </Assembly>
     <Assembly>      
       <Name>HR2880-9RBG</Name>
@@ -2129,6 +2176,9 @@
       <Name>LWN2391-6D1K2C3</Name>
     </Assembly>
     <Assembly>
+      <Name>LWN2391-6D1K2C3G</Name>
+    </Assembly>
+    <Assembly>
       <Name>LWN1701-6ERK2</Name>
     </Assembly>
     <Assembly>
@@ -2574,6 +2624,13 @@
       </Properties>
     </Assembly>
     <Assembly>
+      <Name>MAP110-4200CG</Name>
+      <BarcodeLength>50</BarcodeLength>
+      <Properties>
+        <Memory>N/A</Memory>
+      </Properties>
+    </Assembly>
+    <Assembly>
       <Name>MAP110-1024</Name>
       <BarcodeLength>48</BarcodeLength>
       <Properties>
@@ -2597,6 +2654,13 @@
     <Assembly>
       <Name>MAP55-4001C</Name>
       <BarcodeLength>48</BarcodeLength>
+      <Properties>
+        <Memory>N/A</Memory>
+      </Properties>
+    </Assembly>
+    <Assembly>
+      <Name>MAP55-4001CG</Name>
+      <BarcodeLength>49</BarcodeLength>
       <Properties>
         <Memory>N/A</Memory>
       </Properties>
@@ -2933,6 +2997,13 @@
     <Assembly>
       <Name>MAP130-1024</Name>
       <BarcodeLength>48</BarcodeLength>
+      <Properties>
+        <Memory>N/A</Memory>
+      </Properties>
+    </Assembly>
+    <Assembly>
+      <Name>MAP130-1024G</Name>
+      <BarcodeLength>49</BarcodeLength>
       <Properties>
         <Memory>N/A</Memory>
       </Properties>
@@ -4088,6 +4159,9 @@
 		<Assembly>
 			<Name>AS1601-9RB1</Name>
 		</Assembly>
+    <Assembly>
+			<Name>AS1601-9RB1G</Name>
+		</Assembly>
 		<Assembly>
 			<Name>AS1601-9RT</Name>
 		</Assembly>
@@ -4325,6 +4399,9 @@
 		<Assembly>
 			<Name>BK2660-9R</Name>
 		</Assembly>
+    <Assembly>
+      <Name>BK2660-9RG</Name>
+    </Assembly>
 		<Assembly>
 			<Name>BK2775-7RD8</Name>
 		</Assembly>
@@ -4594,6 +4671,9 @@
 		</Assembly>
 		<Assembly>
 			<Name>BM2540-9</Name>
+		</Assembly>
+    <Assembly>
+			<Name>BM2540-9D4AG</Name>
 		</Assembly>
     <Assembly>
 			<Name>BM2540-9AG</Name>
@@ -5819,6 +5899,9 @@
 		<Assembly>
 			<Name>CM1501-9R</Name>
 		</Assembly>
+    <Assembly>
+      <Name>CM1501-9RG</Name>
+    </Assembly>
 		<Assembly>
 			<Name>CM1506-9R</Name>
 		</Assembly>
@@ -6718,6 +6801,9 @@
 		</Assembly>
 		<Assembly>
 			<Name>DM1001-9R</Name>
+		</Assembly>
+    <Assembly>
+			<Name>DM1001-9RG</Name>
 		</Assembly>
 		<Assembly>
 			<Name>DM1060-7R</Name>
@@ -7767,6 +7853,9 @@
 			<Name>EP4662-0R</Name>
 		</Assembly>
     <Assembly>
+			<Name>EP4662-0RG</Name>
+		</Assembly>
+    <Assembly>
 			<Name>EP4663-9RG</Name>
 		</Assembly>
 		<Assembly>
@@ -8504,6 +8593,9 @@
 		</Assembly>
 		<Assembly>
 			<Name>GP3670-9R</Name>
+		</Assembly>
+    <Assembly>
+			<Name>GP3670-9RG</Name>
 		</Assembly>
 		<Assembly>
 			<Name>GP4320-7R</Name>
@@ -9807,6 +9899,9 @@
 		<Assembly>
 			<Name>LM1001-9P</Name>
 		</Assembly>
+    <Assembly>
+			<Name>LM1001-9PG</Name>
+		</Assembly>
 		<Assembly>
 			<Name>LM1001-9PD5A</Name>
 		</Assembly>
@@ -9873,6 +9968,9 @@
 		<Assembly>
 			<Name>LM1301-7RK</Name>
 		</Assembly>
+    <Assembly>
+      <Name>LM1301-9PG</Name>
+    </Assembly>
 		<Assembly>
 			<Name>LM1301-9R</Name>
 		</Assembly>
@@ -10004,6 +10102,9 @@
 		</Assembly>
 		<Assembly>
 			<Name>LM1601-9PD5A</Name>
+		</Assembly>
+    <Assembly>
+			<Name>LM1601-9PG</Name>
 		</Assembly>
 		<Assembly>
 			<Name>LM1601-9R</Name>
@@ -10211,6 +10312,9 @@
 		</Assembly>
 		<Assembly>
 			<Name>LM2320-9P</Name>
+		</Assembly>
+    <Assembly>
+			<Name>LM2320-9PG</Name>
 		</Assembly>
 		<Assembly>
 			<Name>LM2332-7</Name>
@@ -10439,6 +10543,9 @@
 		</Assembly>
 		<Assembly>
 			<Name>LM3040-9P</Name>
+		</Assembly>
+    <Assembly>
+			<Name>LM3040-9PG</Name>
 		</Assembly>
 		<Assembly>
 			<Name>LM3053-7</Name>
@@ -10776,6 +10883,9 @@
     <Assembly>
       <Name>LPM126-OUTA1-48-C</Name>
     </Assembly>
+    <Assembly>
+			<Name>LPM409-000J-D0142</Name>
+		</Assembly>
 		<Assembly>
 			<Name>LPM409-00BB-D062</Name>
 		</Assembly>
@@ -11087,6 +11197,9 @@
     </Assembly>    
     <Assembly>
       <Name>LPM616-JJJJJJ-D0124</Name>
+    </Assembly>
+    <Assembly>
+      <Name>LRP1602-9B1</Name>
     </Assembly>
     <Assembly>
 			<Name>LRS05-28-901G</Name>
@@ -11961,6 +12074,9 @@
 		<Assembly>
 			<Name>MK010-200G</Name>
 		</Assembly>
+    <Assembly>
+			<Name>MK013-000G</Name>
+		</Assembly>
 		<Assembly>
 			<Name>ML077-200</Name>
 		</Assembly>
@@ -12175,6 +12291,9 @@
 			<Name>PFE1100-12-054NDS387</Name>
 		</Assembly>
     <Assembly>
+			<Name>PFE1100-12-054NDS426</Name>
+		</Assembly>
+    <Assembly>
       <Name>PFE1100-12-054RA</Name>
     </Assembly>
     <Assembly>
@@ -12236,6 +12355,9 @@
 		</Assembly>
 		<Assembly>
 			<Name>PSA121.5-9IR</Name>
+		</Assembly>
+    <Assembly>
+			<Name>PSA121.5-9IRG</Name>
 		</Assembly>
 		<Assembly>
 			<Name>PSA121.5-9IRYG</Name>
@@ -12416,6 +12538,9 @@
 		</Assembly>
 		<Assembly>
 			<Name>PSA5A5A-7I</Name>
+		</Assembly>
+    <Assembly>
+			<Name>PSA5A5A-9IG</Name>
 		</Assembly>
 		<Assembly>
 			<Name>PSA5B5-7</Name>
@@ -13038,6 +13163,9 @@
 		<Assembly>
 			<Name>PSK1220-9EC</Name>
 		</Assembly>
+    <Assembly>
+      <Name>PSK1220-9ECG</Name>
+    </Assembly>
 		<Assembly>
 			<Name>PSK12Z11A-7ECB</Name>
 		</Assembly>
@@ -13674,6 +13802,9 @@
 		<Assembly>
 			<Name>PSR53-9I</Name>
 		</Assembly>
+    <Assembly>
+      <Name>PSR53-9IG</Name>
+    </Assembly>
 		<Assembly>
 			<Name>PSR53-9IR</Name>
 		</Assembly>
@@ -14339,6 +14470,9 @@
 			<Name>BPEU2591</Name>      
 		</Assembly>
     <Assembly>
+      <Name>BPEU2604</Name>
+    </Assembly>
+    <Assembly>
 			<Name>LBC8000-1110S102G</Name>      
 		</Assembly>
     <Assembly>
@@ -14683,6 +14817,9 @@
 		<Assembly>
 			<Name>20IMX35D05D12-8</Name>
 		</Assembly>
+    <Assembly>
+			<Name>20IMX35D05D12-8G</Name>
+		</Assembly>
 		<Assembly>
 			<Name>20IMX35D05D12-8IG</Name>
 		</Assembly>
@@ -14844,6 +14981,9 @@
 		</Assembly>
 		<Assembly>
 			<Name>20IMX4-15-8K</Name>
+		</Assembly>
+    <Assembly>
+			<Name>20IMX4-15-8KG</Name>
 		</Assembly>
 		<Assembly>
 			<Name>20IMX4-15-8ZG</Name>
@@ -15118,6 +15258,9 @@
 		<Assembly>
 			<Name>24KMS7-08-08-601G</Name>
 		</Assembly>
+     <Assembly>
+			<Name>12INV20-230-8G</Name>
+		</Assembly> 
     <Assembly>
 			<Name>24INV12-230-8G</Name>
 		</Assembly> 
@@ -15815,6 +15958,9 @@
 		<Assembly>
 			<Name>3C833010400</Name>
 		</Assembly>
+    <Assembly>
+			<Name>3C833010400G</Name>
+		</Assembly>
 		<Assembly>
 			<Name>3C845010100</Name>
 		</Assembly>
@@ -15868,6 +16014,7 @@
           <Length>0</Length>
         </ProductNo>
       </BarcodeSettings>
+      <IgnoreSNCheck>1</IgnoreSNCheck>
 		</Assembly>
 		<Assembly>
 			<Name>3D869910000</Name>
@@ -16006,6 +16153,28 @@
       </CheckListTests>
 		</Assembly>
     <Assembly>
+			<Name>3F75991F101G</Name>
+      <BarcodeLength>19</BarcodeLength>
+      <BarcodeSettings>
+        <JobID>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </JobID>
+        <SerialNumber>
+          <StartIndex>14</StartIndex>
+          <Length>5</Length>
+        </SerialNumber>
+        <ProductNo>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </ProductNo>
+      </BarcodeSettings>
+      <CheckListTests>
+        <OBA>UAF00753</OBA>
+        <Final_Inspection>UAF00753</Final_Inspection>
+      </CheckListTests>
+		</Assembly>
+    <Assembly>
 			<Name>3F75011F000G</Name>
       <BarcodeLength>8</BarcodeLength>
       <BarcodeSettings>
@@ -16014,8 +16183,8 @@
           <Length>0</Length>
         </JobID>
         <SerialNumber>
-          <StartIndex>3</StartIndex>
-          <Length>5</Length>
+          <StartIndex>4</StartIndex>
+          <Length>4</Length>
         </SerialNumber>
         <ProductNo>
           <StartIndex>-1</StartIndex>
@@ -16060,7 +16229,47 @@
       </BarcodeSettings>
 		</Assembly>
     <Assembly>
+			<Name>3F75011F300G</Name>
+      <BarcodeLength>8</BarcodeLength>
+      <BarcodeSettings>
+        <JobID>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </JobID>
+        <SerialNumber>
+          <StartIndex>4</StartIndex>
+          <Length>4</Length>
+        </SerialNumber>
+        <ProductNo>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </ProductNo>
+      </BarcodeSettings>
+		</Assembly>
+    <Assembly>
 			<Name>3F77991F100G</Name>
+      <BarcodeLength>19</BarcodeLength>
+      <BarcodeSettings>
+        <JobID>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </JobID>
+        <SerialNumber>
+          <StartIndex>14</StartIndex>
+          <Length>5</Length>
+        </SerialNumber>
+        <ProductNo>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </ProductNo>
+      </BarcodeSettings>
+      <CheckListTests>
+        <OBA>UAF00753</OBA>
+        <Final_Inspection>UAF00753</Final_Inspection>
+      </CheckListTests>
+		</Assembly>
+    <Assembly>
+			<Name>3F77991F101G</Name>
       <BarcodeLength>19</BarcodeLength>
       <BarcodeSettings>
         <JobID>
@@ -16083,6 +16292,28 @@
 		</Assembly>
 		<Assembly>
 			<Name>3F78991F100G</Name>
+      <BarcodeLength>19</BarcodeLength>
+      <BarcodeSettings>
+        <JobID>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </JobID>
+        <SerialNumber>
+          <StartIndex>14</StartIndex>
+          <Length>5</Length>
+        </SerialNumber>
+        <ProductNo>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </ProductNo>
+      </BarcodeSettings>
+      <CheckListTests>
+        <OBA>UAF00753</OBA>
+        <Final_Inspection>UAF00753</Final_Inspection>
+      </CheckListTests>
+		</Assembly>
+    <Assembly>
+			<Name>3F78991F101G</Name>
       <BarcodeLength>19</BarcodeLength>
       <BarcodeSettings>
         <JobID>
@@ -16354,6 +16585,9 @@
 		</Assembly>
 		<Assembly>
 			<Name>40IMX4-05-8K</Name>
+		</Assembly>
+    <Assembly>
+			<Name>40IMX4-05-8KG</Name>
 		</Assembly>
 		<Assembly>
 			<Name>40IMX4-05-8Z</Name>
@@ -16868,6 +17102,9 @@
 		<Assembly>
 			<Name>70IMX7-05-05-8</Name>
 		</Assembly>
+    <Assembly>
+			<Name>70IMX7-05-05-8G</Name>
+		</Assembly>
 		<Assembly>
 			<Name>70IMX7-05-8</Name>
 		</Assembly>
@@ -17201,19 +17438,37 @@
       <Name>SPTCERN-01</Name>
     </Assembly>
     <Assembly>
+      <Name>SPTMEDA-01</Name>
+    </Assembly>
+    <Assembly>
       <Name>PAL300-56</Name>
     </Assembly>
-     <Assembly>
+    <Assembly>
+      <Name>72RCM500-24DMQ</Name>
+    </Assembly>    
+    <Assembly>
       <Name>110RCM150-24D</Name>
     </Assembly>
     <Assembly>
+      <Name>110RCM150-24DMQ</Name>
+    </Assembly>
+    <Assembly>
       <Name>110RCM150-24DMQF</Name>
+    </Assembly>
+    <Assembly>
+      <Name>110RCM300-12DMQF</Name>
     </Assembly>
     <Assembly>
       <Name>110RCM300-24DMQF</Name>
     </Assembly>
     <Assembly>
       <Name>110RCM1000-24DMQF</Name>
+    </Assembly>
+    <Assembly>
+      <Name>24RCM150-24DMQF</Name>
+    </Assembly>
+    <Assembly>
+      <Name>YBF095-G</Name>
     </Assembly>
   </Assemblies>
   <Checklists>

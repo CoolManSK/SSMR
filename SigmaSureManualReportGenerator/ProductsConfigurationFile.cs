@@ -10,8 +10,8 @@ namespace SigmaSureManualReportGenerator
 {
     public class ProductsConfigurationFile
     {
-        private String ConfigPath = "";
-        public XmlDocument XmlFile;
+        public String ConfigPath = "";
+        public XmlDocument XmlFile = new XmlDocument();
         
         public struct ChildTestInfo
         {
@@ -33,7 +33,7 @@ namespace SigmaSureManualReportGenerator
             {
                 this.XmlFile.Load(String.Concat(this.ConfigPath, "ProductsConfiguration.xml"));
             }
-            catch
+            catch(Exception ex)
             {
 
             }
@@ -87,12 +87,22 @@ namespace SigmaSureManualReportGenerator
         {
             Boolean retval = false;
 
-            XmlNode myProdNode = this.GetFamilyNode(ProductNo);
-            if (this.GetProductNode(ProductNo) != null)
+            XmlNode myProdNode = this.GetProductNode(ProductNo);
+            if (myProdNode != null)
             {
                 if (myProdNode.SelectSingleNode("./BelMESActivated") != null)
                 {
                     String str_buffer = myProdNode.SelectSingleNode("./BelMESActivated").InnerText;
+                    if (str_buffer == "Y") retval = true;
+                }
+            }
+
+            XmlNode myFamNode = this.GetFamilyNode(ProductNo);
+            if (myFamNode != null)
+            {
+                if (myFamNode.SelectSingleNode("./BelMESActivated") != null)
+                {
+                    String str_buffer = myFamNode.SelectSingleNode("./BelMESActivated").InnerText;
                     if (str_buffer == "Y") retval = true;
                 }
             }
@@ -184,6 +194,19 @@ namespace SigmaSureManualReportGenerator
                 }
             }
             return retArray;
+        }
+
+        public Array GetFaultCodes(String ProdID, String TestType, Boolean PartNoNeeded)
+        {
+            if (PartNoNeeded)
+            {
+                return GetFaultCodes(ProdID, TestType);
+            }
+            else
+            {
+                String[] retArray = { };
+                return retArray;
+            }
         }
 
         public Array GetFaultCodes(String ProdID, String TestType)

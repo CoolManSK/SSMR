@@ -73,6 +73,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.gb_Barcodes = new System.Windows.Forms.GroupBox();
+            this.btn_SimpleMode = new System.Windows.Forms.Button();
             this.btn_GenerateReport = new System.Windows.Forms.Button();
             this.tb_OrderValue = new System.Windows.Forms.TextBox();
             this.lbl_ScanEditOrder = new System.Windows.Forms.Label();
@@ -476,7 +477,7 @@
             // 
             this.btn_BatchMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_BatchMode.Enabled = false;
-            this.btn_BatchMode.Location = new System.Drawing.Point(866, 26);
+            this.btn_BatchMode.Location = new System.Drawing.Point(775, 26);
             this.btn_BatchMode.Name = "btn_BatchMode";
             this.btn_BatchMode.Size = new System.Drawing.Size(85, 50);
             this.btn_BatchMode.TabIndex = 5;
@@ -558,6 +559,7 @@
             // 
             this.gb_Barcodes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gb_Barcodes.Controls.Add(this.btn_SimpleMode);
             this.gb_Barcodes.Controls.Add(this.btn_BatchMode);
             this.gb_Barcodes.Controls.Add(this.btn_GenerateReport);
             this.gb_Barcodes.Controls.Add(this.tb_OrderValue);
@@ -570,11 +572,22 @@
             this.gb_Barcodes.TabStop = false;
             this.gb_Barcodes.Text = "Scan/Edit pole:";
             // 
+            // btn_SimpleMode
+            // 
+            this.btn_SimpleMode.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btn_SimpleMode.Location = new System.Drawing.Point(866, 26);
+            this.btn_SimpleMode.Name = "btn_SimpleMode";
+            this.btn_SimpleMode.Size = new System.Drawing.Size(85, 50);
+            this.btn_SimpleMode.TabIndex = 6;
+            this.btn_SimpleMode.Text = "Simple Mod";
+            this.btn_SimpleMode.UseVisualStyleBackColor = true;
+            this.btn_SimpleMode.Click += new System.EventHandler(this.btn_SimpleMode_Click);
+            // 
             // btn_GenerateReport
             // 
             this.btn_GenerateReport.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btn_GenerateReport.Enabled = false;
-            this.btn_GenerateReport.Location = new System.Drawing.Point(775, 26);
+            this.btn_GenerateReport.Location = new System.Drawing.Point(684, 26);
             this.btn_GenerateReport.Name = "btn_GenerateReport";
             this.btn_GenerateReport.Size = new System.Drawing.Size(85, 50);
             this.btn_GenerateReport.TabIndex = 4;
@@ -588,7 +601,7 @@
             this.tb_OrderValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.tb_OrderValue.Location = new System.Drawing.Point(10, 49);
             this.tb_OrderValue.Name = "tb_OrderValue";
-            this.tb_OrderValue.Size = new System.Drawing.Size(759, 26);
+            this.tb_OrderValue.Size = new System.Drawing.Size(668, 26);
             this.tb_OrderValue.TabIndex = 0;
             this.tb_OrderValue.Enter += new System.EventHandler(this.tb_OrderValue_Enter);
             this.tb_OrderValue.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tb_OrderValue_KeyUp);
@@ -830,6 +843,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn c_Comment;
         private System.Windows.Forms.ToolTip toolTip2;
         private System.Windows.Forms.Timer timer_ToForeground;
+        private System.Windows.Forms.Button btn_SimpleMode;
     }
 }
 

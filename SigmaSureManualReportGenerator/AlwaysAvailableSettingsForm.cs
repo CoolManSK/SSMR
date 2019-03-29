@@ -111,8 +111,11 @@ namespace SigmaSureManualReportGenerator
             this.XMLconfigDoc.SelectSingleNode("./Configuration/HistorySerialNumbersSorting").InnerText = this.cb_HistorySNSorting.SelectedIndex.ToString();            
             this.originalNumberHistorySNSorting = this.cb_HistorySNSorting.SelectedIndex;
 
-            this.XMLconfigDoc.SelectSingleNode("./Configuration/Mode").InnerText = this.cb_StationMode.Text.Substring(0, 1).Trim();
-            this.ActualMode = this.cb_StationMode.Text.Substring(0, 1).Trim();
+            if (this.cb_StationMode.Enabled)
+            {
+                this.XMLconfigDoc.SelectSingleNode("./Configuration/Mode").InnerText = this.cb_StationMode.Text.Substring(0, 1).Trim();
+                this.ActualMode = this.cb_StationMode.Text.Substring(0, 1).Trim();
+            }
 
             this.XMLconfigDoc.SelectSingleNode("./Configuration/Colors/CommandColor").InnerText = this.cb_CommandsColor.Text.Trim();
             this.originalCommandColor = this.cb_CommandsColor.Text.Trim();

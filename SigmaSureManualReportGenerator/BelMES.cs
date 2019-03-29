@@ -21,11 +21,14 @@ namespace SigmaSureManualReportGenerator
         public Boolean WarningMessages = false;
         public Boolean ProductVerifiedForMessages = false;
         public String Mode = "P";
+        private String ConfigDirectory;
 
         private String OperatorNumber;
         private String StationName;
 
-        public BelMES(String StationName)
+        private String LastSerialNumber;
+
+        public BelMES(String StationName, String ConfigDirectory)
         {
             
             if (StationName == "") return;
@@ -55,6 +58,8 @@ namespace SigmaSureManualReportGenerator
                     File.Create(String.Concat(this.LogFilePath, this.LogFileName)).Close();                    
                 }
 
+                this.ConfigDirectory = ConfigDirectory;
+
                 this.WriteLogData("");
             }
             catch
@@ -72,18 +77,33 @@ namespace SigmaSureManualReportGenerator
 
         public Boolean BelMESAuthorization(String SerialNumber, String TestType, String ProductName, String XmlContent, Boolean ForceTerminated)
         {
+            if (SerialNumber.Length == 17)
+            {
+                SerialNumber = SerialNumber.Substring(8);
+            }
+            if (SerialNumber.Length == 19)
+            {
+                SerialNumber = SerialNumber.Substring(10);
+            }
+
+            if ((this.LastSerialNumber == SerialNumber) && (this.Authorization.blnAuthorized))
+                return true;
+
+            this.LastSerialNumber = SerialNumber;
+
             if (TestType == "Adjustement") TestType = "Adjustment";
 
             if ((this.Env.Employee.strEmployeeNumber == null) || (this.Env.Employee.strEmployeeNumber == "nullEmpNumber"))
             {
                 this.EmployeeVerification(this.Emp.strEmployeeNumber);
-            }
+            }            
 
             if ((this.Authorization.strWO_SerialNumber != null) && ForceTerminated)
             {
                 this.Authorization = this.Authorization.TryAuthorization(this.Authorization.strWO_SerialNumber, this.Authorization.strTestKind, "Terminated", this.Env, true, false, this.Mode, XmlContent, "");
+                //if ()
             }
-            if ((SerialNumber.Length == 13) && (TestType != ""))
+            if (TestType != "")
             {
                 this.Authorization = this.Authorization.TryAuthorization(SerialNumber, TestType, "", this.Env, false, true, this.Mode, "", "");
                 this.Authorization.strTestKind = TestType;
@@ -109,6 +129,9 @@ namespace SigmaSureManualReportGenerator
         public Boolean SetActualResult(String Result, String XmlReportString, String SerialNumber)
         {
             Boolean retVal = false;
+
+            if (SerialNumber.Length == 17) SerialNumber = SerialNumber.Substring(8);
+            if (SerialNumber.Length == 19) SerialNumber = SerialNumber.Substring(10);
 
             if ((this.Env.Employee.strEmployeeNumber == null) || (this.Env.Employee.strEmployeeNumber == "nullEmpNumber"))
             {
@@ -156,6 +179,8 @@ namespace SigmaSureManualReportGenerator
         {
             Boolean retVal = false;
 
+            if (SerialNumber.Length == 17) SerialNumber = SerialNumber.Substring(8);
+            if (SerialNumber.Length == 19) SerialNumber = SerialNumber.Substring(10);
 
             if ((this.Env.Employee.strEmployeeNumber == null) || (this.Env.Employee.strEmployeeNumber == "nullEmpNumber"))
             {
@@ -186,10 +211,10 @@ namespace SigmaSureManualReportGenerator
             }
             catch
             {
-                this.WriteLogData("");
+                this.WriteLogData("-00000001");
                 return false;
             }
-            this.WriteLogData("");
+            this.WriteLogData("0");
             return retVal;
         }
 
@@ -241,11 +266,14 @@ namespace SigmaSureManualReportGenerator
         private void WriteLogData(String ExtendedInfo)
         {
             try
-            {                
-                StreamWriter sr = new StreamWriter(String.Concat(this.LogFilePath, this.LogFileName), true);
+            {
+                
+                String PCName = Environment.MachineName;
+                
                 String newLine = String.Concat(
                     DateTime.Now.Hour.ToString("D2"), ":", DateTime.Now.Minute.ToString("D2"), ":", DateTime.Now.Second.ToString("D2"), ";",
                     (this.Env.strTracePoint == null) ? "nullTracePoint" : this.Env.strTracePoint.ToString(), ";",
+                    PCName, ";",
                     (this.Env.Employee.strEmployeeNumber == null) ? "nullEmpNumber" : this.Env.Employee.strEmployeeNumber.ToString(), ";",
                     (this.Authorization.strSerialNumber == null) ? "nullSN1" : this.Authorization.strSerialNumber.ToString(), ";",
                     (this.Authorization.strWO_SerialNumber == null) ? "nullSN2" : this.Authorization.strWO_SerialNumber.ToString(), ";",
@@ -257,13 +285,32 @@ namespace SigmaSureManualReportGenerator
                     (this.Env.DB_Resource.strSQLDatabase == null) ? "nullDatabase" : this.Env.DB_Resource.strSQLDatabase, ";", 
                     (this.Env.DB_Resource.strSQLServer == null) ? "nullServer" : this.Env.DB_Resource.strSQLServer, ";",
                     this.Env.blnAuthorizationPaused, ";", this.Activated, ";", ExtendedInfo);
-                sr.WriteLine(newLine);
-                sr.Close();
-                sr.Dispose();
+
+                if (!Directory.Exists(this.LogFilePath))
+                {
+                    StreamWriter sr1 = new StreamWriter(String.Concat(this.ConfigDirectory, this.LogFileName), true);
+                    sr1.WriteLine(newLine);
+                    sr1.Close();
+                    sr1.Dispose();
+                }
+                else
+                {
+                    StreamWriter sr = new StreamWriter(String.Concat(this.LogFilePath, this.LogFileName), true);
+                    sr.WriteLine(newLine);
+                    sr.Close();
+                    sr.Dispose();
+                }                
             }
             catch (Exception ex)
             {
-                MessageBox.Show(String.Concat(ex.Message, "/n", ex.Data.ToString()));
+                if (ex.ToString().IndexOf("is no longer available") > -1)
+                {
+                    MessageBox.Show(String.Concat("Nie je dostupna siet.", "\n", ex.Data.ToString()), "CHYBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show(String.Concat(ex.Message, "\n", ex.Data.ToString()));
+                }
             }
         }
     }

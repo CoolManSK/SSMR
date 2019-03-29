@@ -23,7 +23,7 @@ namespace SigmaSureManualReportGenerator
             this.OperatorName = OperatorName;
             this.OperatorNr = OperatorNr;
             this.mySI = this.GetStationInfosForTest(this.TestType);
-            this.BelMesObj = new BelMES("");
+            this.BelMesObj = new BelMES("", ProductsConfig.ConfigPath);
         }
 
         public BatchSNEnterForm(String ProductNo, String JobID, String TestType, ProductsConfigurationFile ProductsConfigXML, XmlDocument StationConfigXML, String OperatorName, String OperatorNr, BelMES BelMesObj)
@@ -74,7 +74,7 @@ namespace SigmaSureManualReportGenerator
         {
             public String Name;
             public String Description;
-            public String Note;
+            public String Note;            
         }
         public class SerialNumberFailedSteps
         {
@@ -133,9 +133,9 @@ namespace SigmaSureManualReportGenerator
             {
                 if (e.KeyCode == Keys.Enter)
                 {                    
-                    BatchSNEnterForm myFrm = (BatchSNEnterForm)this.FindForm();
-                    String str_SerialNumber = String.Concat(myFrm.lbl_JobID.Text, myFrm.gb_FailedSteps.Text.Substring(myFrm.gb_FailedSteps.Text.Length - 6, 5));
-                    foreach (SerialNumberFailedSteps actSerialNumber in myFrm.FailedSerialNumbers)
+                    BatchSNEnterForm myForm = (BatchSNEnterForm)this.FindForm();
+                    String str_SerialNumber = String.Concat(myForm.lbl_JobID.Text, myForm.gb_FailedSteps.Text.Substring(myForm.gb_FailedSteps.Text.Length - 6, 5));
+                    foreach (SerialNumberFailedSteps actSerialNumber in myForm.FailedSerialNumbers)
                     {
                         if (actSerialNumber.SerialNumber == str_SerialNumber)
                         {
@@ -382,7 +382,7 @@ namespace SigmaSureManualReportGenerator
             myReport.TestRun.name = this.lbl_TestType.Text;
             foreach (DataGridViewRow actDGVR in this.dgv_SerialNumbers.Rows)
             {
-                if (String.Concat(this.lbl_JobID.Text, actDGVR.Cells[0].Value.ToString().Trim()) == myReport.Cathegory.Product.SerialNo)
+                if (String.Concat(this.lbl_JobID.Text, actDGVR.Cells[1].Value.ToString().Trim()) == myReport.Cathegory.Product.SerialNo)
                 {
                     if (actDGVR.DefaultCellStyle.BackColor == Color.Green)
                     {
@@ -479,7 +479,7 @@ namespace SigmaSureManualReportGenerator
                 {
                     myReport.AddProperty("To Repair", "Yes");
                     foreach (FailedStepInfo actFSI in actSNFS.FailedSteps)
-                    {
+                    {                        
                         myReport.TestRun.AddTestRunChildValueString(actFSI.Name, myReport.starttime, myReport.endtime, "FAIL", actFSI.Description, "*$*");
                     }
                 }                
@@ -511,7 +511,9 @@ namespace SigmaSureManualReportGenerator
                         {
                             String testKind = this.lbl_TestType.Text;
                             if (testKind == "Adjustement") testKind = "Adjustment";
-                            this.BelMesObj.SetActualResult(myReport.Cathegory.Product.SerialNo, testKind, String.Concat(myReport.TestRun.grade, "ED"), XmlReportContent);
+                            if (myReport.TestRun.grade.ToUpper().Trim() == "PASS") myReport.TestRun.grade = "Pass";
+                            if (myReport.TestRun.grade.ToUpper().Trim() == "FAIL") myReport.TestRun.grade = "Fail";
+                            this.BelMesObj.SetActualResult(myReport.Cathegory.Product.SerialNo, testKind, String.Concat(myReport.TestRun.grade, "ed"), XmlReportContent);
                             break;
                         }
                     }
@@ -642,9 +644,9 @@ namespace SigmaSureManualReportGenerator
                     }
                     foreach (DataGridViewRow actRow in this.dgv_SerialNumbers.Rows)
                     {
-                        if (actRow.Cells[0].Value != null)
+                        if (actRow.Cells[1].Value != null)
                         {
-                            if (actRow.Cells[0].Value.ToString() == str_FormatedSN)
+                            if (actRow.Cells[1].Value.ToString() == str_FormatedSN)
                             {
                                 this.tb_ScanField.Text = "";
                                 this.tb_ScanField.SelectAll();
@@ -683,9 +685,11 @@ namespace SigmaSureManualReportGenerator
                             this.AuthorizedSNs.SetValue(str_FormatedSN, this.AuthorizedSNs.Length - 1);
                         }
                         //-----
-                    }  
+                    }
 
-                    this.dgv_SerialNumbers.Rows.Add(str_FormatedSN, "PASS", "FAIL", "DELETE");
+                    String str_LineNumber = String.Concat((this.dgv_SerialNumbers.Rows.Count + 1).ToString(), ".");
+
+                    this.dgv_SerialNumbers.Rows.Add(str_LineNumber, str_FormatedSN, "PASS", "FAIL", "DELETE");
                     this.dgv_SerialNumbers.Rows[this.dgv_SerialNumbers.Rows.Count - 1].DefaultCellStyle.BackColor = Color.Green;
                     this.dgv_SerialNumbers.Rows[this.dgv_SerialNumbers.Rows.Count - 1].DefaultCellStyle.SelectionBackColor = Color.Green;
                     this.dgv_SerialNumbers.Rows[this.dgv_SerialNumbers.Rows.Count - 1].DefaultCellStyle.ForeColor = Color.Black;
@@ -725,7 +729,7 @@ namespace SigmaSureManualReportGenerator
             {                
                 foreach (String actSN in ar_serialNumbers)
                 {
-                    if (actRow.Cells[0].Value.ToString() == actSN)
+                    if (actRow.Cells[1].Value.ToString() == actSN)
                     {
                         DialogResult myRes = MessageBox.Show(String.Concat("Seriove cislo \"", actSN, "\"je v zozname viackrat. Chcete napriek tomu vytvorit reporty so zadanymi seriovymi cislami?"), "UPOZORNENIE", MessageBoxButtons.YesNo);
                         if (myRes == DialogResult.No)
@@ -739,7 +743,7 @@ namespace SigmaSureManualReportGenerator
                     }                    
                 }
                 Array.Resize(ref ar_serialNumbers, ar_serialNumbers.Length + 1);
-                ar_serialNumbers.SetValue(actRow.Cells[0].Value.ToString(), ar_serialNumbers.Length - 1);
+                ar_serialNumbers.SetValue(actRow.Cells[1].Value.ToString(), ar_serialNumbers.Length - 1);
             }
             if (this.CheckingOfSerialNumberTested)
             {
@@ -747,11 +751,11 @@ namespace SigmaSureManualReportGenerator
 
                 foreach (DataGridViewRow actRow in this.dgv_SerialNumbers.Rows)
                 {                    
-                    if (actRow.Cells[0].Value.ToString() != "")
+                    if (actRow.Cells[1].Value.ToString() != "")
                     {
-                        if (TD.CheckSerialNumberAndTestType(this.lbl_JobID.Text.Trim(), actRow.Cells[0].Value.ToString().Trim(), this.lbl_TestType.Text))
+                        if (TD.CheckSerialNumberAndTestType(this.lbl_JobID.Text.Trim(), actRow.Cells[1].Value.ToString().Trim(), this.lbl_TestType.Text))
                         {
-                            if (MessageBox.Show(String.Concat("V databaze sa uz nachadza PASS vysledok pre vyrobok s JobID \"", this.lbl_JobID.Text.Trim(), "\" a so seriovym cislom \"", actRow.Cells[0].Value.ToString().Trim(), "\" pre typ testu \"", this.lbl_TestType.Text, "\".\n\nChcete report aj tak poslat?"), "POZOR", MessageBoxButtons.YesNo) == DialogResult.No)
+                            if (MessageBox.Show(String.Concat("V databaze sa uz nachadza PASS vysledok pre vyrobok s JobID \"", this.lbl_JobID.Text.Trim(), "\" a so seriovym cislom \"", actRow.Cells[1].Value.ToString().Trim(), "\" pre typ testu \"", this.lbl_TestType.Text, "\".\n\nChcete report aj tak poslat?"), "POZOR", MessageBoxButtons.YesNo) == DialogResult.No)
                             {
                                 return;
                             }
@@ -765,9 +769,9 @@ namespace SigmaSureManualReportGenerator
             {
                 foreach (DataGridViewRow actRow in this.dgv_SerialNumbers.Rows)
                 {
-                    if (actRow.Cells[0].Value.ToString().Trim() != "")
+                    if (actRow.Cells[1].Value.ToString().Trim() != "")
                     {                        
-                        this.GenerateReport(actRow.Cells[0].Value.ToString().Trim(), DateTime.Now.AddSeconds(counter * 5));
+                        this.GenerateReport(actRow.Cells[1].Value.ToString().Trim(), DateTime.Now.AddSeconds(counter * 5));
                         counter++;
                     }
                 }
@@ -784,7 +788,7 @@ namespace SigmaSureManualReportGenerator
                 {
                     if (actRow.Cells[0].Value.ToString().Trim() != "")
                     {
-                        if (actRow.DefaultCellStyle.BackColor == Color.Green) TD.SaveSerialNumberAndTestTypeToLogFile(this.lbl_JobID.Text.Trim(), actRow.Cells[0].Value.ToString().Trim(), this.lbl_TestType.Text);
+                        if (actRow.DefaultCellStyle.BackColor == Color.Green) TD.SaveSerialNumberAndTestTypeToLogFile(this.lbl_JobID.Text.Trim(), actRow.Cells[1].Value.ToString().Trim(), this.lbl_TestType.Text);
                     }
                 }
             }
@@ -806,10 +810,10 @@ namespace SigmaSureManualReportGenerator
             String[] ar_SNs = { };
             foreach (DataGridViewRow actRow in this.dgv_SerialNumbers.Rows)
             {
-                if (actRow.Cells[0].ToString().Trim() != "")
+                if (actRow.Cells[1].ToString().Trim() != "")
                 {
                     Array.Resize(ref ar_SNs, ar_SNs.Length + 1);
-                    ar_SNs.SetValue(actRow.Cells[0].Value.ToString(), ar_SNs.GetUpperBound(0));
+                    ar_SNs.SetValue(actRow.Cells[1].Value.ToString(), ar_SNs.GetUpperBound(0));
                 }
             }
             Array.Sort(ar_SNs);
@@ -817,12 +821,12 @@ namespace SigmaSureManualReportGenerator
 
             for (int i = 0; i < ar_SNs.Length; i++)
             {
-                this.dgv_SerialNumbers.Rows[i].Cells[0].Value = ar_SNs.GetValue(i).ToString();                
+                this.dgv_SerialNumbers.Rows[i].Cells[1].Value = ar_SNs.GetValue(i).ToString();                
             }
 
             foreach (DataGridViewRow actRow in this.dgv_SerialNumbers.Rows)
             {
-                String actSN = string.Concat(this.lbl_JobID.Text, actRow.Cells[0].Value.ToString().Trim());
+                String actSN = string.Concat(this.lbl_JobID.Text, actRow.Cells[1].Value.ToString().Trim());
                 foreach (SerialNumberFailedSteps actSNFS in this.FailedSerialNumbers)
                 {
                     if (actSNFS.SerialNumber == actSN)
@@ -837,6 +841,12 @@ namespace SigmaSureManualReportGenerator
                     }
                 }
             }
+
+            for (Int32 i = 0; i < this.dgv_SerialNumbers.Rows.Count; i++)
+            {
+                this.dgv_SerialNumbers.Rows[i].Cells[0].Value = String.Concat((i + 1).ToString(), ".");
+            }            
+
             this.tb_ScanField.Focus();
         }
 
@@ -846,7 +856,7 @@ namespace SigmaSureManualReportGenerator
             {
                 if (e.Button == MouseButtons.Left)
                 {
-                    this.gb_FailedSteps.Text = String.Concat(@"Failed kroky pre SN """, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[0].Value.ToString(), @"""");
+                    this.gb_FailedSteps.Text = String.Concat(@"Failed kroky pre SN """, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[1].Value.ToString(), @"""");
                     this.CellMouseEnterActive = true;
                 }
             }
@@ -860,7 +870,7 @@ namespace SigmaSureManualReportGenerator
             String str_SNtoCB = "";
             foreach (DataGridViewRow actRow in this.dgv_SerialNumbers.Rows)
             {
-                str_SNtoCB = String.Concat(str_SNtoCB, "\n", actRow.Cells[0].Value.ToString());
+                str_SNtoCB = String.Concat(str_SNtoCB, "\n", actRow.Cells[1].Value.ToString());
             }
             Clipboard.SetText(str_SNtoCB);
             this.tb_ScanField.Focus();
@@ -895,7 +905,7 @@ namespace SigmaSureManualReportGenerator
                 {
                     continue;
                 }
-                this.dgv_SerialNumbers.Rows.Add(str_actSN, "PASS", "FAIL", "DELETE");
+                this.dgv_SerialNumbers.Rows.Add(String.Concat((this.dgv_SerialNumbers.Rows.Count + 1).ToString(), "."), str_actSN, "PASS", "FAIL", "DELETE");
                 this.dgv_SerialNumbers.Rows[this.dgv_SerialNumbers.Rows.Count - 1].DefaultCellStyle.BackColor = System.Drawing.Color.Green;
                 this.dgv_SerialNumbers.Rows[this.dgv_SerialNumbers.Rows.Count - 1].DefaultCellStyle.SelectionBackColor = System.Drawing.Color.Green;
             }
@@ -910,9 +920,9 @@ namespace SigmaSureManualReportGenerator
             if (e.Button == MouseButtons.Left)
             {
                 if (e.RowIndex < 0) return;
-                String actSerialNumber = String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[0].Value.ToString().Trim());
+                String actSerialNumber = String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[1].Value.ToString().Trim());
                 // highlight serial number
-                if (e.ColumnIndex == 0)
+                if ((e.ColumnIndex == 0) || (e.ColumnIndex == 1))
                 {                    
                     if (this.dgv_SerialNumbers.Rows[e.RowIndex].DefaultCellStyle.BackColor == Color.Green)
                     {
@@ -926,7 +936,7 @@ namespace SigmaSureManualReportGenerator
                         SerialNumberFailedSteps actSNFStoShow = new SerialNumberFailedSteps();
                         foreach (SerialNumberFailedSteps actSNFS in this.FailedSerialNumbers)
                         {
-                            if (actSNFS.SerialNumber == String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[0].Value.ToString()))
+                            if (actSNFS.SerialNumber == String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[1].Value.ToString()))
                             {
                                 actSNFounded = true;
                                 actSNFStoShow = actSNFS;
@@ -935,7 +945,7 @@ namespace SigmaSureManualReportGenerator
                         }
                         if (!actSNFounded)
                         {
-                            actSNFStoShow = new SerialNumberFailedSteps(String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[0].Value.ToString()));
+                            actSNFStoShow = new SerialNumberFailedSteps(String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[1].Value.ToString()));
                         }
                         foreach (FailedStepInfo actFS in actSNFStoShow.FailedSteps)
                         {
@@ -951,9 +961,9 @@ namespace SigmaSureManualReportGenerator
                     }
                 }
                 // pass button
-                else if (e.ColumnIndex == 1)
+                else if (e.ColumnIndex == 2)
                 {
-                    this.DeleteSerialNumberFailedSteps(String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[0].Value.ToString()));
+                    this.DeleteSerialNumberFailedSteps(String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[1].Value.ToString()));
                     this.dgv_SerialNumbers.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Green;
                     this.dgv_SerialNumbers.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = Color.Green;
                     this.FailedStepComponentsVisibility(false);
@@ -969,7 +979,7 @@ namespace SigmaSureManualReportGenerator
                     }
                 }
                 // fail button
-                else if (e.ColumnIndex == 2)
+                else if (e.ColumnIndex == 3)
                 {
                     this.gb_FailedSteps.Controls.Clear();
 
@@ -977,7 +987,7 @@ namespace SigmaSureManualReportGenerator
                     SerialNumberFailedSteps actSNFStoShow = new SerialNumberFailedSteps();
                     foreach (SerialNumberFailedSteps actSNFS in this.FailedSerialNumbers)
                     {
-                        if (actSNFS.SerialNumber == String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[0].Value.ToString().Trim()))
+                        if (actSNFS.SerialNumber == String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[1].Value.ToString().Trim()))
                         {
                             actSNFounded = true;
                             actSNFStoShow = actSNFS;
@@ -986,7 +996,7 @@ namespace SigmaSureManualReportGenerator
                     }
                     if (!actSNFounded)
                     {
-                        actSNFStoShow = new SerialNumberFailedSteps(String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[0].Value.ToString()));
+                        actSNFStoShow = new SerialNumberFailedSteps(String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[1].Value.ToString()));
                     }
                     foreach (FailedStepInfo actFS in actSNFStoShow.FailedSteps)
                     {
@@ -1003,7 +1013,7 @@ namespace SigmaSureManualReportGenerator
                     this.tb_FailedStepNameEnter.Focus();
                 }
                 // delete button
-                else if (e.ColumnIndex == 3)
+                else if (e.ColumnIndex == 4)
                 {
                     
                     PropertyInfo[] bufferPIs = { };
@@ -1033,8 +1043,15 @@ namespace SigmaSureManualReportGenerator
                         }
                     }
                     this.myPIs = bufferPIs;
-                    this.DeleteSerialNumberFailedSteps(String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[0].Value.ToString().Trim()));
+                    this.DeleteSerialNumberFailedSteps(String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[1].Value.ToString().Trim()));
                     this.dgv_SerialNumbers.Rows.RemoveAt(e.RowIndex);
+
+                    for (Int32 i = 0; i < this.dgv_SerialNumbers.Rows.Count; i++)
+                    {
+                        this.dgv_SerialNumbers.Rows[i].Cells[0].Value = String.Concat((i + 1).ToString(), ".");
+                    }
+
+                    this.FailedStepComponentsVisibility(false);
                 }
                 
                 
@@ -1064,7 +1081,7 @@ namespace SigmaSureManualReportGenerator
                 SerialNumberFailedSteps actSNFSfounded;
                 foreach (SerialNumberFailedSteps actSNFS in this.FailedSerialNumbers)
                 {
-                    if (actSNFS.SerialNumber == String.Concat(this.lbl_JobID.Text, this.gb_FailedSteps.Text.Substring(this.gb_FailedSteps.Text.Length - 6, 5)));
+                    if (actSNFS.SerialNumber == String.Concat(this.lbl_JobID.Text, this.gb_FailedSteps.Text.Substring(this.gb_FailedSteps.Text.Length - 6, 5)))
                     {
                         Array.Resize(ref actSNFS.FailedSteps, actSNFS.FailedSteps.Length + 1);
                         actSNFS.FailedSteps.SetValue(fsi_actual, actSNFS.FailedSteps.Length - 1);
@@ -1092,10 +1109,11 @@ namespace SigmaSureManualReportGenerator
                 this.gb_FailedSteps.Controls.Clear();
                 foreach (SerialNumberFailedSteps actSNFS in this.FailedSerialNumbers)
                 {
-                    if (actSNFS.SerialNumber == String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[0].Value.ToString().Trim()))
+                    if (actSNFS.SerialNumber == String.Concat(this.lbl_JobID.Text, this.dgv_SerialNumbers.Rows[e.RowIndex].Cells[1].Value.ToString().Trim()))
                     {
                         foreach (FailedStepInfo actFS in actSNFS.FailedSteps)
                         {
+
                             Point actLocation = new Point();
                             actLocation.X = 10;
                             actLocation.Y = (this.gb_FailedSteps.Controls.Count * 53) + 10;
@@ -1109,6 +1127,7 @@ namespace SigmaSureManualReportGenerator
                 }
                 this.FailedStepComponentsVisibility(false);
             }
-        }        
+        }
+
     }
 }

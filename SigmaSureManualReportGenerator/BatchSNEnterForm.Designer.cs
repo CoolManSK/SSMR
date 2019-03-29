@@ -44,6 +44,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.btn_SortSNs = new System.Windows.Forms.Button();
             this.dgv_SerialNumbers = new System.Windows.Forms.DataGridView();
+            this.LineNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.c_SN = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.c_Pass = new System.Windows.Forms.DataGridViewButtonColumn();
             this.c_Fail = new System.Windows.Forms.DataGridViewButtonColumn();
@@ -122,7 +123,7 @@
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(383, 60);
+            this.groupBox1.Size = new System.Drawing.Size(408, 60);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Napoveda";
@@ -131,7 +132,7 @@
             // 
             this.label4.Location = new System.Drawing.Point(6, 17);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(371, 33);
+            this.label4.Size = new System.Drawing.Size(396, 33);
             this.label4.TabIndex = 1;
             this.label4.Text = "Do skenovacieho pola postupne oskenujte vsetky vyrobky so spolocnym JobID a nasle" +
     "dne kliknite na \"Vytvor reporty\" tlacidlo. ";
@@ -190,7 +191,7 @@
             // 
             this.btn_SortSNs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btn_SortSNs.Enabled = false;
-            this.btn_SortSNs.Location = new System.Drawing.Point(273, 666);
+            this.btn_SortSNs.Location = new System.Drawing.Point(298, 666);
             this.btn_SortSNs.Name = "btn_SortSNs";
             this.btn_SortSNs.Size = new System.Drawing.Size(122, 31);
             this.btn_SortSNs.TabIndex = 13;
@@ -208,6 +209,7 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.dgv_SerialNumbers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_SerialNumbers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.LineNumber,
             this.c_SN,
             this.c_Pass,
             this.c_Fail,
@@ -222,11 +224,19 @@
             this.dgv_SerialNumbers.RowTemplate.Height = 35;
             this.dgv_SerialNumbers.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dgv_SerialNumbers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgv_SerialNumbers.Size = new System.Drawing.Size(379, 433);
+            this.dgv_SerialNumbers.Size = new System.Drawing.Size(404, 433);
             this.dgv_SerialNumbers.TabIndex = 14;
             this.dgv_SerialNumbers.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_SerialNumbers_CellMouseDown);
             this.dgv_SerialNumbers.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_SerialNumbers_CellMouseEnter);
             this.dgv_SerialNumbers.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_SerialNumbers_CellMouseUp);
+            // 
+            // LineNumber
+            // 
+            this.LineNumber.Frozen = true;
+            this.LineNumber.HeaderText = "Nr.";
+            this.LineNumber.Name = "LineNumber";
+            this.LineNumber.ReadOnly = true;
+            this.LineNumber.Width = 35;
             // 
             // c_SN
             // 
@@ -296,9 +306,9 @@
             this.gb_FailedSteps.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.gb_FailedSteps.Location = new System.Drawing.Point(401, 91);
+            this.gb_FailedSteps.Location = new System.Drawing.Point(426, 91);
             this.gb_FailedSteps.Name = "gb_FailedSteps";
-            this.gb_FailedSteps.Size = new System.Drawing.Size(442, 569);
+            this.gb_FailedSteps.Size = new System.Drawing.Size(417, 569);
             this.gb_FailedSteps.TabIndex = 15;
             this.gb_FailedSteps.TabStop = false;
             this.gb_FailedSteps.Text = "Failed kroky";
@@ -307,7 +317,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(407, 23);
+            this.label7.Location = new System.Drawing.Point(422, 23);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(305, 20);
             this.label7.TabIndex = 16;
@@ -318,9 +328,9 @@
             // 
             this.tb_FailedStepNameEnter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tb_FailedStepNameEnter.Location = new System.Drawing.Point(411, 46);
+            this.tb_FailedStepNameEnter.Location = new System.Drawing.Point(426, 46);
             this.tb_FailedStepNameEnter.Name = "tb_FailedStepNameEnter";
-            this.tb_FailedStepNameEnter.Size = new System.Drawing.Size(432, 26);
+            this.tb_FailedStepNameEnter.Size = new System.Drawing.Size(417, 26);
             this.tb_FailedStepNameEnter.TabIndex = 17;
             this.tb_FailedStepNameEnter.Visible = false;
             this.tb_FailedStepNameEnter.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tb_FailedStepNameEnter_KeyUp);
@@ -380,15 +390,16 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button btn_SortSNs;
         private System.Windows.Forms.DataGridView dgv_SerialNumbers;
-        private System.Windows.Forms.DataGridViewTextBoxColumn c_SN;
-        private System.Windows.Forms.DataGridViewButtonColumn c_Pass;
-        private System.Windows.Forms.DataGridViewButtonColumn c_Fail;
-        private System.Windows.Forms.DataGridViewButtonColumn c_Delete;
         private System.Windows.Forms.ContextMenuStrip cms_BatchNumbersCopyPaste;
         private System.Windows.Forms.ToolStripMenuItem tsmi_CopySN;
         private System.Windows.Forms.ToolStripMenuItem tsmi_PasteSN;
         private System.Windows.Forms.GroupBox gb_FailedSteps;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox tb_FailedStepNameEnter;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LineNumber;
+        private System.Windows.Forms.DataGridViewTextBoxColumn c_SN;
+        private System.Windows.Forms.DataGridViewButtonColumn c_Pass;
+        private System.Windows.Forms.DataGridViewButtonColumn c_Fail;
+        private System.Windows.Forms.DataGridViewButtonColumn c_Delete;
     }
 }

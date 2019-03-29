@@ -85,7 +85,12 @@ namespace SigmaSureManualReportGenerator
                 {
                     this.cb_OperatorLoginNr.SelectedIndex = -1;
                 }
-                this.tb_OperatorScanField.SelectAll();
+                this.tb_OperatorScanField.Clear();
+                if (this.cb_OperatorLoginNr.SelectedIndex > -1)
+                {
+                    this.tb_OperatorScanField.Clear();
+                    this.tb_OperatorLoginPassword.Focus();
+                }                
             }
         }
 
@@ -140,6 +145,7 @@ namespace SigmaSureManualReportGenerator
                     {
                         this.tb_OperatorScanField.Focus();
                         this.tb_OperatorScanField.SelectAll();
+                        MessageBox.Show(this.BelMESobj.Emp.strEmployeeCodeInfo);
                         return;
                     }
                 }

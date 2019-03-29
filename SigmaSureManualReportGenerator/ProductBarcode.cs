@@ -86,6 +86,10 @@ namespace SigmaSureManualReportGenerator
                 else
                 {
                     //#0245594100002;350DNC40-24-8G;AA;1614;16;;350DNC40-24-8G;;1834103-RG;12KG
+                    if (BarcodeText.Trim().Length == 15)
+                    {
+                        return "";
+                    }
                     String retVal = BarcodeText.Substring(BarcodeText.IndexOf(';') + 1);
                     retVal = retVal.Substring(0, retVal.IndexOf(';'));
                     return retVal;
@@ -133,7 +137,19 @@ namespace SigmaSureManualReportGenerator
         }
         public static String GetJobIdFromBarcode(String ProductNo, String BarcodeText)
         {
-            if (BarcodeText.IndexOf(';') > -1)
+            if (BarcodeText.Length == 13)
+            {
+                try
+                {
+                    double buf = Convert.ToDouble(BarcodeText);
+                    return BarcodeText.Substring(0, 8);
+                }
+                catch
+                {
+                    
+                }
+            }
+            if ((BarcodeText.IndexOf(';') > -1) || (BarcodeText.Length == 14))
             {
                 if (BarcodeText[0] != '#')
                 {
@@ -149,6 +165,16 @@ namespace SigmaSureManualReportGenerator
                     return BarcodeText.Substring(1, 8);
                 }
             }
+            try
+            {
+                Convert.ToDouble(BarcodeText);
+                return BarcodeText;
+            }
+            catch
+            {
+
+            }
+
             ProductBarcode PB = new ProductBarcode();
             PB.LoadProductsConfig();
             XmlNode node_actProdNoNode = PB.GetProductNode(ProductNo);
@@ -238,8 +264,23 @@ namespace SigmaSureManualReportGenerator
             }
             return BarcodeText;
         }
+
+
         public static String GetSerialNumberFromBarcode(String ProductNo, String BarcodeText)
-        {            
+        {
+            if (BarcodeText.Length == 13)
+            {
+                try
+                {
+                    Double buff = Convert.ToDouble(BarcodeText);
+                    return BarcodeText.Substring(8);
+                }
+                catch
+                {
+                    return BarcodeText;
+                }
+            }
+            
             ProductBarcode PB = new ProductBarcode();
             PB.LoadProductsConfig();
             if (BarcodeText.Length < 5)

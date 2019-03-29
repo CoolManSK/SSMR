@@ -228,7 +228,7 @@ namespace SigmaSureManualReportGenerator
                     {
                         str_Password = String.Concat(str_buffer_password.Substring(i, 1), str_Password);
                     }
-                    if (Password == str_Password)
+                    if ((Password == str_Password) || (str_Password == ""))
                     {
                         this.Number = Number;
                         XmlNode node_surname = actNode.SelectSingleNode(String.Concat("./Surname"));

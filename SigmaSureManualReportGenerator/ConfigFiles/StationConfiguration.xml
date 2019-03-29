@@ -28,4 +28,9 @@
   <AllowStationModeChange>N</AllowStationModeChange>
   <BelMESMessageWarnings>N</BelMESMessageWarnings>
   <ExtraLoginEnabled>N</ExtraLoginEnabled>
+  <SimpleMode>
+    <SerialNumbersInProcess>
+      
+    </SerialNumbersInProcess>
+  </SimpleMode>
 </Configuration>
