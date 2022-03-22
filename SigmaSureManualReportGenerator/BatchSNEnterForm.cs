@@ -6,7 +6,7 @@ using System.IO;
 using System.Threading;
 using System.Drawing;
 using SigmaSure;
-using BelMESCommon;
+
 
 namespace SigmaSureManualReportGenerator
 {
@@ -23,7 +23,7 @@ namespace SigmaSureManualReportGenerator
             this.OperatorName = OperatorName;
             this.OperatorNr = OperatorNr;
             this.mySI = this.GetStationInfosForTest(this.TestType);
-            this.BelMesObj = new BelMES("", ProductsConfig.ConfigPath);
+            this.BelMesObj = new BelMES("", ProductsConfig.ConfigPath, "2");
         }
 
         public BatchSNEnterForm(String ProductNo, String JobID, String TestType, ProductsConfigurationFile ProductsConfigXML, XmlDocument StationConfigXML, String OperatorName, String OperatorNr, BelMES BelMesObj)
@@ -41,12 +41,12 @@ namespace SigmaSureManualReportGenerator
         }
 
         private String ProductNo;
-        private String JobID;
-        private String TestType;
-        private String OperatorName;
-        private String OperatorNr;
-        private ProductsConfigurationFile ProductsConfig;
-        private XmlDocument StationConfig;
+        private readonly String JobID;
+        private readonly String TestType;
+        private readonly String OperatorName;
+        private readonly String OperatorNr;
+        private readonly ProductsConfigurationFile ProductsConfig;
+        private readonly XmlDocument StationConfig;
         private Boolean CheckingOfSerialNumberTested;
         private StationInfos mySI;
         private PropertyInfo[] myPIs = { };
@@ -206,7 +206,7 @@ namespace SigmaSureManualReportGenerator
             }
         }
 
-        private BelMES BelMesObj;
+        private readonly BelMES BelMesObj;
         private String[] AuthorizedSNs = { };
         public SerialNumberFailedSteps[] FailedSerialNumbers = { };        
         
@@ -480,7 +480,7 @@ namespace SigmaSureManualReportGenerator
                     myReport.AddProperty("To Repair", "Yes");
                     foreach (FailedStepInfo actFSI in actSNFS.FailedSteps)
                     {                        
-                        myReport.TestRun.AddTestRunChildValueString(actFSI.Name, myReport.starttime, myReport.endtime, "FAIL", actFSI.Description, "*$*");
+                        myReport.TestRun.AddTestRunChild(actFSI.Name, myReport.starttime, myReport.endtime, "FAIL", actFSI.Description, "", "*$*");
                     }
                 }                
             }
@@ -673,7 +673,7 @@ namespace SigmaSureManualReportGenerator
 
                     if (this.BelMesObj.Activated)
                     {
-                        if (this.BelMesObj.BelMESAuthorization(String.Concat(this.JobID, str_FormatedSN), this.TestType, this.ProductNo, "", false))                        
+                        if (this.BelMesObj.BelMESAuthorization(String.Concat(this.JobID, str_FormatedSN), this.TestType, ref this.ProductNo, "", false, false, ""))
                         {
                             Array.Resize(ref this.AuthorizedSNs, this.AuthorizedSNs.Length + 1);
                             this.AuthorizedSNs.SetValue(str_FormatedSN, this.AuthorizedSNs.Length - 1);
@@ -1129,5 +1129,14 @@ namespace SigmaSureManualReportGenerator
             }
         }
 
+        private void dgv_SerialNumbers_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            this.label6.Text = String.Concat(@"Zoznam zoskenovanych seriovych cisiel (", this.dgv_SerialNumbers.Rows.Count.ToString().Trim(), @") :");
+        }
+
+        private void dgv_SerialNumbers_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
+        {
+            this.label6.Text = String.Concat(@"Zoznam zoskenovanych seriovych cisiel (", this.dgv_SerialNumbers.Rows.Count.ToString().Trim(), @") :");
+        }
     }
 }

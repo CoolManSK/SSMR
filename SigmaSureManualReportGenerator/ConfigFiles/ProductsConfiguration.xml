@@ -3937,6 +3937,12 @@
 		<Assembly>
 			<Name>AM1650-9RD8A</Name>
 		</Assembly>
+    <Assembly>
+      <Name>AM1651-9RG</Name>
+      <CheckListTests>
+        <Final_Inspection>TestFinInsp01</Final_Inspection>
+      </CheckListTests>
+    </Assembly>
 		<Assembly>
 			<Name>AM1712-0R</Name>
 		</Assembly>
@@ -5181,6 +5187,9 @@
 		</Assembly>
 		<Assembly>
 			<Name>BP3071-9RDG</Name>
+      <CheckListTests>        
+        <Final_Inspection>TestFinInsp02</Final_Inspection>
+      </CheckListTests>
 		</Assembly>
 		<Assembly>
 			<Name>BP3240-7RD</Name>
@@ -5294,7 +5303,7 @@
 			<Name>BP8021-7R</Name>
 		</Assembly>
 		<Assembly>
-			<Name>BP8028-7R</Name>
+			<Name>BP8028-7R</Name>      
 		</Assembly>
 		<Assembly>
 			<Name>BP8029-9RB0G</Name>
@@ -5374,9 +5383,12 @@
 		<Assembly>
 			<Name>BQ2322-7R</Name>
 		</Assembly>
-		<Assembly>
-			<Name>BQ2322-9RG</Name>
-		</Assembly>
+    <Assembly>
+      <Name>BQ2322-9RG</Name>
+      <CheckListTests>
+        <Final_Inspection>TestFinInsp02</Final_Inspection>
+      </CheckListTests>
+    </Assembly>
 		<Assembly>
 			<Name>BQ2323-9R</Name>
 		</Assembly>
@@ -6889,6 +6901,12 @@
 		<Assembly>
 			<Name>DM1626-5RD2</Name>
 		</Assembly>
+    <Assembly>
+      <Name>DM1651-9RG</Name>
+      <CheckListTests>
+        <Final_Inspection>TestFinInsp01</Final_Inspection>
+      </CheckListTests>
+    </Assembly>
 		<Assembly>
 			<Name>DM1738-6R</Name>
 		</Assembly>
@@ -7707,7 +7725,7 @@
 		</Assembly>
 		<Assembly>
 			<Name>EP1601-9RG</Name>
-		</Assembly>
+    </Assembly>
 		<Assembly>
 			<Name>EP2001-7R</Name>
 		</Assembly>
@@ -7807,9 +7825,12 @@
 		<Assembly>
 			<Name>EP3071-7RD</Name>
 		</Assembly>
-		<Assembly>
-			<Name>EP3071-9RDG</Name>
-		</Assembly>
+    <Assembly>
+      <Name>EP3071-9RDG</Name>
+      <CheckListTests>
+        <Final_Inspection>TestFinInsp02</Final_Inspection>
+      </CheckListTests>
+    </Assembly>
 		<Assembly>
 			<Name>EP3670-9R</Name>
 		</Assembly>
@@ -7939,6 +7960,12 @@
 		<Assembly>
 			<Name>EQ2321-9R</Name>
 		</Assembly>
+    <Assembly>
+      <Name>EQ2322-9RG</Name>
+      <CheckListTests>
+        <Final_Inspection>TestFinInsp02</Final_Inspection>
+      </CheckListTests>
+    </Assembly>
 		<Assembly>
 			<Name>EQ2540-7R</Name>
 		</Assembly>
@@ -8588,9 +8615,12 @@
 		<Assembly>
 			<Name>GP3071-7RDG</Name>
 		</Assembly>
-		<Assembly>
-			<Name>GP3071-9RDG</Name>
-		</Assembly>
+    <Assembly>
+      <Name>GP3071-9RDG</Name>
+      <CheckListTests>
+        <Final_Inspection>TestFinInsp02</Final_Inspection>
+      </CheckListTests>
+    </Assembly>
 		<Assembly>
 			<Name>GP3670-9R</Name>
 		</Assembly>
@@ -8657,6 +8687,12 @@
 		<Assembly>
 			<Name>GQ2322-7R</Name>
 		</Assembly>
+    <Assembly>
+      <Name>GQ2323-9RG</Name>
+      <CheckListTests>
+        <Final_Inspection>TestFinInsp02</Final_Inspection>
+      </CheckListTests>
+    </Assembly>
 		<Assembly>
 			<Name>GQ2540-7P</Name>
 		</Assembly>
@@ -8750,6 +8786,24 @@
     <Assembly>
 			<Name>HP4660-9RVG</Name>
 		</Assembly>
+    <Assembly>
+      <Name>HP4661-9RU14G</Name>
+      <CheckListTests>
+        <Final_Inspection>TestFinInsp02</Final_Inspection>
+      </CheckListTests>
+    </Assembly>
+    <Assembly>
+      <Name>HP4661-9RU21G</Name>
+      <CheckListTests>
+        <Final_Inspection>TestFinInsp02</Final_Inspection>
+      </CheckListTests>
+    </Assembly>
+    <Assembly>
+      <Name>HP4661-9RU42G</Name>
+      <CheckListTests>
+        <Final_Inspection>TestFinInsp02</Final_Inspection>
+      </CheckListTests>
+    </Assembly>
     <Assembly>
 			<Name>HP8029-9RG</Name>
 		</Assembly>
@@ -11748,7 +11802,7 @@
 			<Name>LT1702-7</Name>
 		</Assembly>
     <Assembly>
-			<Name>LT1702-7G</Name>
+			<Name>LT1702-7G</Name>      
 		</Assembly>
 		<Assembly>
 			<Name>LT1702-7B1</Name>
@@ -11760,7 +11814,7 @@
 			<Name>LT1704-7</Name>
 		</Assembly>
 		<Assembly>
-			<Name>LT1705-7</Name>
+			<Name>LT1705-7</Name>      
 		</Assembly>
 		<Assembly>
 			<Name>LT1706-7</Name>
@@ -11921,15 +11975,24 @@
 		<Assembly>
 			<Name>MD097-000</Name>
 		</Assembly>
-		<Assembly>
-			<Name>MD098-000G</Name>
-		</Assembly>
-		<Assembly>
-			<Name>MD099-000G</Name>
-		</Assembly>
-		<Assembly>
-			<Name>MD100-000G</Name>
-		</Assembly>
+    <Assembly>
+      <Name>MD098-000G</Name>
+      <CheckListTests>
+        <Final_Inspection>TestFinInsp03</Final_Inspection>
+      </CheckListTests>
+    </Assembly>
+    <Assembly>
+      <Name>MD099-000G</Name>
+      <CheckListTests>
+        <Final_Inspection>TestFinInsp03</Final_Inspection>
+      </CheckListTests>
+    </Assembly>
+    <Assembly>
+      <Name>MD100-000G</Name>
+      <CheckListTests>
+        <Final_Inspection>TestFinInsp03</Final_Inspection>
+      </CheckListTests>
+    </Assembly>
 		<Assembly>
 			<Name>MF001-000</Name>
 		</Assembly>
@@ -12077,6 +12140,9 @@
     <Assembly>
 			<Name>MK013-000G</Name>
 		</Assembly>
+    <Assembly>
+      <Name>MK014-000G</Name>
+    </Assembly>
 		<Assembly>
 			<Name>ML077-200</Name>
 		</Assembly>
@@ -14473,6 +14539,13 @@
       <Name>BPEU2604</Name>
     </Assembly>
     <Assembly>
+      <Name>BPEU4035</Name>
+      <CheckListTests>
+        <OBA>testOBA1</OBA>
+        <FAI>testFAI1</FAI>
+      </CheckListTests>
+    </Assembly>
+    <Assembly>
 			<Name>LBC8000-1110S102G</Name>      
 		</Assembly>
     <Assembly>
@@ -15288,28 +15361,47 @@
         <OBA>UAF01068</OBA>
         <Final_Inspection>UAF01068</Final_Inspection>
       </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>
     <Assembly>
-      <Name>350DNC40-12-8S415</Name>
-      <BarcodeLength>33</BarcodeLength>
-      <BarcodeSettings>
-        <JobID>
-          <StartIndex>-1</StartIndex>
-          <Length>0</Length>
-        </JobID>
-        <SerialNumber>
-          <StartIndex>-1</StartIndex>
-          <Length>0</Length>
-        </SerialNumber>
-        <ProductNo>
-          <StartIndex>-1</StartIndex>
-          <Length>0</Length>
-        </ProductNo>
-      </BarcodeSettings>
+      <Name>350DNC40-12-8S415</Name>      
       <CheckListTests>
         <OBA>UAF01068</OBA>
         <Final_Inspection>UAF01068</Final_Inspection>
       </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
+    </Assembly>
+    <Assembly>
+      <Name>350DNC40-12-8S569</Name>
+      <CheckListTests>
+        <OBA>UAF01068</OBA>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
+    </Assembly>
+    <Assembly>
+      <Name>350DNC40-12-8S451</Name>
+      <CheckListTests>
+        <OBA>UAF01068</OBA>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
     </Assembly>
     <Assembly>
 			<Name>350DNC40-12-8G</Name>
@@ -15332,9 +15424,15 @@
         <OBA>UAF01068</OBA>
         <Final_Inspection>UAF01068</Final_Inspection>
       </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+          <Station002>kolman</Station002>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>
     <Assembly>
-			<Name>350DNC40-12-AS102G</Name>
+      <Name>350DNC40-12-AS102G</Name>
       <BarcodeLength>33</BarcodeLength>
       <BarcodeSettings>
         <JobID>
@@ -15354,6 +15452,23 @@
         <OBA>UAF01068</OBA>
         <Final_Inspection>UAF01068</Final_Inspection>
       </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
+    </Assembly>
+    <Assembly>
+			<Name>350DNC40-12-8S508</Name>
+      <CheckListTests>
+        <OBA>UAF01068</OBA>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>      
 		<Assembly>
 			<Name>350DNC40-12-AG</Name>
@@ -15376,6 +15491,11 @@
         <OBA>UAF01068</OBA>
         <Final_Inspection>UAF01068</Final_Inspection>
       </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>
 		<Assembly>
 			<Name>350DNC40-12-BG</Name>
@@ -15398,6 +15518,11 @@
         <OBA>UAF01068</OBA>
         <Final_Inspection>UAF01068</Final_Inspection>
       </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>
 		<Assembly>
 			<Name>350DNC40-12-CG</Name>
@@ -15420,6 +15545,11 @@
         <OBA>UAF01068</OBA>
         <Final_Inspection>UAF01068</Final_Inspection>
       </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>
 		<Assembly>
 			<Name>350DNC40-12G</Name>
@@ -15442,6 +15572,11 @@
         <OBA>UAF01068</OBA>
         <Final_Inspection>UAF01068</Final_Inspection>
       </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>
 		<Assembly>
 			<Name>350DNC40-12KITG</Name>
@@ -15453,49 +15588,53 @@
 			<Name>350DNC40-12-UG</Name>
 		</Assembly>
 		<Assembly>
-			<Name>350DNC40-24-8G</Name>
-      <BarcodeLength>33</BarcodeLength>
-      <BarcodeSettings>
-        <JobID>
-          <StartIndex>-1</StartIndex>
-          <Length>0</Length>
-        </JobID>
-        <SerialNumber>
-          <StartIndex>-1</StartIndex>
-          <Length>0</Length>
-        </SerialNumber>
-        <ProductNo>
-          <StartIndex>-1</StartIndex>
-          <Length>0</Length>
-        </ProductNo>
-      </BarcodeSettings>
+			<Name>350DNC40-24-8G</Name>      
       <CheckListTests>
         <OBA>UAF01068</OBA>
         <Final_Inspection>UAF01068</Final_Inspection>
       </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>
     <Assembly>
 			<Name>350DNC40-24-8S392G</Name>
-      <BarcodeLength>33</BarcodeLength>
-      <BarcodeSettings>
-        <JobID>
-          <StartIndex>-1</StartIndex>
-          <Length>0</Length>
-        </JobID>
-        <SerialNumber>
-          <StartIndex>-1</StartIndex>
-          <Length>0</Length>
-        </SerialNumber>
-        <ProductNo>
-          <StartIndex>-1</StartIndex>
-          <Length>0</Length>
-        </ProductNo>
-      </BarcodeSettings>
       <CheckListTests>
         <OBA>UAF01068</OBA>
         <Final_Inspection>UAF01068</Final_Inspection>
       </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>
+    <Assembly>
+      <Name>350DNC40-24-8S396</Name>
+      <CheckListTests>
+        <OBA>UAF01068</OBA>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
+    </Assembly>
+    <Assembly>
+      <Name>350DNC40-24-8S419</Name>
+      <CheckListTests>
+        <OBA>UAF01068</OBA>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
+    </Assembly>
 		<Assembly>
 			<Name>350DNC40-24-9G</Name>
       <BarcodeLength>33</BarcodeLength>
@@ -15517,28 +15656,23 @@
         <OBA>UAF01068</OBA>
         <Final_Inspection>UAF01068</Final_Inspection>
       </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>
     <Assembly>
-			<Name>350DNC40-24-9S101G</Name>
-      <BarcodeLength>33</BarcodeLength>
-      <BarcodeSettings>
-        <JobID>
-          <StartIndex>-1</StartIndex>
-          <Length>0</Length>
-        </JobID>
-        <SerialNumber>
-          <StartIndex>-1</StartIndex>
-          <Length>0</Length>
-        </SerialNumber>
-        <ProductNo>
-          <StartIndex>-1</StartIndex>
-          <Length>0</Length>
-        </ProductNo>
-      </BarcodeSettings>
+			<Name>350DNC40-24-9S101G</Name>      
       <CheckListTests>
         <OBA>UAF01068</OBA>
         <Final_Inspection>UAF01068</Final_Inspection>
       </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>
     <Assembly>
 			<Name>350DNC40-24-CG</Name>
@@ -15561,7 +15695,57 @@
         <OBA>UAF01068</OBA>
         <Final_Inspection>UAF01068</Final_Inspection>
       </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>
+    <Assembly>
+      <Name>350DNC40-24-CS408</Name>
+      <BarcodeLength>33</BarcodeLength>
+      <BarcodeSettings>
+        <JobID>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </JobID>
+        <SerialNumber>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </SerialNumber>
+        <ProductNo>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </ProductNo>
+      </BarcodeSettings>
+      <CheckListTests>
+        <OBA>UAF01068</OBA>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
+    </Assembly>
+    <Assembly>
+      <Name>350DNC40-24-CG_AK</Name>
+      <BarcodeLength>33</BarcodeLength>
+      <BarcodeSettings>
+        <JobID>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </JobID>
+        <SerialNumber>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </SerialNumber>
+        <ProductNo>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </ProductNo>
+      </BarcodeSettings>      
+    </Assembly>
 		<Assembly>
 			<Name>350DNC40-24G</Name>
 		</Assembly>
@@ -15607,6 +15791,11 @@
         <OBA>UAF01068</OBA>
         <Final_Inspection>UAF01068</Final_Inspection>
       </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>    
     <Assembly>
       <Name>350INV60-120-240-9G</Name>
@@ -15645,6 +15834,11 @@
         <OBA>UAR05638</OBA>
         <Final_Inspection>UAR05638</Final_Inspection>
       </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>
 		<Assembly>
 			<Name>350INV60-120-240-9G_EVT3</Name>      
@@ -16245,7 +16439,31 @@
           <Length>0</Length>
         </ProductNo>
       </BarcodeSettings>
+      <CheckListTests>
+        <OBA>UAF01815c</OBA>
+      </CheckListTests>
 		</Assembly>
+    <Assembly>
+      <Name>3F75011F400G</Name>
+      <BarcodeLength>8</BarcodeLength>
+      <BarcodeSettings>
+        <JobID>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </JobID>
+        <SerialNumber>
+          <StartIndex>4</StartIndex>
+          <Length>4</Length>
+        </SerialNumber>
+        <ProductNo>
+          <StartIndex>-1</StartIndex>
+          <Length>0</Length>
+        </ProductNo>
+      </BarcodeSettings>
+      <CheckListTests>
+        <OBA>UAF01815c</OBA>        
+      </CheckListTests>
+    </Assembly>
     <Assembly>
 			<Name>3F77991F100G</Name>
       <BarcodeLength>19</BarcodeLength>
@@ -16972,13 +17190,44 @@
 		</Assembly>
 		<Assembly>
 			<Name>700DNC40-12-8G</Name>
+      <CheckListTests>
+        <OBA>UAF01068</OBA>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+					<Station001>kolmannb</Station001>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>
+    <Assembly>
+      <Name>700DNC40-12-8S428</Name>
+      <CheckListTests>
+        <OBA>UAF01068</OBA>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
+    </Assembly>
 		<Assembly>
 			<Name>700DNC40-12-9G</Name>
 		</Assembly>
 		<Assembly>
 			<Name>700DNC40-12-CG</Name>
-		</Assembly>
+      <CheckListTests>
+        <OBA>UAF01068</OBA>
+        <Final_Inspection>UAF01068A</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
+    </Assembly>
 		<Assembly>
 			<Name>700DNC40-12G</Name>
 		</Assembly>
@@ -16991,14 +17240,135 @@
 		<Assembly>
 			<Name>700DNC40-12-TG</Name>
 		</Assembly>
+    <Assembly>
+      <Name>700DNC40-12-8S509</Name>
+      <CheckListTests>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
+    </Assembly>
+    <Assembly>
+      <Name>700DNC40-12-8S559</Name>
+      <CheckListTests>        
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+					<Station001>kolmannb</Station001>
+        </Final_Inspection>
+      </AllowedStations>
+    </Assembly>
 		<Assembly>
 			<Name>700DNC40-24-8G</Name>
+      <CheckListTests>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+					<Station002>kolmannb</Station002>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>
+    <Assembly>
+      <Name>700DNC40-24-8S429</Name>
+      <CheckListTests>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
+    </Assembly>
+    <Assembly>
+      <Name>700DNC40-24-8S556</Name>
+      <CheckListTests>
+        <OBA>UAF01068</OBA>
+        <Final_Inspection>UAF01068A</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+					<Station001>kolmannb</Station001>
+        </Final_Inspection>
+      </AllowedStations>
+    </Assembly>
+    <Assembly>
+      <Name>700DNC40-24-8S578</Name>
+      <CheckListTests>
+        <OBA>UAF01068</OBA>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
+    </Assembly>
+    <Assembly>
+      <Name>700DNC40-24-8S580</Name>
+      <CheckListTests>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
+    </Assembly>
 		<Assembly>
 			<Name>700DNC40-24-9G</Name>
+      <CheckListTests>
+        <OBA>UAF01068</OBA>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>
+    <Assembly>
+      <Name>700DNC40-24-8S490</Name>
+      <CheckListTests>
+        <OBA>UAF01068</OBA>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
+    </Assembly>
+    <Assembly>
+      <Name>700DNC40-24-CG</Name>
+      <CheckListTests>
+        <OBA>UAF01068</OBA>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
+    </Assembly>
 		<Assembly>
 			<Name>700DNC40-24-CS393</Name>
+      <CheckListTests>
+        <OBA>UAF01068</OBA>
+        <Final_Inspection>UAF01068</Final_Inspection>
+      </CheckListTests>
+      <AllowedStations>
+        <Final_Inspection>
+          <Station001>FIHEV01</Station001>
+        </Final_Inspection>
+      </AllowedStations>
 		</Assembly>    
 		<Assembly>
 			<Name>700DNC40-24G</Name>
@@ -17473,6 +17843,29 @@
   </Assemblies>
   <Checklists>
     <OBA>
+      <Default>
+        <_1_Completeness_of_product_packaging>
+          <Instruction>Skontroluj spravnost a kompletnost balenia vyrobku</Instruction>
+        </_1_Completeness_of_product_packaging>
+				<_2_Accessories_inspection>
+          <Instruction>Skontroluj pribaly a prislusenstvo vyrobku</Instruction>
+        </_2_Accessories_inspection>
+				<_3_Labels_of_product_and_packaging>
+          <Instruction>Skontroluj stitky na vyrobku a baleni (obsah, neposkodenost, citatelnost udajov)</Instruction>
+        </_3_Labels_of_product_and_packaging>
+				<_4_Mechanical_integrity>
+          <Instruction>Skontroluj vyrobok na mozne mechanicke poskodenie alebo skrabance</Instruction>
+        </_4_Mechanical_integrity>
+				<_5_Correctness_of_soldering_process_-_uncovered_products_only>
+          <Instruction>Skontroluj spravnost spajkovacieho procesu - iba pre nezakrytovane vyrobky</Instruction>
+        </_5_Correctness_of_soldering_process_-_uncovered_products_only>
+				<_6_Data_completeness_in_MSK>
+          <Instruction>Skontroluj spravnost odpisania operacii v MSK</Instruction>
+        </_6_Data_completeness_in_MSK>
+				<_7_Visual_inspection_of_proper_assembly>
+          <Instruction>Vizualne skontroluj spravne zostavenie vyrobku</Instruction>
+        </_7_Visual_inspection_of_proper_assembly>
+      </Default>
       <UAF00753>
         <_1>
           <Instruction>Skontroluj pritomnost hnedeho priklopu na dlhom kablovom konektore a lok na konektore nesmie byt zlomeny</Instruction>
@@ -17554,41 +17947,39 @@
         </_10>
       </UAF00755>
       <UAF01068>
-        <_1>
-          <Instruction>16 skrutiek na fixaciu vrchneho krytu - pritomnost a spravne dotiahnutie</Instruction>
+        <_1_-_Screws_of_top_cover>
+          <Instruction>Kontrola skrutiek vrchneho krytu: 16 skrutiek na fixaciu vrchneho krytu - pritomnost a spravne dotiahnutie</Instruction>
           <Picture>01.JPG</Picture>
-        </_1>
-        <_2>
-          <Instruction>3x stitok na vrchnom kryte</Instruction>
-          <Picture>01.JPG</Picture>
-        </_2>
-        <_3>
-          <Instruction>Kontrola zavitov na vani</Instruction>
-          <Picture>02.JPG</Picture>
-        </_3>
-        <_4>
-          <Instruction>Kontrola ciernych konektorov a skrutiek</Instruction>
-          <Picture>03a.JPG</Picture>
-        </_4>
-        <_5>
-          <Instruction>Kontrola pritomnosti ventilu</Instruction>
-          <Picture>03a.JPG</Picture>
-        </_5>
-        <_6>
-          <Instruction>Kontrola oranzoveho konektora a pritomnosti skrutiek s podlozkami</Instruction>
-          <Picture>03a.JPG</Picture>
-        </_6>
-        <_7>
-          <Instruction>Kontrola vykonanych testov: HV, FT1, BI, FT</Instruction>
-          <Picture>03a.JPG</Picture>
-        </_7>
-        <_8>
-          <Instruction>Kontrola popisu na vani (uzemnenie, CTRL, OUT)</Instruction>
-          <Picture>03a.JPG</Picture>
-        </_8>
-        <_9>
-          <Instruction>Kontrola povrchu vyrobku podla SQQ 187 Standard pre posudzovanie vzhladu</Instruction>
-        </_9>
+					<Timeout>2</Timeout>
+        </_1_-_Screws_of_top_cover>
+        <_2_-_Screws_on_connectors>
+          <Instruction>Kontrola skrutiek na konektoroch</Instruction>          
+					<Timeout>2</Timeout>
+        </_2_-_Screws_on_connectors>
+        <_3_-_Gore-tex_valve>
+          <Instruction>Kontrola Gore-tex ventilu</Instruction>          
+					<Timeout>2</Timeout>
+        </_3_-_Gore-tex_valve>
+        <_4_-_Connector_seal>
+          <Instruction>Kontrola tesnenia konektoru</Instruction>          
+					<Timeout>2</Timeout>
+        </_4_-_Connector_seal>
+        <_5_-_Surface_of_item>
+          <Instruction>Kontrola povrchu vyrobku podla SQQ 187 Standard pre posudzovanie vzhladu</Instruction>          
+					<Timeout>2</Timeout>
+        </_5_-_Surface_of_item>
+        <_6_-_Black_covers>
+          <Instruction>Kontrola ciernych krytiek</Instruction>
+					<Timeout>2</Timeout>
+        </_6_-_Black_covers>
+        <_7_-_Labels>
+          <Instruction>Kontrola stitkov na vyrobku</Instruction>          
+          <Timeout>2</Timeout>
+        </_7_-_Labels>
+        <_8_-_Inserting_and_checking_of_connector_cover>
+          <Instruction>Vlozenie a kontrola krytiek konektorov</Instruction>
+					<Timeout>2</Timeout>
+        </_8_-_Inserting_and_checking_of_connector_cover>        
       </UAF01068>
       <UAR05638>
         <_1>
@@ -17732,8 +18123,76 @@
           <Picture></Picture>
         </_7>
       </UAF01815b>
+      <UAF01815c>
+        <_1>
+          <Instruction>Skontroluj stitok, obsah, kvalitu potlace, nalepenie</Instruction>
+          <Picture></Picture>
+        </_1>
+        <_2>
+          <Instruction>Skontroluj zaliatie - vyrobok musi byt zaliaty vodorovne s hranou krytu</Instruction>
+          <Picture></Picture>
+        </_2>        
+        <_3>
+          <Instruction>Skontroluj neporusenost krabicky (skrabance, mastne flaky, odtlacky prstov a pod.)</Instruction>
+          <Picture></Picture>
+        </_3>
+        <_4>
+          <Instruction>Skontroluj neporusenost zaliatej plochy - nesmu byt diery, bubliny</Instruction>
+          <Picture></Picture>
+        </_4>
+        <_5>
+          <Instruction>Skontroluj piny konektora - musia byt bez poskodenia, ohnutia</Instruction>
+          <Picture></Picture>
+        </_5>
+        <_6>
+          <Instruction>Skontroluj konektor - nesmie mat mechanicke poskodenie izolacie</Instruction>
+          <Picture></Picture>
+        </_6>
+        <_7>
+          <Instruction>Skontroluj osadenie kablu konektora v krabicke - nesmie precnievat izolacia kablu z krabicky</Instruction>
+          <Picture></Picture>
+        </_7>
+      </UAF01815c>
     </OBA>
     <Final_Inspection>
+      <TestFinInsp01>
+        <_CustomerSerialNumber>
+          <Instruction>Nalepte na kus zakaznicke seriove cislo a zoskenujte ho pomocou skenera</Instruction>
+          <Picture>02.jpg</Picture>
+          <ScanBarcode>####-###############</ScanBarcode>
+          <Timeout>2</Timeout>
+        </_CustomerSerialNumber>        
+      </TestFinInsp01>
+      <TestFinInsp02>
+        <_CustomerSerialNumber>
+          <Instruction>Nalepte na kus zakaznicke seriove cislo a zoskenujte ho pomocou skenera</Instruction>
+          <Picture>02.jpg</Picture>
+          <ScanBarcode>####-###############</ScanBarcode>
+          <Timeout>2</Timeout>
+        </_CustomerSerialNumber>
+      </TestFinInsp02>
+      <TestFinInsp03>
+        <_CustomerSerialNumber>
+          <Instruction>Nalepte na kus zakaznicke seriove cislo a zoskenujte ho pomocou skenera</Instruction>
+          <Picture>02.jpg</Picture>
+          <ScanBarcode>####-###############</ScanBarcode>
+          <Timeout>2</Timeout>
+        </_CustomerSerialNumber>
+      </TestFinInsp03>
+      <TestFinInsp04>
+        <_1>
+          <Instruction>Kontrola povrchu vyrobku podla SQQ187 Standard pre posudzovanie vzhladu</Instruction>
+        </_1>
+        <_2>
+          <Instruction>Kontrola balenia pomocou kameroveho systemu</Instruction>
+          <Picture>S559.jpg</Picture>
+          <CameraInspection>1</CameraInspection>
+          <Timeout>2</Timeout>
+        </_2>
+        <_3>
+          <Instruction>Kontrola povrchu vyrobku podla SQQ187 Standard pre posudzovanie vzhladu</Instruction>
+        </_3>
+      </TestFinInsp04>
       <UAF00753>
         <_1>
           <Instruction>Skontroluj pritomnost hnedeho priklopu na dlhom kablovom konektore a lok na konektore nesmie byt zlomeny</Instruction>
@@ -17809,42 +18268,81 @@
         </_8>
       </UAF00755>
       <UAF01068>
-        <_1>
-          <Instruction>16 skrutiek na fixaciu vrchneho krytu - pritomnost a spravne dotiahnutie</Instruction>
+        <_1_-_Screws_of_top_cover>
+          <Instruction>Kontrola skrutiek vrchneho krytu: 16 skrutiek na fixaciu vrchneho krytu - pritomnost a spravne dotiahnutie</Instruction>
           <Picture>01.JPG</Picture>
-        </_1>
-        <_2>
-          <Instruction>3x stitok na vrchnom kryte</Instruction>
-          <Picture>01.JPG</Picture>
-        </_2>
-        <_3>
-          <Instruction>Kontrola zavitov na vani</Instruction>
-          <Picture>02.JPG</Picture>
-        </_3>
-        <_4>
-          <Instruction>Kontrola ciernych konektorov a skrutiek</Instruction>
-          <Picture>03a.JPG</Picture>
-        </_4>
-        <_5>
-          <Instruction>Kontrola pritomnosti ventilu</Instruction>
-          <Picture>03a.JPG</Picture>
-        </_5>
-        <_6>
-          <Instruction>Kontrola oranzoveho konektora a pritomnosti skrutiek s podlozkami</Instruction>
-          <Picture>03a.JPG</Picture>
-        </_6>
-        <_7>
-          <Instruction>Kontrola vykonanych testov: HV, FT1, BI, FT</Instruction>
-          <Picture>03a.JPG</Picture>
-        </_7>
-        <_8>
-          <Instruction>Kontrola popisu na vani (uzemnenie, CTRL, OUT)</Instruction>
-          <Picture>03a.JPG</Picture>
-        </_8>
-        <_9>
+          <Timeout>2</Timeout>
+        </_1_-_Screws_of_top_cover>
+        <_2_-_Screws_on_connectors>
+          <Instruction>Kontrola skrutiek na konektoroch</Instruction>
+          <Timeout>2</Timeout>
+        </_2_-_Screws_on_connectors>
+        <_3_-_Gore-tex_valve>
+          <Instruction>Kontrola Gore-tex ventilu</Instruction>
+          <Timeout>2</Timeout>
+        </_3_-_Gore-tex_valve>
+        <_4_-_Connector_seal>
+          <Instruction>Kontrola tesnenia konektoru</Instruction>
+          <Timeout>2</Timeout>
+        </_4_-_Connector_seal>
+        <_5_-_Surface_of_item>
           <Instruction>Kontrola povrchu vyrobku podla SQQ 187 Standard pre posudzovanie vzhladu</Instruction>
-        </_9>
-      </UAF01068>
+          <Timeout>2</Timeout>
+        </_5_-_Surface_of_item>
+        <_6_-_Black_covers>
+          <Instruction>Kontrola ciernych krytiek</Instruction>
+          <Timeout>2</Timeout>
+        </_6_-_Black_covers>
+        <_7_-_Labels>
+          <Instruction>Kontrola stitkov na vyrobku</Instruction>
+          <Timeout>2</Timeout>
+        </_7_-_Labels>
+        <_8_-_Inserting_and_checking_of_connector_cover>
+          <Instruction>Vlozenie a kontrola krytiek konektorov</Instruction>
+          <Timeout>2</Timeout>
+        </_8_-_Inserting_and_checking_of_connector_cover>
+      <_9_-_Camera_check_of_packing>
+          <Instruction>Kontrola balenia pomocou kameroveho systemu. Pripravte balenie podla obrazku a tlacidlom START spustite kontrolu.</Instruction>
+          <Picture>default.jpg</Picture>
+          <CameraInspection>1</CameraInspection>
+          <Timeout>2</Timeout>
+        </_9_-_Camera_check_of_packing>
+			</UAF01068>
+      <UAF01068A>
+        <_1_-_Screws_of_top_cover>
+          <Instruction>Kontrola skrutiek vrchneho krytu: 16 skrutiek na fixaciu vrchneho krytu - pritomnost a spravne dotiahnutie</Instruction>
+          <Picture>01.JPG</Picture>
+          <Timeout>2</Timeout>
+        </_1_-_Screws_of_top_cover>
+        <_2_-_Screws_on_connectors>
+          <Instruction>Kontrola skrutiek na konektoroch</Instruction>
+          <Timeout>2</Timeout>
+        </_2_-_Screws_on_connectors>
+        <_3_-_Gore-tex_valve>
+          <Instruction>Kontrola Gore-tex ventilu</Instruction>
+          <Timeout>2</Timeout>
+        </_3_-_Gore-tex_valve>
+        <_4_-_Connector_seal>
+          <Instruction>Kontrola tesnenia konektoru</Instruction>
+          <Timeout>2</Timeout>
+        </_4_-_Connector_seal>
+        <_5_-_Surface_of_item>
+          <Instruction>Kontrola povrchu vyrobku podla SQQ 187 Standard pre posudzovanie vzhladu</Instruction>
+          <Timeout>2</Timeout>
+        </_5_-_Surface_of_item>
+        <_6_-_Black_covers>
+          <Instruction>Kontrola ciernych krytiek</Instruction>
+          <Timeout>2</Timeout>
+        </_6_-_Black_covers>
+        <_7_-_Labels>
+          <Instruction>Kontrola stitkov na vyrobku</Instruction>
+          <Timeout>2</Timeout>
+        </_7_-_Labels>
+        <_8_-_Inserting_and_checking_of_connector_cover>
+          <Instruction>Vlozenie a kontrola krytiek konektorov</Instruction>
+          <Timeout>2</Timeout>
+        </_8_-_Inserting_and_checking_of_connector_cover>
+			</UAF01068A>
       <XEF00148>
         <_1>
           <Instruction>Kontrola pritomnosti zakaznickych stitkov na prednom paneli vyrobku</Instruction>
@@ -17987,32 +18485,100 @@
           <Picture></Picture>
         </_7>
       </UAF01815b>
-      <UAF01815b>
+      <UAF01815c>
         <_1>
-          <Instruction>Skontroluj povrch vyrobku bez skrabancov, skvrn, chybajuce casti</Instruction>
+          <Instruction>Skontroluj stitok, obsah, kvalitu potlace, nalepenie</Instruction>
           <Picture></Picture>
         </_1>
         <_2>
-          <Instruction>Skontroluj konektory - polohu, poskodenia</Instruction>
+          <Instruction>Skontroluj zaliatie - vyrobok musi byt zaliaty vodorovne s hranou krytu</Instruction>
           <Picture></Picture>
         </_2>        
         <_3>
-          <Instruction>Skontroluj razitka na vrchnej strane vyrobku. Musia byt dobre citatelne a oznacene v poradi: ET, HV, FT1, BI, FT</Instruction>
+          <Instruction>Skontroluj neporusenost krabicky (skrabance, mastne flaky, odtlacky prstov a pod.)</Instruction>
           <Picture></Picture>
         </_3>
         <_4>
-          <Instruction>Skontroluj zabalenie vyrobku predpisanym sposobom</Instruction>
+          <Instruction>Skontroluj neporusenost zaliatej plochy - nesmu byt diery, bubliny</Instruction>
           <Picture></Picture>
         </_4>
         <_5>
-          <Instruction>Skontroluj vlozenie vyrobku do ESD sacku</Instruction>
+          <Instruction>Skontroluj piny konektora - musia byt bez poskodenia, ohnutia</Instruction>
           <Picture></Picture>
         </_5>
         <_6>
-          <Instruction>Skontroluj pritomnost vysusovacieho vrecka v baleni</Instruction>
+          <Instruction>Skontroluj konektor - nesmie mat mechanicke poskodenie izolacie</Instruction>
           <Picture></Picture>
         </_6>
-      </UAF01815b>
+        <_7>
+          <Instruction>Skontroluj osadenie kablu konektora v krabicke - nesmie precnievat izolacia kablu z krabicky</Instruction>
+          <Picture></Picture>
+        </_7>
+      </UAF01815c>
     </Final_Inspection>
+    <FAI>
+      <testFAI1>
+        <_1>
+          <Instruction>Kontrola vykonania FAI na SMT (First SN Check) pre VDA.00819.0 / FAI Inspection (First SN Check) of VDA.00819.0</Instruction>
+          <Picture></Picture>
+        </_1>
+        <_2>
+          <Instruction>Kontrola povrchu vyrobku podla SQQ187 Standard pre posudzovanie vzhladu / Inspection of the survace according cosmetic standard SQQ187</Instruction>
+          <Picture>1.JPG</Picture>
+        </_2>
+        <_3>
+          <Instruction>Vrchny kryt - kontrola skrutiek - 8ks / Top cover - inspection of the screws - 8pcs</Instruction>
+          <Picture>2.JPG</Picture>
+        </_3>
+        <_4>
+          <Instruction>Predny panel - kontrola skrutiek - 6 ks / Front panel - inspection of the screws - 6pcs</Instruction>
+          <Picture></Picture>
+        </_4>
+        <_5>
+          <Instruction>Predny panel - kontrola skrutiek na konektoroch predneho panela - 4ks / Front panel - connectors - inspection of the screws - 4pcs</Instruction>
+          <Picture></Picture>
+        </_5>
+        <_6>
+          <Instruction>Vyrez na konektore YVD.01081.0 musi smerovat k vypinacu / Connector YVD.01081.0 - groove direction to power switch</Instruction>
+          <Picture></Picture>
+        </_6>
+        <_7>
+          <Instruction>Drziak baterie - kontrola skrutiek - 4ks / Battery holder - inspection of the screw - 4pcs</Instruction>
+          <Picture></Picture>
+        </_7>
+        <_8>
+          <Instruction>Tieniaci plech - kontrola skrutiek - 5ks / Shield plate - inspection of the screws - 5pcs</Instruction>
+          <Picture></Picture>
+        </_8>
+        <_9>
+          <Instruction>Stitky - kontrola podla BOMu (obsah a citatelnost) / Labels - inspection according BOM (content and readability)</Instruction>
+          <Picture></Picture>
+        </_9>
+        <_10>
+          <Instruction>Kontektory: neposkodene koliky, bez prasklin, kontrola drziaka XFC.00121 / Connectors: undamaged pins, without cracks, inspection of cable holder XFC.00121</Instruction>
+          <Picture></Picture>
+        </_10>
+        <_11>
+          <Instruction>Hlavny vypinac v polohe 0 / Main switch in position 0</Instruction>
+          <Picture></Picture>
+        </_11>
+        <_12>
+          <Instruction>Kontrola vyviazania vodicov - 5ks binderiek / Inspection of wires bundles - 5pcs of binders</Instruction>
+          <Picture></Picture>
+        </_12>
+        <_13>
+          <Instruction>Kontrola uzemnovacich skrutiek - 2ks / Inspection of ground screws - 2pcs</Instruction>
+          <Picture></Picture>
+        </_13>
+        <_14>
+          <Instruction>Kontrola vykonania elektrickych testov - HVT, FT / Inspection of electrical tests - HVT, FT</Instruction>
+          <Picture></Picture>
+        </_14>
+        <_15>
+          <Instruction>Kontrola balenia / Inspection of packaging</Instruction>
+          <Picture></Picture>
+        </_15>
+      </testFAI1>
+    </FAI>
   </Checklists>
 </Configuration>

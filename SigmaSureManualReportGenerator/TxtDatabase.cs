@@ -12,6 +12,7 @@ namespace SigmaSureManualReportGenerator
     {
         public Boolean CheckSerialNumberAndTestType(String JobID, String SerialNumber, String TestType)
         {
+            //return false;
             String FileName = String.Concat(JobID, ".txt");
             String FilePath = @"\\dcafs3\SHARE\Manufacturing_Engineering\Public\Kolman Vladimir\SigmaSureReportLogs\";
             if (!this.PathExists(FilePath)) return false;
@@ -30,7 +31,7 @@ namespace SigmaSureManualReportGenerator
                     {
                         StreamReader sr = new StreamReader(String.Concat(FilePath, FileName));
                         String line = "";
-                        while (((line = sr.ReadLine()) != null))
+                        while ((line = sr.ReadLine()) != null)
                         {
                             String actSN = line.Substring(0, line.IndexOf(';'));
                             if (actSN != SerialNumber) continue;
@@ -70,6 +71,7 @@ namespace SigmaSureManualReportGenerator
                         return true;
                     }
                     sr.Close();
+                    sr.Dispose();
                 }
                 catch (Exception ex)
                 {
@@ -81,6 +83,7 @@ namespace SigmaSureManualReportGenerator
         }
         public void SaveSerialNumberAndTestTypeToLogFile(String JobID, String SerialNumber, String TestType)
         {
+            //return;
             String FileName = String.Concat(JobID, ".txt");
             String FilePath = @"\\dcafs3\SHARE\Manufacturing_Engineering\Public\Kolman Vladimir\SigmaSureReportLogs\";
             if (!this.PathExists(FilePath)) return;

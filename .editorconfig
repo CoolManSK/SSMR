@@ -1,0 +1,10 @@
+﻿[*.{cs,vb}]
+
+# IDE0017: Simplify object initialization
+dotnet_style_object_initializer = true:none
+
+# IDE1006: Naming Styles
+dotnet_diagnostic.IDE1006.severity = none
+
+# IDE0059: Unnecessary assignment of a value
+csharp_style_unused_value_assignment_preference = discard_variable:none

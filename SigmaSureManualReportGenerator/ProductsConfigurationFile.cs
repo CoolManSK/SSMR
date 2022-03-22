@@ -18,6 +18,9 @@ namespace SigmaSureManualReportGenerator
             public string Name;
             public string Instruction;
             public string PicturePath;
+            public string ScanBarcode;
+            public string Timeout;
+            public string CameraInspection;
         }
         public struct FaultCode
         {
@@ -33,9 +36,9 @@ namespace SigmaSureManualReportGenerator
             {
                 this.XmlFile.Load(String.Concat(this.ConfigPath, "ProductsConfiguration.xml"));
             }
-            catch(Exception ex)
+            catch
             {
-
+                MessageBox.Show("Chyba v product configuration subore. Zavolajte prosim nadriadeneho.", "CHYBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -123,11 +126,15 @@ namespace SigmaSureManualReportGenerator
                     XmlNode InstructionsNode = this.XmlFile.LastChild.SelectSingleNode(String.Concat("./Checklists/", TestType.Replace(' ', '_'), "/", childCheckListInfoActTestNode.InnerText));
                     if (InstructionsNode != null)
                     {
+                        retArray = this.GetInstrunctionsFromNode(InstructionsNode, childCheckListInfoActTestNode.InnerText);
+                        /*
                         for (Int32 i = 0; i < InstructionsNode.ChildNodes.Count; i++)
                         {
                             XmlNode actTestNode = InstructionsNode.ChildNodes[i];
                             ChildTestInfo actCTI = new ChildTestInfo();
-                            actCTI.Name = actTestNode.Name.Replace('_', ' ');
+                            actCTI.Name = actTestNode.Name.Replace('_', ' ').Trim();
+                            if (actTestNode.SelectSingleNode("./Instruction") == null)
+                                continue;
                             actCTI.Instruction = actTestNode.SelectSingleNode("./Instruction").InnerText;
                             XmlNode actPictureNode = actTestNode.SelectSingleNode("./Picture");
                             if (actPictureNode != null)
@@ -142,15 +149,47 @@ namespace SigmaSureManualReportGenerator
                             {
                                 actCTI.PicturePath = "";
                             }
+                            XmlNode actScanBarcodeNode = actTestNode.SelectSingleNode("./ScanBarcode");
+                            if (actScanBarcodeNode != null)
+                            {
+                                actCTI.ScanBarcode = actScanBarcodeNode.InnerText.Trim();
+                            }
+                            else
+                            {
+                                actCTI.ScanBarcode = "";
+                            }
+                            XmlNode actTimeoutNode = actTestNode.SelectSingleNode("./Timeout");
+                            if (actTimeoutNode != null)
+                            {
+                                actCTI.Timeout = actTimeoutNode.InnerText.Trim();
+                            }
+                            else
+                            {
+                                actCTI.Timeout = "5";
+                            }
+                            XmlNode actCameraInspectionNode = actTestNode.SelectSingleNode("./CameraInspection");
+                            if (actCameraInspectionNode != null)
+                            {
+                                actCTI.CameraInspection = actCameraInspectionNode.InnerText.Trim();
+                            }
+                            else
+                            {
+                                actCTI.CameraInspection = "0";
+                            }
                             Array.Resize(ref retArray, i + 1);
                             retArray.SetValue(actCTI, i);
                         }
+                        */
                     }
                 }
             }
-            if (retArray.Length != 0)
+            if (retArray.Length == 0)
             {
-                return retArray;
+                XmlNode InstructionsNode = this.XmlFile.LastChild.SelectSingleNode(String.Concat("./Checklists/", TestType.Replace(' ', '_'), "/Default"));
+                if (InstructionsNode == null)
+                {
+                    return retArray;
+                }
             }
 
             XmlNode FamilyNode = this.GetFamilyNode(ProdID);
@@ -166,6 +205,8 @@ namespace SigmaSureManualReportGenerator
                         XmlNode InstructionsNode = this.XmlFile.LastChild.SelectSingleNode(String.Concat("./Checklists/", TestType.Replace(' ', '_'), "/", childCheckListInfoActTestNode.InnerText));
                         if (InstructionsNode != null)
                         {
+                            retArray = this.GetInstrunctionsFromNode(InstructionsNode, childCheckListInfoActTestNode.InnerText);
+                            /*
                             for (Int32 i = 0; i < InstructionsNode.ChildNodes.Count; i++)
                             {
                                 XmlNode actTestNode = InstructionsNode.ChildNodes[i];
@@ -185,13 +226,104 @@ namespace SigmaSureManualReportGenerator
                                 {
                                     actCTI.PicturePath = "";
                                 }
+                                XmlNode actScanBarcodeNode = actTestNode.SelectSingleNode("./ScanBarcode");
+                                if (actScanBarcodeNode != null)
+                                {
+                                    actCTI.ScanBarcode = actScanBarcodeNode.InnerText.Trim();
+                                }
+                                else
+                                {
+                                    actCTI.ScanBarcode = "";
+                                }
+                                XmlNode actTimeoutNode = actTestNode.SelectSingleNode("./Timeout");
+                                if (actTimeoutNode != null)
+                                {
+                                    actCTI.Timeout = actTimeoutNode.InnerText.Trim();
+                                }
+                                else
+                                {
+                                    actCTI.Timeout = "0";
+                                }
+                                XmlNode actCameraInspectionNode = actTestNode.SelectSingleNode("./CameraInspection");
+                                if (actCameraInspectionNode != null)
+                                {
+                                    actCTI.CameraInspection = actCameraInspectionNode.InnerText.Trim();
+                                }
+                                else
+                                {
+                                    actCTI.CameraInspection = "0";
+                                }
                                 Array.Resize(ref retArray, i + 1);
                                 retArray.SetValue(actCTI, i);
                             }
+                            */
                         }
                     }
 
                 }
+            }
+            if (retArray.Length == 0)
+            {
+                XmlNode InstructionsNode = this.XmlFile.LastChild.SelectSingleNode(String.Concat("./Checklists/", TestType.Replace(' ', '_'), "/Default"));
+                if (InstructionsNode != null)
+                {
+                    retArray = this.GetInstrunctionsFromNode(InstructionsNode, "Default");
+                }
+            }
+            return retArray;
+        }
+
+        private ChildTestInfo[] GetInstrunctionsFromNode(XmlNode InstructionsNode, String PictureDirPath)
+        {
+            ChildTestInfo[] retArray = { };
+            for (Int32 i = 0; i < InstructionsNode.ChildNodes.Count; i++)
+            {
+                XmlNode actTestNode = InstructionsNode.ChildNodes[i];
+                ChildTestInfo actCTI = new ChildTestInfo();
+                actCTI.Name = actTestNode.Name.Replace('_', ' ');
+                actCTI.Instruction = actTestNode.SelectSingleNode("./Instruction").InnerText;
+                XmlNode actPictureNode = actTestNode.SelectSingleNode("./Picture");
+                if (actPictureNode != null)
+                {
+                    actCTI.PicturePath = String.Concat(PictureDirPath, @"\", actTestNode.SelectSingleNode("./Picture").InnerText);
+                    if (Path.GetFileName(actCTI.PicturePath) == "")
+                    {
+                        actCTI.PicturePath = "";
+                    }
+                }
+                else
+                {
+                    actCTI.PicturePath = "";
+                }
+                XmlNode actScanBarcodeNode = actTestNode.SelectSingleNode("./ScanBarcode");
+                if (actScanBarcodeNode != null)
+                {
+                    actCTI.ScanBarcode = actScanBarcodeNode.InnerText.Trim();
+                }
+                else
+                {
+                    actCTI.ScanBarcode = "";
+                }
+                XmlNode actTimeoutNode = actTestNode.SelectSingleNode("./Timeout");
+                if (actTimeoutNode != null)
+                {
+                    actCTI.Timeout = actTimeoutNode.InnerText.Trim();
+                }
+                else
+                {
+                    actCTI.Timeout = "0";
+                }
+                XmlNode actCameraInspectionNode = actTestNode.SelectSingleNode("./CameraInspection");
+                if (actCameraInspectionNode != null)
+                {
+                    actCTI.CameraInspection = actCameraInspectionNode.InnerText.Trim();
+                }
+                else
+                {
+                    actCTI.CameraInspection = "0";
+                }
+                Array.Resize(ref retArray, i + 1);
+                retArray.SetValue(actCTI, i);                
             }
             return retArray;
         }
@@ -255,6 +387,72 @@ namespace SigmaSureManualReportGenerator
                 }
             }
             return retArray;
-        }        
+        }
+
+        public static Boolean CheckValueToMask(String InputValue, String Mask)
+        { 
+            if (Mask == "")
+                return true;
+
+            if (InputValue.Length != Mask.Length)
+                return false;
+
+            if (InputValue == Mask)
+                return true;
+
+            Boolean retVal = true;
+
+            for (int i = 0; i < InputValue.Length; i++)
+            {
+                String actMaskChar = Mask.Substring(i, 1);
+                String actInputChar = InputValue.Substring(i, 1);
+
+                if (actMaskChar == actInputChar) 
+                    continue;
+
+                switch (actMaskChar)
+                {
+                    case "#":
+                        if (!Char.IsDigit(actInputChar, 0))
+                            return false;
+                        break;
+                    case "*":
+                        if (!Char.IsLetter(actInputChar, 0))
+                            return false;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return retVal;
+        }
+
+        public Boolean TestStationAllowed(String TestType, String ProductID, String TestStation)
+        {
+            Boolean retVal = true;
+
+            XmlNode ProdNode = this.GetProductNode(ProductID);
+            if (ProdNode != null)
+            {
+                XmlNode childAllowedStationsNode = ProdNode.SelectSingleNode("./AllowedStations");
+                if (childAllowedStationsNode != null)
+                {
+                    String FormatedTestType = TestType.Replace(' ', '_');
+                    XmlNode childTestTypeNode = childAllowedStationsNode.SelectSingleNode(String.Concat("./", FormatedTestType));
+                    if (childTestTypeNode != null)
+                    {
+                        retVal = false;
+                        foreach (XmlNode actNode in childTestTypeNode.ChildNodes)
+                        {
+                            if (actNode.InnerText.ToLower().Trim() == TestStation.ToLower().Trim())
+                                retVal = true;
+                        }
+                    }
+                }
+            }
+
+            return retVal;
+        }
     }
 }

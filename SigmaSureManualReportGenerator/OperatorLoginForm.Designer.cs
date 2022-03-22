@@ -69,6 +69,7 @@
             this.cb_OperatorLoginNr.Location = new System.Drawing.Point(124, 104);
             this.cb_OperatorLoginNr.Name = "cb_OperatorLoginNr";
             this.cb_OperatorLoginNr.Size = new System.Drawing.Size(158, 28);
+            this.cb_OperatorLoginNr.Sorted = true;
             this.cb_OperatorLoginNr.TabIndex = 2;
             this.cb_OperatorLoginNr.SelectedIndexChanged += new System.EventHandler(this.cb_OperatorLoginNr_SelectedIndexChanged);
             // 
@@ -123,6 +124,7 @@
             this.label3.Size = new System.Drawing.Size(225, 20);
             this.label3.TabIndex = 6;
             this.label3.Text = "Zoskenujte barcode z ID karty:";
+            this.label3.MouseHover += new System.EventHandler(this.label3_MouseHover);
             // 
             // cb_OperatorSurname
             // 
@@ -132,6 +134,7 @@
             this.cb_OperatorSurname.Location = new System.Drawing.Point(124, 70);
             this.cb_OperatorSurname.Name = "cb_OperatorSurname";
             this.cb_OperatorSurname.Size = new System.Drawing.Size(158, 28);
+            this.cb_OperatorSurname.Sorted = true;
             this.cb_OperatorSurname.TabIndex = 1;
             this.cb_OperatorSurname.SelectedIndexChanged += new System.EventHandler(this.cb_OperatorSurname_SelectedIndexChanged);
             // 

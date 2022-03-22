@@ -15,28 +15,33 @@ namespace SigmaSureManualReportGenerator
         public clEnvironment Env = new clEnvironment();
         public clEmployee Emp = new clEmployee();
         public clAuthorization Authorization = new clAuthorization();
-        private String LogFilePath = @"\\dcafs3\share\Manufacturing_Engineering\Public\Kolman Vladimir\BelMESCommon\SSMRG_BELLogs\";
-        private String LogFileName = "";
+        public clSupportRequest SupportRequest = new clSupportRequest();
+        private readonly String LogFilePath = @"\\dcafs3\share\Manufacturing_Engineering\Public\Kolman Vladimir\BelMESCommon\SSMRG_BELLogs\";
+        private readonly String LogFileName = "";
         public Boolean Activated = false;
         public Boolean WarningMessages = false;
         public Boolean ProductVerifiedForMessages = false;
         public String Mode = "P";
-        private String ConfigDirectory;
+        private readonly String ConfigDirectory;
+        private String actualFixtureID = "";
 
-        private String OperatorNumber;
-        private String StationName;
+        //private String OperatorNumber;
+        //private String StationName;
 
-        private String LastSerialNumber;
+        public String LastSerialNumber;        
 
-        public BelMES(String StationName, String ConfigDirectory)
+        private readonly String ActualProgramVersion = "";
+
+        public BelMES(String StationName, String ConfigDirectory, String ActualProgramVersion)
         {
             
             if (StationName == "") return;
             try
             {
-                //String userName = "inspection07";
-                //this.Env = this.Env.SetEnvironment(userName);
+                this.ActualProgramVersion = ActualProgramVersion;
+                this.Env = new clEnvironment();
                 this.Env = this.Env.SetEnvironment();
+                //this.Env = this.Env.SetEnvironment("finalinspectionhev01");
                 if (this.Env != null)
                 {
                     if ((this.Env.strComputer == "") || (this.Env.strComputer == null))
@@ -55,7 +60,30 @@ namespace SigmaSureManualReportGenerator
 
                 if (!File.Exists(String.Concat(this.LogFilePath, this.LogFileName)))
                 {
-                    File.Create(String.Concat(this.LogFilePath, this.LogFileName)).Close();                    
+                    File.Create(String.Concat(this.LogFilePath, this.LogFileName)).Close();
+
+                    try
+                    {
+                        String newLine = String.Concat("SWVERSION;DATETIME;TRACEPOINT;PCNAME;EMPLOYEENUMBER;SERIALNUMBER;strWO_SerialNumber;strItem;blnAuthorized;blnMustTraced;blnTraceItemStart;strTestKind;strStatus;strResult;intReturnCode;strSQLDatabase;strSQLServer;blnAuthorizationPaused;Activated;ExtendedInfo");
+
+                        StreamWriter sr = new StreamWriter(String.Concat(this.LogFilePath, this.LogFileName), true);
+                        sr.WriteLine(newLine);
+                        sr.Close();
+                        sr.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex.ToString().IndexOf("is no longer available") > -1)
+                        {
+                            MessageBox.Show(String.Concat("Nie je dostupna siet.", "\n", ex.Data.ToString()), "CHYBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else
+                        {
+                            MessageBox.Show(String.Concat(ex.Message, "\n", ex.Data.ToString()));
+                        }
+                    }
+
+                    
                 }
 
                 this.ConfigDirectory = ConfigDirectory;
@@ -69,14 +97,24 @@ namespace SigmaSureManualReportGenerator
             }
         }
 
-        public Boolean BelMESAuthorization(String SerialNumber, String TestType, String ProductName, String XmlContent)
+        public Boolean BelMESAuthorization(String SerialNumber, String TestType, ref String ProductName, String XmlContent)
         {
-            if (TestType == "Adjustement") TestType = "Adjustment";
-            return this.BelMESAuthorization(SerialNumber, TestType, ProductName, XmlContent, false);
+            return this.BelMESAuthorization(SerialNumber, TestType, ref ProductName, XmlContent, false);
         }
 
-        public Boolean BelMESAuthorization(String SerialNumber, String TestType, String ProductName, String XmlContent, Boolean ForceTerminated)
+        public Boolean BelMESAuthorization(String SerialNumber, String TestType, ref String ProductName, String XmlContent, Boolean ForceTerminated)
         {
+            return this.BelMESAuthorization(SerialNumber, TestType, ref ProductName, XmlContent, ForceTerminated, true, "");
+        }
+
+        public Boolean BelMESAuthorization(String SerialNumber, String TestType, ref String ProductName, String XmlContent, Boolean ForceTerminated, Boolean StartNew, String warningInfoMessage)
+        {
+            if (SerialNumber.Length == 8)
+            {
+                this.WriteLogData(String.Concat("sn ma len 8 znakov - ", SerialNumber, " - ", warningInfoMessage));
+                return false;
+            }
+
             if (SerialNumber.Length == 17)
             {
                 SerialNumber = SerialNumber.Substring(8);
@@ -86,42 +124,67 @@ namespace SigmaSureManualReportGenerator
                 SerialNumber = SerialNumber.Substring(10);
             }
 
-            if ((this.LastSerialNumber == SerialNumber) && (this.Authorization.blnAuthorized))
+            if ((this.LastSerialNumber == SerialNumber) && (this.Authorization.blnAuthorized) && (this.Authorization.blnTraceItemStart))
                 return true;
 
             this.LastSerialNumber = SerialNumber;
 
             if (TestType == "Adjustement") TestType = "Adjustment";
-
-            if ((this.Env.Employee.strEmployeeNumber == null) || (this.Env.Employee.strEmployeeNumber == "nullEmpNumber"))
+            if (TestType == "FAI")
+            {
+                TestType = "OBA";
+                this.actualFixtureID = "FAI";
+            }
+            
+            if (this.Env.Employee.strEmployeeNumber == null)
             {
                 this.EmployeeVerification(this.Emp.strEmployeeNumber);
-            }            
+            }
+            if (this.Env.Employee.strEmployeeNumber == "nullEmpNumber")
+            {
+                this.EmployeeVerification(this.Emp.strEmployeeNumber);
+            }
+      
 
             if ((this.Authorization.strWO_SerialNumber != null) && ForceTerminated)
             {
-                this.Authorization = this.Authorization.TryAuthorization(this.Authorization.strWO_SerialNumber, this.Authorization.strTestKind, "Terminated", this.Env, true, false, this.Mode, XmlContent, "");
-                //if ()
+                this.Authorization = this.Authorization.TryAuthorization(this.Authorization.strWO_SerialNumber, this.Authorization.strTestKind, "Terminated", this.Env, true, false, this.Mode, XmlContent, this.actualFixtureID);
+                if (!StartNew)
+                {
+                    this.WriteLogData(String.Concat(SerialNumber, " - ", warningInfoMessage));
+                    return true;
+                }
             }
             if (TestType != "")
             {
-                this.Authorization = this.Authorization.TryAuthorization(SerialNumber, TestType, "", this.Env, false, true, this.Mode, "", "");
+                this.Authorization = this.Authorization.TryAuthorization(SerialNumber, TestType, "", this.Env, false, true, this.Mode, "", this.actualFixtureID);
                 this.Authorization.strTestKind = TestType;
             }
-            this.WriteLogData(SerialNumber);
+            if (this.Authorization.intReturnCode < 0)
+            {
+                MessageBox.Show(String.Concat(this.Authorization.strResult," \rChyba v spojeni s SQL serverom. Zavolajte prosim svojho nadriadeneho"), "CHYBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.WriteLogData(String.Concat(this.Authorization.intReturnCode.ToString(), " - ", warningInfoMessage));
+                return false;
+            }
+            this.WriteLogData(String.Concat(SerialNumber, " - ", warningInfoMessage));
             Boolean b_Verified = true;
             if (this.Authorization.blnAuthorized)
             {
-                if (this.Authorization.strItem != ProductName)
-                    b_Verified = false;
+                ProductName = this.Authorization.strItem;      
             }
             else
             {
-                b_Verified = false;
-                if (this.WarningMessages || this.ProductVerifiedForMessages)
-                {
+                b_Verified = false;                
+                if (this.Authorization.blnMustTraced)
+                { 
                     MessageBox.Show(this.Authorization.strResult, "CHYBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }   
+                else
+                {
+                    ProductName = this.Authorization.strItem;
+                    b_Verified = true;
                 }
+                
             }            
             return b_Verified;
         }
@@ -140,6 +203,7 @@ namespace SigmaSureManualReportGenerator
 
             try
             {
+
                 if (this.Authorization.strWO_SerialNumber != null)
                 {
                     if (this.Authorization.strWO_SerialNumber != "")
@@ -155,6 +219,7 @@ namespace SigmaSureManualReportGenerator
                 {
                     this.Authorization = this.Authorization.TryAuthorization(SerialNumber, this.Authorization.strTestKind, Result, this.Env, false, true, this.Mode, XmlReportString, "");
                 }
+
                 /*
                 if ((this.Authorization.strWO_SerialNumber != null))
                 {
@@ -177,7 +242,7 @@ namespace SigmaSureManualReportGenerator
 
         public Boolean SetActualResult(String SerialNumber, String TestKind, String Result, String XmlReportString)
         {
-            Boolean retVal = false;
+            Boolean retVal = true;
 
             if (SerialNumber.Length == 17) SerialNumber = SerialNumber.Substring(8);
             if (SerialNumber.Length == 19) SerialNumber = SerialNumber.Substring(10);
@@ -185,17 +250,30 @@ namespace SigmaSureManualReportGenerator
             if ((this.Env.Employee.strEmployeeNumber == null) || (this.Env.Employee.strEmployeeNumber == "nullEmpNumber"))
             {
                 this.EmployeeVerification(this.Emp.strEmployeeNumber);                
-            }
+            }            
 
             if (TestKind == "Adjustement") TestKind = "Adjustment";
+            if (TestKind == "FAI")
+            {
+                TestKind = "OBA";
+                this.actualFixtureID = "FAI";
+            }
 
             try
             {
-                this.Authorization = this.Authorization.TryAuthorization(SerialNumber, TestKind, Result, this.Env, false, true, this.Mode, XmlReportString, "");
+                this.Authorization = this.Authorization.TryAuthorization(SerialNumber, TestKind, Result, this.Env, false, true, this.Mode, XmlReportString, this.actualFixtureID);
+
+                if (this.Authorization.intReturnCode < 0)
+                {
+                    MessageBox.Show(String.Concat(this.Authorization.strResult, " \rChyba v spojeni s SQL serverom. Zavolajte prosim svojho nadriadeneho"), "CHYBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.WriteLogData(this.Authorization.intReturnCode.ToString());
+                    return false;
+                }
 
                 if ((!this.Authorization.blnAuthorized) && (TestKind == "OBA"))
                 {
                     MessageBox.Show(String.Concat("Nepodaril sa vytvorit zaznam z OBA testu pre SN ", SerialNumber, " do Belmesu. Kontaktujte prosím testovacieho technika."), "CHYBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.WriteLogData("OBA Fail");
                     return false;
                 }
                 /*
@@ -218,9 +296,35 @@ namespace SigmaSureManualReportGenerator
             return retVal;
         }
 
+        public String GetProductID(String SerialNumber, String TestKind)
+        {
+            if ((this.Env.Employee.strEmployeeNumber == null) || (this.Env.Employee.strEmployeeNumber == "nullEmpNumber"))
+            {
+                this.EmployeeVerification(this.Emp.strEmployeeNumber);
+            }
+
+            if (TestKind == "Adjustement")
+                TestKind = "Adjustment";
+            if (TestKind == "FAI")
+            {
+                TestKind = "OBA";
+                this.actualFixtureID = "FAI";
+            }
+
+            try
+            {
+                this.Authorization = this.Authorization.TryAuthorization(SerialNumber, TestKind, "", this.Env, false, false, this.Mode, "", "");
+                return this.Authorization.strItem;
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
         public Boolean EmployeeVerification(String EmployeeNumber)
         {
-            this.OperatorNumber = EmployeeNumber;
+            //this.OperatorNumber = EmployeeNumber;
             try
             {
                 this.Emp = this.Emp.EmployeeVerify(EmployeeNumber, this.Env.DB_Resource, this.Env.ESD_DB_Resource);
@@ -245,10 +349,7 @@ namespace SigmaSureManualReportGenerator
                     else
                     {
                         this.Activated = false;
-                        if (this.WarningMessages)
-                        {
-                            MessageBox.Show(String.Concat(this.Emp.strEmployeeCodeInfo, ". Zavolajte prosim testovacieho technika."), "CHYBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }                        
+                        MessageBox.Show(String.Concat(this.Emp.strEmployeeCodeInfo, ". Zavolajte prosim testovacieho technika."), "CHYBA", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         this.WriteLogData(EmployeeNumber);
                         return false;
                     }
@@ -261,7 +362,22 @@ namespace SigmaSureManualReportGenerator
                 this.Activated = false;
                 return false;
             }
-        }                
+        }
+
+        public Boolean SendSupportRequest(String SRCode, String SRMessage, ref String WarningMessage)
+        {
+            this.SupportRequest = new clSupportRequest();
+            String strWarningMessage = String.Empty;
+            if (!this.SupportRequest.SendSupportRequest(SRCode, SRMessage, this.Env, ref WarningMessage))
+            {
+                MessageBox.Show(new Form { TopMost = true }, String.Concat("Support Request nebol odoslany.\n", WarningMessage), "Support Request Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);                
+                this.WriteLogData(String.Concat("SupportRequestError:", WarningMessage));
+                return false;
+            }
+            this.WriteLogData(String.Concat("SupportRequest:", WarningMessage));
+            return true;
+        }
+        
 
         private void WriteLogData(String ExtendedInfo)
         {
@@ -269,37 +385,43 @@ namespace SigmaSureManualReportGenerator
             {
                 
                 String PCName = Environment.MachineName;
-                
+
                 String newLine = String.Concat(
+                    this.ActualProgramVersion, ";",
                     DateTime.Now.Hour.ToString("D2"), ":", DateTime.Now.Minute.ToString("D2"), ":", DateTime.Now.Second.ToString("D2"), ";",
                     (this.Env.strTracePoint == null) ? "nullTracePoint" : this.Env.strTracePoint.ToString(), ";",
                     PCName, ";",
                     (this.Env.Employee.strEmployeeNumber == null) ? "nullEmpNumber" : this.Env.Employee.strEmployeeNumber.ToString(), ";",
                     (this.Authorization.strSerialNumber == null) ? "nullSN1" : this.Authorization.strSerialNumber.ToString(), ";",
                     (this.Authorization.strWO_SerialNumber == null) ? "nullSN2" : this.Authorization.strWO_SerialNumber.ToString(), ";",
-                    this.Authorization.blnMustTraced, ";", 
-                    this.Authorization.blnTraceItemStart.ToString(), ";", 
-                    (this.Authorization.strTestKind == null) ? "nullTestKind" : this.Authorization.strTestKind.ToString(), ";", 
-                    (this.Authorization.strStatus == null) ? "nullStatus" : this.Authorization.strStatus.ToString(), ";", 
+                    this.Authorization.strItem, ";",
+                    this.Authorization.blnAuthorized.ToString(), ";",
+                    this.Authorization.blnMustTraced.ToString(), ";",
+                    this.Authorization.blnTraceItemStart.ToString(), ";",
+                    (this.Authorization.strTestKind == null) ? "nullTestKind" : this.Authorization.strTestKind.ToString(), ";",
+                    (this.Authorization.strStatus == null) ? "nullStatus" : this.Authorization.strStatus.ToString(), ";",
                     (this.Authorization.strResult == null) ? "nullResult" : this.Authorization.strResult.ToString(), ";",
-                    (this.Env.DB_Resource.strSQLDatabase == null) ? "nullDatabase" : this.Env.DB_Resource.strSQLDatabase, ";", 
-                    (this.Env.DB_Resource.strSQLServer == null) ? "nullServer" : this.Env.DB_Resource.strSQLServer, ";",
-                    this.Env.blnAuthorizationPaused, ";", this.Activated, ";", ExtendedInfo);
+                    (this.actualFixtureID == null) ? "nullFixtureID" : this.actualFixtureID.ToString(), ";",
+                    this.Authorization.intReturnCode.ToString(), ";",
+                    this.Env.DB_Resource.strSQLDatabase ?? "nullDatabase", ";",
+                    this.Env.DB_Resource.strSQLServer ?? "nullServer", ";",                    
+                    this.Env.blnAuthorizationPaused, ";", this.Activated, ";", ExtendedInfo) ;
+
+                StreamWriter sr;
 
                 if (!Directory.Exists(this.LogFilePath))
                 {
-                    StreamWriter sr1 = new StreamWriter(String.Concat(this.ConfigDirectory, this.LogFileName), true);
-                    sr1.WriteLine(newLine);
-                    sr1.Close();
-                    sr1.Dispose();
+                    sr = new StreamWriter(String.Concat(this.ConfigDirectory, this.LogFileName), true);
                 }
                 else
                 {
-                    StreamWriter sr = new StreamWriter(String.Concat(this.LogFilePath, this.LogFileName), true);
-                    sr.WriteLine(newLine);
-                    sr.Close();
-                    sr.Dispose();
-                }                
+                    sr = new StreamWriter(string.Concat(this.LogFilePath, this.LogFileName), true);
+                }
+                sr.WriteLine(newLine);
+                this.actualFixtureID = null;
+                sr.Close();
+                sr.Dispose();
+
             }
             catch (Exception ex)
             {

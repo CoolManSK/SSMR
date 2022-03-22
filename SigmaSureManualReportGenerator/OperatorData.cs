@@ -132,12 +132,7 @@ namespace SigmaSureManualReportGenerator
                 this.ErrorMessageBoxShow(String.Concat("Operator s osobnym cislom \"", this.Number, "\" uz existuje."));
                 return false;
             }
-
-            if (this.Password.Length < 6)
-            {
-                this.ErrorMessageBoxShow("Heslo musi mat minimalne 6 znakov.");
-                return false;
-            }
+                        
             XmlNode OperatorNodeToAdd = this.OperatorsNode.FirstChild.Clone();
             OperatorNodeToAdd.SelectSingleNode("./Surname").InnerText = this.Surname;
             OperatorNodeToAdd.SelectSingleNode("./Number").InnerText = this.Number;
@@ -211,8 +206,15 @@ namespace SigmaSureManualReportGenerator
         }
         public Boolean PasswordValidation(String Number, String Password, XmlDocument ConfigDocument)
         {
-            Boolean IsValid = false;            
+            /*
+            if (Number != "1805")
+            {
+                return true;
+            }
+            */
 
+            Boolean IsValid = false;            
+            
             String[] ar_operators = { };
             XmlNode node_Operators = this.XMLConfig.SelectSingleNode(String.Concat("./Operators"));
 
@@ -228,14 +230,21 @@ namespace SigmaSureManualReportGenerator
                     {
                         str_Password = String.Concat(str_buffer_password.Substring(i, 1), str_Password);
                     }
-                    if ((Password == str_Password) || (str_Password == ""))
+                    if ((Password == str_Password) || (Password == ""))
                     {
-                        this.Number = Number;
-                        XmlNode node_surname = actNode.SelectSingleNode(String.Concat("./Surname"));
-                        this.Surname = node_surname.InnerText;
-                        XmlNode privileges_node = actNode.SelectSingleNode(String.Concat("./Privileges"));
-                        this.Privileges = privileges_node.InnerText;
-                        return true;
+                        if ((Password == "") && (Number == "1805"))
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            this.Number = Number;
+                            XmlNode node_surname = actNode.SelectSingleNode(String.Concat("./Surname"));
+                            this.Surname = node_surname.InnerText;
+                            XmlNode privileges_node = actNode.SelectSingleNode(String.Concat("./Privileges"));
+                            this.Privileges = privileges_node.InnerText;
+                            return true;
+                        }
                     }
                     else
                     {

@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
     <PublishUrl>\\dcafs3\Testing_SRO\TESTING\SigmaSure\SSManualReportGenerator\InstallFiles\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
@@ -23,16 +24,17 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <TargetCulture>en-GB</TargetCulture>
-    <ProductName>SigmaSure Manual Report Generator</ProductName>
-    <PublisherName>Vladimir Kolman</PublisherName>
+    <ProductName>BelMes Manual Report Generator</ProductName>
+    <PublisherName>Bel Power Solutions sro</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>127</ApplicationRevision>
-    <ApplicationVersion>1.4.0.%2a</ApplicationVersion>
+    <ApplicationRevision>97</ApplicationRevision>
+    <ApplicationVersion>1.5.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <BootstrapperComponentsLocation>Relative</BootstrapperComponentsLocation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -43,6 +45,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -52,6 +56,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -68,16 +74,25 @@
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BelMESCommon, Version=1.0.2.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\VSAPI\BelMESCommon\BelMESCommon.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\BelMESCommon\BelMESCommon.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Vsa.Vb.CodeDOMProcessor" />
     <Reference Include="SigmaSure, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>\\dcafs3\SHARE\Manufacturing_Engineering\Public\Kolman Vladimir\SoftwareToInstall_DoNotDelete\SigmaSure\SigmaSure\bin\Release\SigmaSure.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\VSProjects\SigmaSure\bin\Release\SigmaSure.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -101,12 +116,35 @@
       <DependentUpon>BatchSNEnterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="BelMES.cs" />
+    <Compile Include="frm_debug.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_debug.Designer.cs">
+      <DependentUpon>frm_debug.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DGV_Instructions.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="frm_Instructions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_Instructions.Designer.cs">
+      <DependentUpon>frm_Instructions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frm_InstructionsOneByOne.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frm_InstructionsOneByOne.Designer.cs">
+      <DependentUpon>frm_InstructionsOneByOne.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InputBox_Form.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="InputBox_Form.Designer.cs">
       <DependentUpon>InputBox_Form.cs</DependentUpon>
     </Compile>
+    <Compile Include="NewLogin.cs" />
     <Compile Include="OperatorData.cs" />
     <Compile Include="DeleteOperatorForm.cs">
       <SubType>Form</SubType>
@@ -146,6 +184,7 @@
       <DependentUpon>SimpleMode_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="SpecialRequirements.cs" />
+    <Compile Include="StationConfig.cs" />
     <Compile Include="TxtDatabase.cs" />
     <Compile Include="UserMaintenanceForm.cs">
       <SubType>Form</SubType>
@@ -161,6 +200,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DeleteOperatorForm.resx">
       <DependentUpon>DeleteOperatorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_debug.resx">
+      <DependentUpon>frm_debug.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_Instructions.resx">
+      <DependentUpon>frm_Instructions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frm_InstructionsOneByOne.resx">
+      <DependentUpon>frm_InstructionsOneByOne.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InputBox_Form.resx">
       <DependentUpon>InputBox_Form.cs</DependentUpon>
@@ -182,6 +230,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="SimpleMode_Form.resx">
       <DependentUpon>SimpleMode_Form.cs</DependentUpon>
@@ -189,6 +238,9 @@
     <EmbeddedResource Include="UserMaintenanceForm.resx">
       <DependentUpon>UserMaintenanceForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="app.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
@@ -241,12 +293,7 @@
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 4.5</ProductName>
-      <Install>true</Install>
+      <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>

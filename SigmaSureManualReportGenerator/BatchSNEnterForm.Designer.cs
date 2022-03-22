@@ -160,9 +160,9 @@
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label6.Location = new System.Drawing.Point(13, 208);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(251, 16);
+            this.label6.Size = new System.Drawing.Size(269, 16);
             this.label6.TabIndex = 9;
-            this.label6.Text = "Zoznam zoskenovanych seriovych cisiel:";
+            this.label6.Text = "Zoznam zoskenovanych seriovych cisiel (0):";
             // 
             // btn_CreateReports
             // 
@@ -229,6 +229,8 @@
             this.dgv_SerialNumbers.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_SerialNumbers_CellMouseDown);
             this.dgv_SerialNumbers.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_SerialNumbers_CellMouseEnter);
             this.dgv_SerialNumbers.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_SerialNumbers_CellMouseUp);
+            this.dgv_SerialNumbers.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dgv_SerialNumbers_RowsAdded);
+            this.dgv_SerialNumbers.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dgv_SerialNumbers_RowsRemoved);
             // 
             // LineNumber
             // 

@@ -395,5 +395,6 @@ namespace SigmaSureManualReportGenerator
             }
             return PB.FormatSerialNumber(BarcodeText);
         }
+
     }
 }

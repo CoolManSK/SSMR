@@ -16,14 +16,25 @@ namespace SigmaSureManualReportGenerator
             InitializeComponent();
         }
 
-        public InputBox_Form(String TitleCaption, String QuestionString)
+        public InputBox_Form(String TitleCaption, String QuestionString, String[] ComboBoxItems = null)
         {
             InitializeComponent();
             this.Text = TitleCaption;
             this.lbl_Question.Text = QuestionString;
-        }
+            if (ComboBoxItems == null)
+            {
+                this.lbl_Question.Size = new Size(this.lbl_Question.Size.Width, 109);
+                this.cb_SelectItem.Visible = false;
+            }
+            else
+            {
+                this.cb_SelectItem.Items.AddRange(ComboBoxItems);
+            }
+        }       
 
         public String Answer;
+        public String SelectedItem;
+        private bool UserExiting = true;
         
         private void InputBox_Form_Load(object sender, EventArgs e)
         {
@@ -41,20 +52,34 @@ namespace SigmaSureManualReportGenerator
         private void btn_OK_Click(object sender, EventArgs e)
         {
             this.Answer = this.tb_Answer.Text;
+            if (this.cb_SelectItem.Visible)
+            {
+                if (this.cb_SelectItem.SelectedIndex < 0)
+                {
+                    this.SelectedItem = "";
+                }
+                else
+                {
+                    this.SelectedItem = this.cb_SelectItem.Text;
+                }
+            }
+            this.UserExiting = false;
             this.Close();
         }
 
         private void btn_CANCEL_Click(object sender, EventArgs e)
         {
             this.Answer = "";
+            this.SelectedItem = "";
             this.Close();
         }
 
         private void InputBox_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing)
+            if (this.UserExiting)
             {
                 this.Answer = "";
+                this.SelectedItem = "";
             }
         }
     }

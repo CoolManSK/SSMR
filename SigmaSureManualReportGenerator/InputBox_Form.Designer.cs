@@ -32,22 +32,23 @@
             this.tb_Answer = new System.Windows.Forms.TextBox();
             this.btn_OK = new System.Windows.Forms.Button();
             this.btn_CANCEL = new System.Windows.Forms.Button();
+            this.cb_SelectItem = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // lbl_Question
             // 
             this.lbl_Question.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_Question.Location = new System.Drawing.Point(18, 14);
+            this.lbl_Question.Location = new System.Drawing.Point(12, 14);
             this.lbl_Question.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbl_Question.Name = "lbl_Question";
-            this.lbl_Question.Size = new System.Drawing.Size(463, 70);
+            this.lbl_Question.Size = new System.Drawing.Size(469, 78);
             this.lbl_Question.TabIndex = 0;
             this.lbl_Question.Text = "label1";
             this.lbl_Question.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tb_Answer
             // 
-            this.tb_Answer.Location = new System.Drawing.Point(12, 87);
+            this.tb_Answer.Location = new System.Drawing.Point(12, 129);
             this.tb_Answer.Name = "tb_Answer";
             this.tb_Answer.Size = new System.Drawing.Size(470, 26);
             this.tb_Answer.TabIndex = 1;
@@ -55,7 +56,8 @@
             // 
             // btn_OK
             // 
-            this.btn_OK.Location = new System.Drawing.Point(12, 119);
+            this.btn_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btn_OK.Location = new System.Drawing.Point(12, 161);
             this.btn_OK.Name = "btn_OK";
             this.btn_OK.Size = new System.Drawing.Size(229, 38);
             this.btn_OK.TabIndex = 2;
@@ -65,7 +67,8 @@
             // 
             // btn_CANCEL
             // 
-            this.btn_CANCEL.Location = new System.Drawing.Point(253, 119);
+            this.btn_CANCEL.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btn_CANCEL.Location = new System.Drawing.Point(253, 161);
             this.btn_CANCEL.Name = "btn_CANCEL";
             this.btn_CANCEL.Size = new System.Drawing.Size(229, 38);
             this.btn_CANCEL.TabIndex = 3;
@@ -73,11 +76,20 @@
             this.btn_CANCEL.UseVisualStyleBackColor = true;
             this.btn_CANCEL.Click += new System.EventHandler(this.btn_CANCEL_Click);
             // 
+            // cb_SelectItem
+            // 
+            this.cb_SelectItem.FormattingEnabled = true;
+            this.cb_SelectItem.Location = new System.Drawing.Point(11, 95);
+            this.cb_SelectItem.Name = "cb_SelectItem";
+            this.cb_SelectItem.Size = new System.Drawing.Size(470, 28);
+            this.cb_SelectItem.TabIndex = 4;
+            // 
             // InputBox_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(494, 170);
+            this.ClientSize = new System.Drawing.Size(494, 206);
+            this.Controls.Add(this.cb_SelectItem);
             this.Controls.Add(this.btn_CANCEL);
             this.Controls.Add(this.btn_OK);
             this.Controls.Add(this.tb_Answer);
@@ -103,5 +115,6 @@
         private System.Windows.Forms.TextBox tb_Answer;
         private System.Windows.Forms.Button btn_OK;
         private System.Windows.Forms.Button btn_CANCEL;
+        private System.Windows.Forms.ComboBox cb_SelectItem;
     }
 }

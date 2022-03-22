@@ -313,3 +313,90 @@ V 1.9
 V 1.9.1
 28.3.2019
 - Warning message about Belmes employee verification during logging in added
+
+V 1.9.2
+13.5.2019
+- Simple mode window added
+
+V 1.9.4
+13.5.2019
+- Warning messages showed up everytime when "Authorization.Authorized" is false and "Authorization.MustTraced" is true, no matter of options in the StationConfig file
+
+V 1.9.4.a
+13.9.2019
+- Implementation of Authorization.mustTraced logic
+
+V 1.9.5
+23.9.2019
+- Added authorization messages to simple mode
+
+V 1.9.6
+23.9.2019
+- Implementation of Authorization.mustTraced logic to simple mode
+
+V 1.9.6e
+14.10.2019-6.11.2019
+- debuging on production pcs
+
+V 1.9.7
+8.11.2019
+- Added terminate option to Simple mode
+
+V 1.9.7a
+15.11.2019
+- Debuging
+
+V 1.9.8
+18.11.2019
+- BatchMode in SingleMode Added
+
+V 1.9.8.1
+29.1.2020
+- Simple mode JobID checking added
+
+V 1.9.8.2
+21.2.2020
+- Sorted items in comboboxes during Login operation
+
+V 1.9.8.3
+3.3.2020
+- Application quits when PartNo not needed for main form
+
+V 1.9.8.3a
+7.7.2020
+- Fix the problem in main window when not authorized SN is entered. System have been awaiting for result of that SN. Now, system waits for scanning of next SN.
+
+V 1.9.8.3b
+23.7.2020
+- Fix SimpleForm header click
+
+V 1.9.8.3c
+- SNs will not disappear from SimpleForm datagridview after SQL/Intranet communication error during sending result routine
+
+V 2.0.0.0
+8.3.2021
+- added checklist by one instruction at time
+
+V 2.0.0.1
+7.5.2021
+- extra checking of server connections before each "SN handling" added in Simple Form
+
+V 2.0.0.2
+13.5.2021
+- added pictures of funwerk products for Final Inspection checking
+
+V 2.0.0.3
+21.5.2021
+- added pictures of MD funwerk products for Final Inspection checking
+
+V 2.0.1.0
+30.9.2021
+- added camera inspection option for test step config
+
+V 2.0.1.0a
+16.11.2021
+- fix issue with comment nodes in test steps list in product configuration file
+
+V 2.0.2
+14.12.2021
+- add possibility of default checklist for specific test kind

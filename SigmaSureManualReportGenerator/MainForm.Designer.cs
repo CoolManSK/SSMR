@@ -477,7 +477,7 @@
             // 
             this.btn_BatchMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_BatchMode.Enabled = false;
-            this.btn_BatchMode.Location = new System.Drawing.Point(775, 26);
+            this.btn_BatchMode.Location = new System.Drawing.Point(864, 26);
             this.btn_BatchMode.Name = "btn_BatchMode";
             this.btn_BatchMode.Size = new System.Drawing.Size(85, 50);
             this.btn_BatchMode.TabIndex = 5;
@@ -575,7 +575,8 @@
             // btn_SimpleMode
             // 
             this.btn_SimpleMode.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btn_SimpleMode.Location = new System.Drawing.Point(866, 26);
+            this.btn_SimpleMode.Enabled = false;
+            this.btn_SimpleMode.Location = new System.Drawing.Point(773, 26);
             this.btn_SimpleMode.Name = "btn_SimpleMode";
             this.btn_SimpleMode.Size = new System.Drawing.Size(85, 50);
             this.btn_SimpleMode.TabIndex = 6;
@@ -602,7 +603,7 @@
             this.tb_OrderValue.Location = new System.Drawing.Point(10, 49);
             this.tb_OrderValue.Name = "tb_OrderValue";
             this.tb_OrderValue.Size = new System.Drawing.Size(668, 26);
-            this.tb_OrderValue.TabIndex = 0;
+            this.tb_OrderValue.TabIndex = 0;            
             this.tb_OrderValue.Enter += new System.EventHandler(this.tb_OrderValue_Enter);
             this.tb_OrderValue.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tb_OrderValue_KeyUp);
             // 
