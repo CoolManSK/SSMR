@@ -17263,18 +17263,18 @@
         </Final_Inspection>
       </AllowedStations>
     </Assembly>
-		<Assembly>
-			<Name>700DNC40-24-8G</Name>
-      <CheckListTests>
-        <Final_Inspection>UAF01068</Final_Inspection>
-      </CheckListTests>
-      <AllowedStations>
-        <Final_Inspection>
-          <Station001>FIHEV01</Station001>
-					<Station002>kolmannb</Station002>
-        </Final_Inspection>
-      </AllowedStations>
-		</Assembly>
+	<Assembly>
+		<Name>700DNC40-24-8G</Name>
+		<CheckListTests>
+			<Final_Inspection>UAF01068</Final_Inspection>
+		</CheckListTests>
+		<AllowedStations>
+			<Final_Inspection>
+				<Station001>FIHEV01</Station001>
+				<Station002>kolmannb</Station002>
+			</Final_Inspection>
+		</AllowedStations>
+	</Assembly>
     <Assembly>
       <Name>700DNC40-24-8S429</Name>
       <CheckListTests>

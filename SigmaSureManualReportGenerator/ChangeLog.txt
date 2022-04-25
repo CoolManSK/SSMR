@@ -400,3 +400,11 @@ V 2.0.1.0a
 V 2.0.2
 14.12.2021
 - add possibility of default checklist for specific test kind
+
+V 2.0.3
+14.4.2022
+- added filter of barcode format according 
+
+V 2.0.3.1
+25.4.2022
+- fix bug when checkbox of immediately starting checklist is checked and no checklist is presented

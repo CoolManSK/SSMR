@@ -227,6 +227,17 @@ namespace SigmaSureManualReportGenerator
                 String strValidatedSerialNumber = this.tb_SerialNumber.Text;
                 if (strValidatedSerialNumber[0].ToString() == "#")
                 {
+                    if (strValidatedSerialNumber[strValidatedSerialNumber.Length - 1].ToString() != ";")
+                    {
+                        String[] buffArr = strValidatedSerialNumber.Split(';');
+                        if (buffArr.Length == 2)
+                        {
+                            MessageBox.Show(String.Concat("Nespravny format udajov v Barcode. Posledny znak musi byt bodkociarka - \";\". \nBarcode obsahuje udaj:\n\n", strValidatedSerialNumber), "POZOR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            this.tb_SerialNumber.SelectAll();
+                            this.tb_SerialNumber.Focus();
+                            return;
+                        }
+                    }
                     strValidatedSerialNumber = strValidatedSerialNumber.Substring(0, 14);
                 }
 
@@ -382,6 +393,7 @@ namespace SigmaSureManualReportGenerator
 
                     
                     this.objBelMes.BelMESAuthorization(strValidatedSerialNumber, strTestType, ref SNIPtoSAVE.ProductID, "", false);
+                    Boolean hasInstructions = false;
                     if (this.objBelMes.Authorization.blnAuthorized)
                     {
                         SNIPtoSAVE.SerialNumber = strValidatedSerialNumber;
@@ -393,7 +405,10 @@ namespace SigmaSureManualReportGenerator
                         String PassBtnText = "PASS";
                         Array actCTIs = ProductsConfig.GetChildTestsInfos(SNIPtoSAVE.ProductID, SNIPtoSAVE.TestType);
                         if (actCTIs.Length > 0)
+                        {
                             PassBtnText = "START";
+                            hasInstructions = true;
+                        }
                         this.dgv_SNsIP.Rows.Add(SNIPtoSAVE.SerialNumber, SNIPtoSAVE.ProductID, SNIPtoSAVE.TestType, SNIPtoSAVE.Operator, SNIPtoSAVE.StartTime, PassBtnText, "FAIL", "TERMINATE");
                         this.lbl_Info.ForeColor = Color.Green;
                     }
@@ -418,7 +433,7 @@ namespace SigmaSureManualReportGenerator
                         */
                     }
                     this.lbl_Info.Text = objBelMes.Authorization.strResult;
-                    if (this.chb_ChecklistImmediatelyStart.Checked)
+                    if (this.chb_ChecklistImmediatelyStart.Checked && hasInstructions)
                     {
                         if (this.lbl_Info.ForeColor == Color.Green)
                         {
