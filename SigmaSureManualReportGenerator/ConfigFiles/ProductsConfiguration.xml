@@ -15635,6 +15635,18 @@
         </Final_Inspection>
       </AllowedStations>
     </Assembly>
+	  <Assembly>
+		  <Name>350DNC40-24-8S596</Name>
+		  <CheckListTests>
+			  <OBA>UAF01068</OBA>
+			  <Final_Inspection>UAF01068A</Final_Inspection>
+		  </CheckListTests>
+		  <AllowedStations>
+			  <Final_Inspection>
+				  <Station001>FIHEV01</Station001>
+			  </Final_Inspection>
+		  </AllowedStations>
+	  </Assembly>
 		<Assembly>
 			<Name>350DNC40-24-9G</Name>
       <BarcodeLength>33</BarcodeLength>
@@ -17290,7 +17302,7 @@
       <Name>700DNC40-24-8S556</Name>
       <CheckListTests>
         <OBA>UAF01068</OBA>
-        <Final_Inspection>UAF01068A</Final_Inspection>
+        <Final_Inspection>UAF01068</Final_Inspection>
       </CheckListTests>
       <AllowedStations>
         <Final_Inspection>
@@ -17980,6 +17992,10 @@
           <Instruction>Vlozenie a kontrola krytiek konektorov</Instruction>
 					<Timeout>2</Timeout>
         </_8_-_Inserting_and_checking_of_connector_cover>        
+	    <_9_-_Control_of_packing>
+          <Instruction>Kontrola balenia vyrobku</Instruction>
+					<Timeout>2</Timeout>
+        </_9_-_Control_of_packing>        
       </UAF01068>
       <UAR05638>
         <_1>

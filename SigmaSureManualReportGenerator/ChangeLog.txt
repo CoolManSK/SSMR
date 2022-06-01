@@ -407,4 +407,20 @@ V 2.0.3
 
 V 2.0.3.1
 25.4.2022
-- fix bug when checkbox of immediately starting checklist is checked and no checklist is presented
+- fix bug when checkbox of immediately starting checklist is checked and checklist is not existed
+
+V 2.0.3.1a
+25.4.2022
+- added instructions for item 350DNC40-24-8S596 for camera inspection
+
+V 2.0.3.2
+18.5.2022
+- UAF1068 - added control of packing for OBA
+
+V 2.0.3.2a
+18.5.2022
+- UAF1068A - 700DNC40-24-8S556 added for camera control
+
+V 2.0.3.2c
+1.6.2022
+- Fix compatibility issue with barcode scanner used at Universal BI station

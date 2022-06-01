@@ -225,6 +225,12 @@ namespace SigmaSureManualReportGenerator
                 String strTestType = this.cb_TestTypes.Text.Trim();
 
                 String strValidatedSerialNumber = this.tb_SerialNumber.Text;
+
+                if (strValidatedSerialNumber.Substring(strValidatedSerialNumber.Length - 2) == "\n\t")
+                {
+                    strValidatedSerialNumber = String.Concat(strValidatedSerialNumber.Substring(0, strValidatedSerialNumber.Length - 2), ";") ;  
+                }
+
                 if (strValidatedSerialNumber[0].ToString() == "#")
                 {
                     if (strValidatedSerialNumber[strValidatedSerialNumber.Length - 1].ToString() != ";")
